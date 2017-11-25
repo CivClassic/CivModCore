@@ -1,0 +1,11 @@
+# Download the version, assuming it is a tag
+# Just fail if it doesn't download
+before_install:
+  - echo $GROUP
+  - echo $ARTIFACT
+  - echo $VERSION
+  - echo "Downloading release jar for version $VERSION from `echo $GROUP | grep -oP '(?<=com\.github\.)\w+'`/CivModCore"
+  - wget https://github.com/`echo $GROUP | grep -oP '(?<=com\.github\.)\w+'`/CivModCore/releases/download/$VERSION/release.jar -O release.jar
+
+install:
+  - mvn install:install-file -Dfile=release.jar -DartifactId=$ARTIFACT -DgroupId=$GROUP -Dversion=$VERSION -Dpackaging=jar
