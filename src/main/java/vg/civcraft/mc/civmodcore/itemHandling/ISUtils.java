@@ -1,44 +1,58 @@
 package vg.civcraft.mc.civmodcore.itemHandling;
 
-import java.util.LinkedList;
-import java.util.List;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import vg.civcraft.mc.civmodcore.api.ItemAPI;
 
+import java.util.Arrays;
+
+/**
+ * @deprecated Replaced with ItemAPI
+ * */
+@Deprecated
 public class ISUtils {
 
-	public static void addLore(ItemStack is, String... lore) {
-		ItemMeta im = is.getItemMeta();
-		List<String> loreList = im.getLore();
-		if (loreList == null) {
-			loreList = new LinkedList<>();
-		}
-		for (String currLore : lore) {
-			loreList.add(currLore);
-		}
-		im.setLore(loreList);
-		is.setItemMeta(im);
-
+	/**
+	 * @deprecated Replaced with ItemAPI.addLore();
+	 * @see ItemAPI .addLore();
+	 * */
+	@Deprecated
+	public static void addLore(ItemStack item, String... lines) {
+		ItemAPI.addLore(item, false, Arrays.asList(lines));
 	}
 
-	public static void setLore(ItemStack is, String... lore) {
-		ItemMeta im = is.getItemMeta();
-		List<String> loreList = new LinkedList<>();
-		for (String currLore : lore) {
-			loreList.add(currLore);
+	/**
+	 * @deprecated Replaced with ItemAPI.setLore();
+	 * @see ItemAPI .setLore();
+	 * */
+	@Deprecated
+	public static void setLore(ItemStack item, String... lines) {
+		if (item == null) {
+			return;
 		}
-		im.setLore(loreList);
-		is.setItemMeta(im);
+		if (lines == null || lines.length < 1) {
+			ItemAPI.setLore(item, null);
+		}
+		else {
+			ItemAPI.setLore(item, Arrays.asList(lines));
+		}
 	}
 
-	public static void setName(ItemStack is, String name) {
-		ItemMeta im = is.getItemMeta();
-		im.setDisplayName(name);
-		is.setItemMeta(im);
+	/**
+	 * @deprecated Replaced with ItemAPI.setName();
+	 * @see ItemAPI .setName();
+	 * */
+	@Deprecated
+	public static void setName(ItemStack item, String name) {
+		ItemAPI.setDisplayName(item, name);
 	}
 
-	public static String getName(ItemStack is) {
-		return is.getItemMeta().getDisplayName();
+	/**
+	 * @deprecated Replaced with ItemAPI.getName();
+	 * @see ItemAPI .getName();
+	 * */
+	@Deprecated
+	public static String getName(ItemStack item) {
+		return ItemAPI.getDisplayName(item);
 	}
 
 }

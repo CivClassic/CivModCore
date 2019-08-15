@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.chatDialog.ChatListener;
 import vg.civcraft.mc.civmodcore.chatDialog.DialogManager;
 import vg.civcraft.mc.civmodcore.command.CommandHandler;
@@ -40,6 +41,7 @@ public abstract class ACivMod extends JavaPlugin {
 		if (!initializedAPIs) {
 			initializedAPIs = true;
 			instance.registerEvents();
+			ItemAPI.loadItemNames();
 			new NiceNames().loadNames();
 			new DialogManager();
 			ConfigurationSerialization.registerClass(ManagedDatasource.class);
