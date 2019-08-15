@@ -78,7 +78,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.4.3</version>
+				<version>3.2.1</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -90,9 +90,8 @@
 							<artifactSet>
 								<includes>
 									<include>com.zaxxer:HikariCP</include>
-									<include>org.slf4j:slf4j-api</include>
-									<include>org.apache.logging.log4j:log4j-slf4j-impl</include>
-									<include>io.protonull:java-utilities</include>
+									<include>org.apache.logging.*</include>
+									<include>io.protonull</include>
 								</includes>
 							</artifactSet>
 							<relocations>
