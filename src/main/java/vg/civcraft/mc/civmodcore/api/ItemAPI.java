@@ -3,8 +3,6 @@ package vg.civcraft.mc.civmodcore.api;
 import io.protonull.utilities.Equals;
 import io.protonull.utilities.Exists;
 import io.protonull.utilities.SplitString;
-import io.protonull.utilities.libs.javax.validation.constraints.Min;
-import io.protonull.utilities.libs.javax.validation.constraints.NotNull;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -140,11 +138,17 @@ public final class ItemAPI {
 		return false;
 	}
 
-	public static String getMaterialSlug(@NotNull Material material) {
+	public static String getMaterialSlug(Material material) {
 		return getMaterialSlug(material, (short) 0);
 	}
 
-	public static String getMaterialSlug(Material material, @Min(0) short durability) {
+	public static String getMaterialSlug(Material material, short durability) {
+		if (material == null) {
+			return null;
+		}
+		if (durability < 0) {
+			return null;
+		}
 		return material.name() + ":" + durability;
 	}
 
