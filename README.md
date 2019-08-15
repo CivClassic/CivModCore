@@ -21,12 +21,6 @@ To use CivModCore, your Main Plugin class must extend ACivMod:
     {
     
     }
-
-In addition to that, you must override getPluginName for log messages:
-
-    protected String getPluginName() {
-        return "MyPluginsName";
-    }
     
 CivModCore implements onEnable/onLoad, and as such an extending plugin must Override and call super:
 

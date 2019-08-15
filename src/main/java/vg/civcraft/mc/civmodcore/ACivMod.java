@@ -72,7 +72,14 @@ public abstract class ACivMod extends JavaPlugin {
 		this.handle = handle;
 	}
 
-	protected abstract String getPluginName();
+	/**
+	 * @deprecated Duplicate functionality.
+	 * @see org.bukkit.plugin.Plugin .getName()
+	 * */
+	@Deprecated
+	protected String getPluginName() {
+		return getName();
+	}
 
 	/**
 	 * Simple SEVERE level logging.

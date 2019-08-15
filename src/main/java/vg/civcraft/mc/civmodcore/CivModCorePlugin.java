@@ -21,9 +21,4 @@ public class CivModCorePlugin extends ACivMod {
 		return instance;
 	}
 
-	@Override
-	protected String getPluginName() {
-		return "CivModCore";
-	}
-
 }
