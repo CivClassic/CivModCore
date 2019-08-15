@@ -1,6 +1,5 @@
 name: ${project.name}
 version: ${project.version}
 authors: [valadian, rourke750]
-softdepend: [Mercury]
 main: ${project.groupId}.${project.name}Plugin
 dev-url: null
