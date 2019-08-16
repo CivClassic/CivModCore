@@ -99,6 +99,15 @@
 									<pattern>io.protonull</pattern>
 									<shadedPattern>${project.groupId}.protonull</shadedPattern>
 								</relocation>
+								<!-- Relocations for backwards compatibility -->
+								<relocation>
+									<pattern>${project.groupId}.dialog</pattern>
+									<shadedPattern>${project.groupId}.chatDialog</shadedPattern>
+								</relocation>
+								<relocation>
+									<pattern>${project.groupId}.database</pattern>
+									<shadedPattern>${project.groupId}.dao</shadedPattern>
+								</relocation>
 							</relocations>
 						</configuration>
 					</execution>

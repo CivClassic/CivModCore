@@ -1,4 +1,4 @@
-package vg.civcraft.mc.civmodcore.chatDialog;
+package vg.civcraft.mc.civmodcore.dialog;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -1,4 +1,4 @@
-package vg.civcraft.mc.civmodcore.dao;
+package vg.civcraft.mc.civmodcore.database;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;

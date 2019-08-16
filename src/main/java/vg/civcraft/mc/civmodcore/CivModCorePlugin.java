@@ -5,8 +5,8 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.HandlerList;
 import vg.civcraft.mc.civmodcore.api.EnchantingAPI;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
-import vg.civcraft.mc.civmodcore.chatDialog.DialogManager;
-import vg.civcraft.mc.civmodcore.dao.ManagedDatasource;
+import vg.civcraft.mc.civmodcore.dialog.DialogManager;
+import vg.civcraft.mc.civmodcore.database.ManagedDatasource;
 import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventoryListener;
 
 /**

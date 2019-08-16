@@ -11,4 +11,4 @@
  * @author ProgrammerDan
  *
  */
-package vg.civcraft.mc.civmodcore.dao;
+package vg.civcraft.mc.civmodcore.database;

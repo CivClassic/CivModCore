@@ -1,4 +1,4 @@
-package vg.civcraft.mc.civmodcore.dao;
+package vg.civcraft.mc.civmodcore.database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
