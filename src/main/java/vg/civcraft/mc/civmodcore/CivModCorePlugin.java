@@ -42,6 +42,7 @@ public final class CivModCorePlugin extends ACivMod {
 		super.onDisable();
 		instance = null;
 		HandlerList.unregisterAll(this);
+		ItemAPI.resetItemNames();
 	}
 
 	public static CivModCorePlugin getInstance() {

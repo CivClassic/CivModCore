@@ -287,8 +287,12 @@ public final class ItemAPI {
 
 	private static Map<Integer, String> itemNames = new HashMap<>();
 
-	public static void loadItemNames() {
+	public static void resetItemNames() {
 		itemNames.clear();
+	}
+
+	public static void loadItemNames() {
+		resetItemNames();
 		try {
 			InputStream in = CivModCorePlugin.class.getResourceAsStream("/materials.csv");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));

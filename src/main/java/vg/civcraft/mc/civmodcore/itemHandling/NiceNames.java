@@ -12,8 +12,8 @@ import java.util.Map;
 
 public class NiceNames {
 
-	private static Map<Enchantment, String> enchants;
-	private static Map<Enchantment, String> enchantAcronyms;
+	private static final Map<Enchantment, String> enchants = new HashMap<>();
+	private static final Map<Enchantment, String> enchantAcronyms = new HashMap<>();
 
 	/**
 	 * @deprecated Replaced with ItemAPI.getItemName();
@@ -34,8 +34,8 @@ public class NiceNames {
 
 	public void loadNames() {
 		// enchantment aliases
-		enchants = new HashMap<>();
-		enchantAcronyms = new HashMap<>();
+		enchants.clear();
+		enchantAcronyms.clear();
 		try {
 			InputStream in = getClass().getResourceAsStream("/enchantments.csv");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
