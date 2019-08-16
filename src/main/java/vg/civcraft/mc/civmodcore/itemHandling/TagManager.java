@@ -1,12 +1,12 @@
 package vg.civcraft.mc.civmodcore.itemHandling;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
+
+import io.protonull.utilities.Primitives;
 import net.minecraft.server.v1_12_R1.NBTBase;
 import net.minecraft.server.v1_12_R1.NBTTagByte;
 import net.minecraft.server.v1_12_R1.NBTTagByteArray;
@@ -23,180 +23,75 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
+import vg.civcraft.mc.civmodcore.api.NBTCompound;
 
-public class TagManager {
+/**
+ * @deprecated Replaced with NBTCompound
+ * @see NBTCompound
+ *
+ * There are still some methods that need to be transferred such as maps and lists
+ * */
+@Deprecated
+public class TagManager extends NBTCompound {
+
 	private static final Logger log = Bukkit.getLogger();
 
 	private NBTTagCompound tag;
 
 	public TagManager() {
-		this.tag = new NBTTagCompound();
+		super();
 	}
 
-	public TagManager(ItemStack is) {
-		if (is == null) {
-			throw new IllegalArgumentException("Expected item stack parameter but NULL passed.");
-		}
-
-		net.minecraft.server.v1_12_R1.ItemStack s = CraftItemStack.asNMSCopy(is);
-		this.tag = s.getTag();
-
-		if (this.tag == null) {
-			this.tag = new NBTTagCompound();
-		}
+	public TagManager(ItemStack item) {
+		super(item);
 	}
 
 	private TagManager(NBTTagCompound tag) {
-		this.tag = tag;
+		super(tag);
 	}
 
-	public String getString(String key) {
-		return this.tag.getString(key);
-	}
-
-	public void setString(String key, String value) {
-		this.tag.setString(key, value);
-	}
-
-	public int getInt(String key) {
-		return this.tag.getInt(key);
-	}
-
-	public void setInt(String key, int value) {
-		this.tag.setInt(key, value);
-	}
-
-	public short getShort(String key) {
-		return this.tag.getShort(key);
-	}
-
-	public void setShort(String key, short value) {
-		this.tag.setShort(key, value);
-	}
-
-	public byte getByte(String key) {
-		return this.tag.getByte(key);
-	}
-
-	public void setByte(String key, byte value) {
-		this.tag.setByte(key, value);
-	}
-
+	@Deprecated
 	public List<String> getStringList(String key) {
-		NBTTagList tagList = this.tag.getList(key, 8);
-		List<String> list = new ArrayList<String>();
-
-		for (int i = 0; i < tagList.size(); i++) {
-			list.add(tagList.getString(i));
-		}
-
-		return list;
+		return Arrays.asList(getStringArray(key));
 	}
 
+	@Deprecated
 	public void setStringList(String key, List<String> list) {
-		NBTTagList tagList = new NBTTagList();
-
-		for (String s : list) {
-			tagList.add(new NBTTagString(s));
-		}
-
-		this.tag.set(key, tagList);
+		setStringArray(key, list.toArray(new String[0]));
 	}
 
+	@Deprecated
 	public List<Integer> getIntList(String key) {
-		NBTTagList tagList = this.tag.getList(key, 3);
-		List<Integer> list = new ArrayList<Integer>();
-
-		for (int i = 0; i < tagList.size(); i++) {
-			list.add(tagList.c(i));
-		}
-
-		return list;
+		return Arrays.asList(Primitives.IntegerArray(getIntArray(key)));
 	}
 
 	public void setIntList(String key, List<Integer> list) {
-		NBTTagList tagList = new NBTTagList();
-
-		for (Integer i : list) {
-			tagList.add(new NBTTagInt(i));
-		}
-
-		this.tag.set(key, tagList);
+		setIntArray(key, Primitives.IntegerArray(list.toArray(new Integer[0])));
 	}
 
-	/**
-	 * As of 1.12, the base NBTTagList has no accessor specific for Shorts, so we'll mark it deprecated here.
-	 * Weirdly, the superclass has a method f() that still returns a Short for all number types, but NBTNumber isn't
-	 * visible so ... hack it is.
-	 * 
-	 * @param key
-	 * @return
-	 */
 	@Deprecated
 	public List<Short> getShortList(String key) {
-		NBTTagList tagList = this.tag.getList(key, 2);
-		List<Short> list = new ArrayList<Short>();
-
-		for (int i = 0; i < tagList.size(); i++) {
-			NBTBase base = tagList.i(i);
-			try {
-				Method f = base.getClass().getMethod("f");
-				Short s = (Short) f.invoke(base);
-				list.add(s);
-			} catch (NoSuchMethodException e) {
-				log.warning("ShortList no longer officially supported, failed to map to retrieve method.");
-			} catch (SecurityException e) {
-				log.warning("ShortList no longer officially supported, failed to secure retrieve method.");
-			} catch (IllegalAccessException e) {
-				log.warning("ShortList no longer officially supported, failed to access retrieve method.");
-			} catch (IllegalArgumentException e) {
-				log.warning("ShortList no longer officially supported, failed to use retrieve method.");
-			} catch (InvocationTargetException e) {
-				log.warning("ShortList no longer officially supported, failed to invoke retrieve method.");
-			}
-		}
-
-		return list;
+		return Arrays.asList(Primitives.ShortArray(getShortArray(key)));
 	}
 
-	/**
-	 * Deprecating this as well as of 1.12, even though technically it is still supported (nothing prevents the creation)
-	 * however since accessing a short list _is_, so should writing.
-	 * 
-	 * @param key
-	 * @param list
-	 */
 	@Deprecated
 	public void setShortList(String key, List<Short> list) {
-		NBTTagList tagList = new NBTTagList();
-
-		for (Short s : list) {
-			tagList.add(new NBTTagShort(s));
-		}
-
-		this.tag.set(key, tagList);
+		setShortArray(key, Primitives.ShortArray(list.toArray(new Short[0])));
 	}
 
+	@Override
 	public TagManager getCompound(String key) {
 		return new TagManager(this.tag.getCompound(key));
 	}
 
-	public void setCompound(String key, TagManager tag) {
-		this.tag.set(key, tag.tag);
-	}
-
-	public ItemStack enrichWithNBT(ItemStack is) {
-
-		net.minecraft.server.v1_12_R1.ItemStack s = CraftItemStack.asNMSCopy(is);
-
-		if (s == null) {
-			log.severe("Failed to create enriched copy of " + is.toString());
+	public ItemStack enrichWithNBT(ItemStack item) {
+		net.minecraft.server.v1_12_R1.ItemStack temp = CraftItemStack.asNMSCopy(item);
+		if (temp == null) {
+			log.severe("Failed to create enriched copy of " + item.toString());
 			return null;
 		}
-
-		s.setTag(this.tag);
-
-		return CraftItemStack.asBukkitCopy(s);
+		temp.setTag(this.tag);
+		return CraftItemStack.asBukkitCopy(temp);
 	}
 
 	public void setMap(Map<String, Object> map) {
@@ -319,4 +214,5 @@ public class TagManager {
 		}
 		return base;
 	}
+
 }
