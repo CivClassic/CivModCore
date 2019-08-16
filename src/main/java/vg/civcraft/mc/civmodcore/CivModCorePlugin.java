@@ -3,6 +3,7 @@ package vg.civcraft.mc.civmodcore;
 import lombok.Getter;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.HandlerList;
+import vg.civcraft.mc.civmodcore.api.EnchantingAPI;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.chatDialog.DialogManager;
 import vg.civcraft.mc.civmodcore.dao.ManagedDatasource;
@@ -33,7 +34,7 @@ public final class CivModCorePlugin extends ACivMod {
 		registerListener(DialogManager.instance);
 		// Load APIs
 		ItemAPI.loadItemNames();
-		new NiceNames().loadNames();
+		EnchantingAPI.loadEnchantmentNames();
 		ConfigurationSerialization.registerClass(ManagedDatasource.class);
 	}
 
@@ -43,6 +44,7 @@ public final class CivModCorePlugin extends ACivMod {
 		instance = null;
 		HandlerList.unregisterAll(this);
 		ItemAPI.resetItemNames();
+		EnchantingAPI.resetEnchantmentNames();
 	}
 
 }

@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public final class ItemAPI {
 	private ItemAPI() {} // Make the class effectively static
@@ -293,34 +294,52 @@ public final class ItemAPI {
 
 	public static void loadItemNames() {
 		resetItemNames();
+		Logger logger = Bukkit.getLogger();
 		try {
 			InputStream in = CivModCorePlugin.class.getResourceAsStream("/materials.csv");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			String line = reader.readLine();
 			while (line != null) {
 				SplitString values = new SplitString(line, ",");
-				String name = values.getElement(2);
-				Material material = Material.getMaterial(values.getElement(0));
-				short durability = 0;
-				if (material == null) {
-					Bukkit.getLogger().info(String.format("Could not find a material for: %s", values.getElement(0)));
+				// If there's not at least three values (slug, data, name) then skip
+				if (values.size() < 3) {
+					logger.warning("This material row does not have enough data: " + line);
 					continue;
 				}
+				// If a material cannot be found by the slug given, skip
+				Material material = Material.getMaterial(values.getElement(0));
+				if (material == null) {
+					logger.warning("Could not find a material on this line: " + line);
+					continue;
+				}
+				// If the name is empty, skip
+				String name = values.getElement(2);
+				if (name.isEmpty()) {
+					logger.warning("This material has not been given a name: " + line);
+					continue;
+				}
+				// If the data cannot parse, skip
+				short data = 0;
 				try {
-					durability = Short.parseShort(values.getElement(1));
+					data = Short.parseShort(values.getElement(1));
 				}
 				catch (NumberFormatException error) {
-					Bukkit.getLogger().info(String.format("Could not find a durability for: %s", values.getElement(1)));
+					logger.warning("This material's data cannot be parsed: " + line);
 					continue;
 				}
-				Bukkit.getLogger().info(String.format("Gave %S:%S the name: %s", material.name(), durability, name));
-				itemNames.put(getItemHash(material, durability, null, null), name);
+				// If the data is an inherently illegal value, give warning
+				if (data < 0) {
+					logger.warning("This material's data is set to an illegal value: " + line);
+				}
+				// Put the material, data, and name into the system
+				itemNames.put(getItemHash(material, data, null, null), name);
+				logger.info(String.format("Material parsed: [%s] [%s] [%s]", material, data, name));
 				line = reader.readLine();
 			}
 			reader.close();
 		}
 		catch (IOException e) {
-			Bukkit.getLogger().info("Could not load materials.");
+			logger.warning("Could not load materials.");
 			e.printStackTrace();
 		}
 	}
