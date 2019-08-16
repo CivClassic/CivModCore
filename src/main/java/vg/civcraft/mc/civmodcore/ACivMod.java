@@ -6,24 +6,15 @@ import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import vg.civcraft.mc.civmodcore.api.ItemAPI;
-import vg.civcraft.mc.civmodcore.chatDialog.ChatListener;
-import vg.civcraft.mc.civmodcore.chatDialog.DialogManager;
 import vg.civcraft.mc.civmodcore.command.CommandHandler;
-import vg.civcraft.mc.civmodcore.dao.ManagedDatasource;
 import vg.civcraft.mc.civmodcore.interfaces.ApiManager;
-import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventoryListener;
-import vg.civcraft.mc.civmodcore.itemHandling.NiceNames;
 
 public abstract class ACivMod extends JavaPlugin {
 
 	protected CommandHandler handle;
-
-	private static boolean initializedAPIs = false;
 
 	public ClassLoader classLoader = null;
 
@@ -32,23 +23,6 @@ public abstract class ACivMod extends JavaPlugin {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		return handle == null ? false : handle.execute(sender, command, args);
-	}
-
-	@Override
-	public void onEnable() {
-		initApis(this);
-	}
-
-	private static synchronized void initApis(ACivMod instance) {
-		if (!initializedAPIs) {
-			initializedAPIs = true;
-			instance.registerListener(new ClickableInventoryListener());
-			instance.registerListener(new ChatListener());
-			ItemAPI.loadItemNames();
-			new NiceNames().loadNames();
-			new DialogManager();
-			ConfigurationSerialization.registerClass(ManagedDatasource.class);
-		}
 	}
 
 	protected void registerListener(Listener listener) {
