@@ -4,7 +4,6 @@ import lombok.Getter;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.HandlerList;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
-import vg.civcraft.mc.civmodcore.chatDialog.ChatListener;
 import vg.civcraft.mc.civmodcore.chatDialog.DialogManager;
 import vg.civcraft.mc.civmodcore.dao.ManagedDatasource;
 import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventoryListener;
@@ -31,11 +30,10 @@ public final class CivModCorePlugin extends ACivMod {
 		saveResource("/potions.csv", false);
 		// Register listeners
 		registerListener(new ClickableInventoryListener());
-		registerListener(new ChatListener());
+		registerListener(DialogManager.instance);
 		// Load APIs
 		ItemAPI.loadItemNames();
 		new NiceNames().loadNames();
-		new DialogManager();
 		ConfigurationSerialization.registerClass(ManagedDatasource.class);
 	}
 
