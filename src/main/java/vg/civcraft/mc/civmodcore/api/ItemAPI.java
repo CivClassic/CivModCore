@@ -333,7 +333,7 @@ public final class ItemAPI {
 				}
 				// Put the material, data, and name into the system
 				itemNames.put(getItemHash(material, data, null, null), name);
-				logger.info(String.format("Material parsed: [%s] [%s] [%s]", material, data, name));
+				logger.info(String.format("Material parsed: [%s:%s] [%s]", material, data, name));
 				line = reader.readLine();
 			}
 			reader.close();

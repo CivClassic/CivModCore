@@ -8,7 +8,6 @@ import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.chatDialog.DialogManager;
 import vg.civcraft.mc.civmodcore.dao.ManagedDatasource;
 import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventoryListener;
-import vg.civcraft.mc.civmodcore.itemHandling.NiceNames;
 
 /**
  * The sole purpose of this class is to make Spigot recognize this library as a plugin and automatically load the
@@ -26,9 +25,9 @@ public final class CivModCorePlugin extends ACivMod {
 		super.onEnable();
 		instance = this;
 		// Save default resource
-		saveResource("/enchantments.csv", false);
-		saveResource("/materials.csv", false);
-		saveResource("/potions.csv", false);
+		saveResource("enchantments.csv", false);
+		saveResource("materials.csv", false);
+		saveResource("potions.csv", false);
 		// Register listeners
 		registerListener(new ClickableInventoryListener());
 		registerListener(DialogManager.instance);

@@ -1,9 +1,7 @@
 package vg.civcraft.mc.civmodcore.api;
 
-import io.protonull.utilities.Exists;
 import io.protonull.utilities.SplitString;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -14,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -133,7 +130,7 @@ public final class EnchantingAPI {
 				// Put the name and initials into the system
 				enchantmentNames.put(enchant, name);
 				enchantmentInitials.put(enchant, initials);
-				logger.info(String.format("Enchantment parsed: [%s] [%s] [%s]", enchant, initials, name));
+				logger.info(String.format("Enchantment parsed: [%s] [%s] [%s]", enchant.getName(), initials, name));
 				line = reader.readLine();
 			}
 			reader.close();
