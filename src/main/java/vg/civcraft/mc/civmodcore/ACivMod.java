@@ -3,9 +3,11 @@ package vg.civcraft.mc.civmodcore;
 import java.util.List;
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
@@ -40,7 +42,8 @@ public abstract class ACivMod extends JavaPlugin {
 	private static synchronized void initApis(ACivMod instance) {
 		if (!initializedAPIs) {
 			initializedAPIs = true;
-			instance.registerEvents();
+			instance.registerListener(new ClickableInventoryListener());
+			instance.registerListener(new ChatListener());
 			ItemAPI.loadItemNames();
 			new NiceNames().loadNames();
 			new DialogManager();
@@ -48,9 +51,12 @@ public abstract class ACivMod extends JavaPlugin {
 		}
 	}
 
-	private void registerEvents() {
-		getServer().getPluginManager().registerEvents(new ClickableInventoryListener(), this);
-		getServer().getPluginManager().registerEvents(new ChatListener(), this);
+	protected void registerListener(Listener listener) {
+		if (listener == null) {
+			Bukkit.getLogger().warning("That listener you're trying to register is null!");
+			return;
+		}
+		getServer().getPluginManager().registerEvents(listener, this);
 	}
 
 	@Deprecated
