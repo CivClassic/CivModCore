@@ -44,6 +44,7 @@ public final class CivModCorePlugin extends ACivMod {
 		HandlerList.unregisterAll(this);
 		ItemAPI.resetItemNames();
 		EnchantingAPI.resetEnchantmentNames();
+		ConfigurationSerialization.unregisterClass(ManagedDatasource.class);
 	}
 
 }
