@@ -1,5 +1,6 @@
 package vg.civcraft.mc.civmodcore;
 
+import lombok.Getter;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.HandlerList;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
@@ -17,6 +18,7 @@ import vg.civcraft.mc.civmodcore.itemHandling.NiceNames;
  */
 public final class CivModCorePlugin extends ACivMod {
 
+	@Getter
 	private static CivModCorePlugin instance;
 
 	@Override
@@ -43,10 +45,6 @@ public final class CivModCorePlugin extends ACivMod {
 		instance = null;
 		HandlerList.unregisterAll(this);
 		ItemAPI.resetItemNames();
-	}
-
-	public static CivModCorePlugin getInstance() {
-		return instance;
 	}
 
 }
