@@ -18,6 +18,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import vg.civcraft.mc.civmodcore.api.ItemAPI;
 
 /**
  * Allows the storage and comparison of itemstacks while ignoring their maximum possible stack sizes. This offers
@@ -503,19 +504,23 @@ public class ItemMap {
 		List<ItemStack> items = new LinkedList<>();
 		for (Entry<ItemStack, Integer> entry : getEntrySet()) {
 			ItemStack is = entry.getKey().clone();
-			ISUtils.addLore(is, ChatColor.GOLD + "Total item count: " + entry.getValue());
+			ItemAPI.addLore(is, ChatColor.GOLD + "Total item count: " + entry.getValue());
 			if (entry.getValue() > entry.getKey().getType().getMaxStackSize()) {
 				int stacks = entry.getValue() / is.getType().getMaxStackSize();
 				int extra = entry.getValue() % is.getType().getMaxStackSize();
 				StringBuilder out = new StringBuilder(ChatColor.GOLD.toString());
 				if (stacks != 0) {
-					out.append(stacks + " stack" + (stacks == 1 ? "" : "s"));
+					out.append(stacks);
+					out.append(" stack");
+					out.append(stacks == 1 ? "" : "s");
 				}
 				if (extra != 0) {
-					out.append(" and " + extra);
-					out.append(" item" + (extra == 1 ? "" : "s"));
+					out.append(" and ");
+					out.append(extra);
+					out.append(" item");
+					out.append(extra == 1 ? "" : "s");
 				}
-				ISUtils.addLore(is, out.toString());
+				ItemAPI.addLore(is, out.toString());
 			}
 			items.add(is);
 		}

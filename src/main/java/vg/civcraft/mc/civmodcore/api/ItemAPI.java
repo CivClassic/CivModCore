@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -221,6 +222,10 @@ public final class ItemAPI {
 		return meta.getLore();
 	}
 
+	public static boolean setLore(ItemStack item, String... lines) {
+		return setLore(item, Arrays.asList(lines));
+	}
+
 	public static boolean setLore(ItemStack item, List<String> lines) {
 		if (item == null) {
 			return false;
@@ -231,8 +236,16 @@ public final class ItemAPI {
 		return true;
 	}
 
+	public static boolean addLore(ItemStack item, String... lines) {
+		return addLore(item, Arrays.asList(lines));
+	}
+
 	public static boolean addLore(ItemStack item, List<String> lines) {
 		return addLore(item, false, lines);
+	}
+
+	public static boolean addLore(ItemStack item, boolean prepend, String... lines) {
+		return addLore(item, prepend, Arrays.asList(lines));
 	}
 
 	public static boolean addLore(ItemStack item, boolean prepend, List<String> lines) {

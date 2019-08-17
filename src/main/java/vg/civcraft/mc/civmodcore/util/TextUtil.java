@@ -6,25 +6,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import io.protonull.utilities.libs.javax.validation.constraints.NotEmpty;
+import io.protonull.utilities.libs.javax.validation.constraints.NotNull;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class TextUtil {
-	private static Map<String, String> tags = new HashMap<String, String>();
 
-	static {
-		tags.put("g", TextUtil.parseColor("<lime>")); // good
-		tags.put("b", TextUtil.parseColor("<rose>")); // bad
-		tags.put("i", TextUtil.parseColor("<yellow>")); // info
-		tags.put("a", TextUtil.parseColor("<gold>")); // art
-		tags.put("l", TextUtil.parseColor("<green>")); // logo
-		tags.put("n", TextUtil.parseColor("<silver>")); // notice
-		tags.put("h", TextUtil.parseColor("<pink>")); // highlight
-		tags.put("c", TextUtil.parseColor("<aqua>")); // parameter
-		tags.put("p", TextUtil.parseColor("<teal>")); // parameter
-		tags.put("w", TextUtil.parseColor("<white>")); // parameter
-		tags.put("lp", TextUtil.parseColor("<lpurple>"));
-	}
+	private static Map<String, String> tags = new HashMap<String, String>() {{
+		put("g", TextUtil.parseColor("<lime>")); // good
+		put("b", TextUtil.parseColor("<rose>")); // bad
+		put("i", TextUtil.parseColor("<yellow>")); // info
+		put("a", TextUtil.parseColor("<gold>")); // art
+		put("l", TextUtil.parseColor("<green>")); // logo
+		put("n", TextUtil.parseColor("<silver>")); // notice
+		put("h", TextUtil.parseColor("<pink>")); // highlight
+		put("c", TextUtil.parseColor("<aqua>")); // parameter
+		put("p", TextUtil.parseColor("<teal>")); // parameter
+		put("w", TextUtil.parseColor("<white>")); // parameter
+		put("lp", TextUtil.parseColor("<lpurple>"));
+	}};
 
 	public static Map<String, String> getTags() {
 		return tags;
@@ -113,23 +115,20 @@ public class TextUtil {
 	// Standard utils like UCFirst, implode and repeat.
 	// -------------------------------------------- //
 
-	public static String upperCaseFirst(String string) {
-		Guard.ArgumentNotNull(string, "string");
+	public static String upperCaseFirst(@NotNull @NotEmpty String string) {
 		return string.substring(0, 1).toUpperCase() + string.substring(1);
 	}
 
-	public static String repeat(String string, int times) {
-		Guard.ArgumentNotNull(string, "string");
+	public static String repeat(@NotNull String string, int times) {
 		if (times <= 0) {
 			return "";
-		} else {
+		}
+		else {
 			return string + repeat(string, times - 1);
 		}
 	}
 
-	public static String implode(List<String> list, String glue) {
-		Guard.ArgumentNotNull(list, "list");
-		Guard.ArgumentNotNull(glue, "glue");
+	public static String implode(@NotNull List<String> list, @NotNull String glue) {
 		StringBuilder ret = new StringBuilder();
 		for (int i = 0; i < list.size(); i++) {
 			if (i != 0) {
@@ -147,13 +146,11 @@ public class TextUtil {
 		if (list.size() == 1) {
 			return list.get(0);
 		}
-
 		String lastItem = list.get(list.size() - 1);
 		String nextToLastItem = list.get(list.size() - 2);
 		String merge = nextToLastItem + and + lastItem;
 		list.set(list.size() - 2, merge);
 		list.remove(list.size() - 1);
-
 		return implode(list, comma);
 	}
 
