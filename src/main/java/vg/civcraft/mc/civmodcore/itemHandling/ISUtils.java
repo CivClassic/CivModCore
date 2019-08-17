@@ -30,7 +30,7 @@ public class ISUtils {
 			return;
 		}
 		if (lines == null || lines.length < 1) {
-			ItemAPI.setLore(item, null);
+			ItemAPI.clearLore(item);
 		}
 		else {
 			ItemAPI.setLore(item, Arrays.asList(lines));

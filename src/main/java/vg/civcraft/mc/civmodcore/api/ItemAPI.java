@@ -265,6 +265,16 @@ public final class ItemAPI {
 		return setLore(item, lore);
 	}
 
+	public static boolean clearLore(ItemStack item) {
+		if (item == null) {
+			return false;
+		}
+		List<String> lore = getLore(item);
+		lore.clear();
+		setLore(item, lore);
+		return true;
+	}
+
 	/**
 	 * Turns an amount of an item into a series of stacks depending
 	 * on the maximum stack size of the item type. The .getAmount()
