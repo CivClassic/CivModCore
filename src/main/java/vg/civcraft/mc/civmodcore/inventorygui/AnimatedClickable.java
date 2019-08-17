@@ -1,60 +1,91 @@
 package vg.civcraft.mc.civmodcore.inventorygui;
 
 import java.util.List;
+
+import io.protonull.utilities.libs.javax.validation.constraints.Min;
+import io.protonull.utilities.libs.javax.validation.constraints.NotEmpty;
+import io.protonull.utilities.libs.javax.validation.constraints.NotNull;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import vg.civcraft.mc.civmodcore.CivModCorePlugin;
 
-public class AnimatedClickable implements IClickable {
+public class AnimatedClickable extends ClickableButton {
 
 	private List<ItemStack> items;
 	private long timing;
-	private int currentPos;
+	private int currentPos = 0;
+	private BukkitTask task = null;
 
-	public AnimatedClickable(List<ItemStack> stacks, long timing) {
+	public AnimatedClickable(@NotNull @NotEmpty List<ItemStack> stacks, @Min(1) long timing) {
 		this.items = stacks;
 		this.timing = timing;
-		this.currentPos = 0;
-		if (stacks.size() == 0) {
-			throw new IllegalArgumentException("Can't create blinking clickable with empty item list");
-		}
 	}
 
 	public ItemStack getNext() {
-		currentPos++;
-		if (currentPos == items.size()) {
-			currentPos = 0;
+		if (++this.currentPos >= this.items.size()) {
+			this.currentPos = 0;
 		}
-		return items.get(currentPos);
-	}
-
-	@Override
-	public void clicked(Player p) {
-	}
-
-	@Override
-	public ItemStack getItemStack() {
-		return items.get(0);
-	}
-
-	@Override
-	public void addedToInventory(final ClickableInventory inv, final int slot) {
-		// Schedule swapping out of item
-		new BukkitRunnable() {
-
-			@Override
-			public void run() {
-				inv.setItem(getNext(), slot);
-			}
-		}.runTaskTimer(CivModCorePlugin.getInstance(), timing, timing);
-
+		return this.items.get(this.currentPos);
 	}
 
 	/**
-	 * @return How often this instance will switch it's item representation
+	 * @return How often this instance will switch its item representation, think ticks per frame
 	 */
 	public long getTiming() {
-		return timing;
+		return this.timing;
 	}
+
+	/**
+	 * Gets the item that will represent this button within the GUI.
+	 */
+	@Override
+	public ItemStack getButtonItem() {
+		return this.items.get(this.currentPos);
+	}
+
+	/**
+	 * Called when this button is clicked within a GUI.
+	 *
+	 * @param inventory The GUI this button was called in.
+	 * @param player    The player that clicked the button.
+	 */
+	@Override
+	public void onClick(ClickableInventory inventory, Player player) {}
+
+	/**
+	 * Called when this button is added to a GUI.
+	 *
+	 * @param inventory The GUI this button was added to.
+	 * @param slot      The slot of the inventory of the GUI.
+	 */
+	@Override
+	public void onAddedToInventory(ClickableInventory inventory, int slot) {
+		if (this.task != null) {
+			onRemovedFromInventory(inventory, slot);
+		}
+		this.task = new BukkitRunnable() {
+			@Override
+			public void run() {
+				inventory.getInventory().setItem(slot, getNext());
+				ClickableInventoryManager.updateInventory(inventory);
+			}
+		}.runTaskTimer(CivModCorePlugin.getInstance(), this.timing, this.timing);
+	}
+
+	/**
+	 * Called when this button is removed from a GUI.
+	 *
+	 * @param inventory The GUI this button was removed from.
+	 * @param slot      The slot of the inventory of the GUI.
+	 */
+	@Override
+	public void onRemovedFromInventory(ClickableInventory inventory, int slot) {
+		if (this.task != null) {
+			this.task.cancel();
+			this.task = null;
+		}
+	}
+
 }

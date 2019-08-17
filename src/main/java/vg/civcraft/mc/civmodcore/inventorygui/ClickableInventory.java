@@ -1,69 +1,180 @@
 package vg.civcraft.mc.civmodcore.inventorygui;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Logger;
+
+import io.protonull.utilities.libs.javax.validation.constraints.Max;
+import io.protonull.utilities.libs.javax.validation.constraints.Min;
+import io.protonull.utilities.libs.javax.validation.constraints.NotNull;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import vg.civcraft.mc.civmodcore.inventorygui.legacy.IClickable;
 
-/**
- * Represents an inventory filled with Clickables. Whenever one of those is clicked by a player, the clickables specific
- * action is executed. To use those, either extend your main plugin class from ACivMod or register
- * ClickableInventoryListener as a listener in your plugin. DONT DO BOTH.
- * <p>
- * Also if you want to update players inventories with the given method, use setPlugin(JavaPlugin plugin) to specify
- * which plugin this runs on
- *
- * @author Maxopoly
- */
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class ClickableInventory {
 
-	private static final Logger log = Bukkit.getLogger();
-
-	private static HashMap<UUID, ClickableInventory> openInventories = new HashMap<>();
+	public enum Occupation {
+		NONE,
+		BUTTON,
+		ITEM
+	}
 
 	private Inventory inventory;
+	private IClickable[] buttons;
+	private int size;
 
-	private IClickable[] clickables;
-
-	/**
-	 * Creates a new ClickableInventory
-	 *
-	 * @param type
-	 *            type of the inventory, dont use CREATIVE here, it wont work
-	 * @param name
-	 *            name of the inventory which is shown at the top when a player has it open
-	 */
-	public ClickableInventory(InventoryType type, String name) {
-		if (name != null && name.length() > 32) {
-			log.warning("ClickableInventory title exceeds Bukkit limits: " + name);
+	public ClickableInventory(@NotNull InventoryType type, @NotNull String name) {
+		if (type == InventoryType.CREATIVE) {
+			throw new IllegalArgumentException("Cannot use CREATIVE as a clickable inventory.");
+		}
+		if (name.length() > 32) {
 			name = name.substring(0, 32);
 		}
-		inventory = Bukkit.createInventory(null, type, name);
-		this.clickables = new IClickable[inventory.getSize() + 1];
+		this.inventory = Bukkit.createInventory(null, type, name);
+		this.buttons = new IClickable[this.inventory.getSize()];
+		this.size = this.buttons.length;
+	}
+
+	public ClickableInventory(@Min(1) @Max(54) int size, @NotNull String name) {
+		if ((size % 9) != 0) {
+			throw new IllegalArgumentException("ClickableInventory's size must be divisible by 9");
+		}
+		if (name.length() > 32) {
+			name = name.substring(0, 32);
+		}
+		this.inventory = Bukkit.createInventory(null, size, name);
+		this.buttons = new IClickable[size];
+		this.size = size;
+	}
+
+	public final @Nonnull Occupation isSlotOccupied(int slot) {
+		if (slot < 0 || slot >= this.size) {
+			return Occupation.NONE;
+		}
+		if (this.buttons[slot] != null) {
+			return Occupation.BUTTON;
+		}
+		if (this.inventory.getItem(slot) != null) {
+			return Occupation.ITEM;
+		}
+		return Occupation.NONE;
 	}
 
 	/**
-	 * Creates a new Clickable Inventory based on how many slots the inventory should have. The given size should always
-	 * be dividable by 9 and smaller or equal to 54, which is the maximum possible size
-	 *
-	 * @param size
-	 *            Size of the inventory to create, must be multiple of 9, bigger than 0 and smaller than 54
-	 * @param name
-	 *            name of the inventory which is shown at the top when a player has it open
-	 */
-	public ClickableInventory(int size, String name) {
-		if (name != null && name.length() > 32) {
-			log.warning("ClickableInventory title exceeds Bukkit limits: " + name);
-			name = name.substring(0, 32);
+	 * Empties a slot of buttons and items.
+	 * @throws IndexOutOfBoundsException if the slot is out of bounds
+	 * */
+	public final void emptyOutSlot(int slot) {
+		if (slot < 0 || slot >= this.size) {
+			throw new IndexOutOfBoundsException();
 		}
-		inventory = Bukkit.createInventory(null, size, name);
-		this.clickables = new IClickable[size + 1];
+		ClickableButton button = getButtonSlot(slot);
+		if (button != null) {
+			button.onRemovedFromInventory(this, slot);
+		}
+		this.buttons[slot] = null;
+		this.inventory.setItem(slot, null);
 	}
+
+	/**
+	 * Sets a clickable button to a slot.
+	 * WARNING: This will overwrite any item set through the inventory or through .setItemSlot(); You should check with
+	 * if the slot is occupied first before setting anything. This will also not cause an inventory update.
+	 * @see ClickableInventory#isSlotOccupied(int)
+	 * @see ClickableInventoryManager#updateInventory(ClickableInventory)
+	 * @throws IndexOutOfBoundsException if the slot is out of bounds
+	 * */
+	public final void setButtonSlot(ClickableButton button, int slot) {
+		if (slot < 0 || slot >= this.size) {
+			throw new IndexOutOfBoundsException();
+		}
+		emptyOutSlot(slot);
+		if (button != null) {
+			button.onAddedToInventory(this, slot);
+			this.inventory.setItem(slot, button.getButtonItem());
+			this.buttons[slot] = button;
+		}
+	}
+
+	/**
+	 * Gets a clickable button from a slot.
+	 * WARNING: The inventory's items are not considered at all, only ClickableInventory's internal buttons array. Don't
+	 * assume that just because a button isn't present in this slot, that this slot is objectively empty.
+	 * @throws IndexOutOfBoundsException if the slot is out of bounds
+	 * */
+	public final @Nullable ClickableButton getButtonSlot(int slot) {
+		if (slot < 0 || slot >= this.size) {
+			throw new IndexOutOfBoundsException();
+		}
+		IClickable clickable = this.buttons[slot];
+		if (clickable instanceof ClickableButton) {
+			return (ClickableButton) clickable;
+		}
+		return null;
+	}
+
+	/**
+	 * Sets an item to a slot.
+	 * WARNING: This will nullify any button set to this slot. You should check with if the slot is occupied first
+	 * before setting anything. This will also not cause an inventory update.
+	 * @see ClickableInventory#isSlotOccupied(int)
+	 * @see ClickableInventoryManager#updateInventory(ClickableInventory)
+	 * @throws IndexOutOfBoundsException if the slot is out of bounds
+	 * */
+	public final void setItemSlot(ItemStack item, int slot) {
+		if (slot < 0 || slot >= this.size) {
+			throw new IndexOutOfBoundsException();
+		}
+		emptyOutSlot(slot);
+		this.inventory.setItem(slot, item);
+		this.buttons[slot] = null;
+	}
+
+	/**
+	 * Gets an item from a slot.
+	 * WARNING: If a button exists in this slot, null will be returned. Don't assume that because no item was returned
+	 * that the slot is objectively empty.
+	 * @throws IndexOutOfBoundsException if the slot is out of bounds
+	 * */
+	public final ItemStack getItemSlot(int slot) {
+		if (slot < 0 || slot >= this.size) {
+			throw new IndexOutOfBoundsException();
+		}
+		if (this.buttons[slot] != null) {
+			return null;
+		}
+		return this.inventory.getItem(slot);
+	}
+
+	/**
+	 * Click a button if a button exists in that slot.
+	 * @throws IndexOutOfBoundsException if the slot is out of bounds
+	 * */
+	public final void clickButtonSlot(Player player, int slot) {
+		if (slot < 0 || slot >= this.size) {
+			throw new IndexOutOfBoundsException();
+		}
+		IClickable clickable = this.buttons[slot];
+		if (clickable instanceof ClickableButton) {
+			((ClickableButton) clickable).onClick(this, player);
+			return;
+		}
+		clickable.clicked(player);
+	}
+
+	public final Inventory getInventory() {
+		return this.inventory;
+	}
+
+	public final int getSize() {
+		return this.size;
+	}
+
+	// Deprecated functions
 
 	/**
 	 * Sets a specific slot to use the given Clickable and also updates its item in the inventory. This will overwrite
@@ -71,42 +182,39 @@ public class ClickableInventory {
 	 * while a player has an inventory open, the visual for him isn't changed, but the functionality behind the scenes
 	 * is, possibly resulting in something the player did not want to do. Either only use this if you are sure noone has
 	 * this inventory open currently or update the inventories right away
-	 *
-	 * @param c
-	 *            The new clickable for the given slot
-	 * @param index
-	 *            index of the slot in the inventory
+	 * @see ClickableInventory#setButtonSlot(ClickableButton, int)
 	 */
-	public void setSlot(IClickable c, int index) {
-		inventory.setItem(index, c.getItemStack());
-		clickables[index] = c;
-		c.addedToInventory(this, index);
+	@Deprecated
+	public final void setSlot(IClickable clickable, int slot) {
+		if (slot >= 0 || slot < this.size) {
+			clickable.addedToInventory(this, slot);
+			this.inventory.setItem(slot, clickable.getItemStack());
+			this.buttons[slot] = clickable;
+		}
 	}
 
 	/**
 	 * Gets which Clickable currently represents the given slot in this instance.
-	 *
-	 * @param index
-	 *            index of the Clickable or the item representation in the inventory
-	 * @return Either the clickable in the given slot or null if the slot is empty or if the given index is out of range
-	 *         of the inventory indices
+	 * @see ClickableInventory#getButtonSlot(int)
 	 */
-	public IClickable getSlot(int index) {
-		return index < inventory.getSize() ? clickables[index] : null;
+	@Deprecated
+	public final IClickable getSlot(int slot) {
+		if (slot < 0 || slot >= this.size) {
+			return null;
+		}
+		emptyOutSlot(slot);
+		return this.buttons[slot];
 	}
 
 	/**
 	 * This puts the given clickable in the first empty slot of this instance. If there are no empty slots, this will
 	 * fail quietly. Make sure to not add clickables, whichs item representation is identical to another already in this
 	 * inventory existing clickable, because their item representation would stack in the inventory
-	 *
-	 * @param c
-	 *            Clickable to add
 	 */
-	public void addSlot(IClickable c) {
-		for (int i = 0; i < clickables.length; i++) {
-			if (clickables[i] == null) {
-				setSlot(c, i);
+	public final void addSlot(IClickable clickable) {
+		for (int i = 0; i < this.size; i++) {
+			if (isSlotOccupied(i) == Occupation.NONE) {
+				setSlot(clickable, i);
 				break;
 			}
 		}
@@ -115,66 +223,41 @@ public class ClickableInventory {
 	/**
 	 * Called whenever a player clicks an item in a clickable inventory. This executes the clicked items clickable and
 	 * also closes the clickable inventory, unless the clicked object was a decoration stack
-	 *
-	 * @param p
-	 *            Player who clicked
-	 * @param index
-	 *            index of the item in the inventory
+	 * @see ClickableInventory#clickButtonSlot(Player, int)
 	 */
-	public void itemClick(Player p, int index) {
-		if (index >= clickables.length || index < 0 || clickables[index] == null) {
-			return;
+	@Deprecated
+	public final void itemClick(Player player, int slot) {
+		try {
+			clickButtonSlot(player, slot);
 		}
-		clickables[index].clicked(p);
-	}
-
-	/**
-	 * Gets the inventory shown to players by this instance. Do not modify the inventory object directly, use the
-	 * methods provided by this class instead
-	 *
-	 * @return The inventory which represents this instance
-	 */
-	public Inventory getInventory() {
-		return inventory;
+		catch (IndexOutOfBoundsException ignored) {}
 	}
 
 	/**
 	 * Shows a player the inventory of this instance with all of its clickables
-	 *
-	 * @param p
-	 *            Player to show the inventory to
+	 * @see ClickableInventoryManager#showInventory(Player, ClickableInventory)
 	 */
-	public void showInventory(Player p) {
-		if (p != null) {
-			p.openInventory(inventory);
-			openInventories.put(p.getUniqueId(), this);
-		}
+	@Deprecated
+	public final void showInventory(Player player) {
+		ClickableInventoryManager.showInventory(player, this);
 	}
 
 	/**
 	 * Updates the inventories of this instance for all players who have it currently open and syncs it with the
 	 * internal representation.
+	 * @see ClickableInventoryManager#updateInventory(ClickableInventory)
 	 */
-	public void updateInventory() {
-		for (Map.Entry<UUID, ClickableInventory> c : openInventories.entrySet()) {
-			if (c.getValue() == this) {
-				Player p = Bukkit.getPlayer(c.getKey());
-				p.updateInventory();
-				showInventory(p);
-			}
-		}
+	@Deprecated
+	public final void updateInventory() {
+		ClickableInventoryManager.updateInventory(this);
 	}
 
 	/**
 	 * Gets the index of any given Clickable in this instance
-	 *
-	 * @param c
-	 *            Clickable to search for
-	 * @return The index of the clickable if it exists in this inventory or -1 if it doesnt
 	 */
-	public int indexOf(IClickable c) {
-		for (int i = 0; i < clickables.length; i++) {
-			if (clickables[i] == c) {
+	public final int indexOf(IClickable clickable) {
+		for (int i = 0; i < this.size; i++) {
+			if (this.buttons[i] == clickable) {
 				return i;
 			}
 		}
@@ -183,85 +266,66 @@ public class ClickableInventory {
 
 	/**
 	 * Sets a certain item slot, while bypassing the clickable structure
-	 * 
-	 * @param is
-	 *            ItemStack to set to
-	 * @param slot
-	 *            Slot to be set
+	 * @see ClickableInventory#setItemSlot(ItemStack, int) 
 	 */
-	void setItem(ItemStack is, int slot) {
-		inventory.setItem(slot, is);
+	@Deprecated
+	public final void setItem(ItemStack item, int slot) {
+		setItemSlot(item, slot);
 	}
 
 	/**
 	 * Closes a players clickable inventory if he has one open. This will also close any other inventory the player has
 	 * possibly open, but no problems will occur if this is called while no clickable inventory was actually open
-	 *
-	 * @param p
-	 *            Player whose inventory is closed
+	 * @see ClickableInventoryManager#closeInventory(Player)
 	 */
-	public static void forceCloseInventory(Player p) {
-		if (p != null) {
-			p.closeInventory();
-			openInventories.remove(p.getUniqueId());
-		}
+	@Deprecated
+	public static void forceCloseInventory(Player player) {
+		ClickableInventoryManager.closeInventory(player);
 	}
 
 	/**
 	 * Called whenever a player closes a clickable inventory to update this in the internal tracking
-	 *
-	 * @param p
-	 *            Player who closed the inventory
+	 * @see ClickableInventoryManager#inventoryClosed(Player)
 	 */
-	public static void inventoryWasClosed(Player p) {
-		if (p != null) {
-			openInventories.remove(p.getUniqueId());
-		}
+	@Deprecated
+	public static void inventoryWasClosed(Player player) {
+		ClickableInventoryManager.inventoryClosed(player);
 	}
 
 	/**
 	 * Checks whether a player has a clickable inventory open currently
-	 *
-	 * @param p
-	 *            Player to check
-	 * @return true if the player has a clickable inventory open currently, false if not
+	 * @see ClickableInventoryManager#getOpenClickable(Player)
 	 */
-	public static boolean hasClickableInventoryOpen(Player p) {
-		return openInventories.get(p.getUniqueId()) != null;
+	@Deprecated
+	public static boolean hasClickableInventoryOpen(Player player) {
+		return ClickableInventoryManager.getOpenClickable(player) != null;
 	}
 
 	/**
 	 * Checks whether the player with this uuid has a clickable inventory open
-	 *
-	 * @param uuid
-	 *            UUID of the player to check
-	 * @return true if the player has a clickable inventory open currently, false if not
+	 * @see ClickableInventoryManager#getOpenClickable(UUID)
 	 */
+	@Deprecated
 	public static boolean hasClickableInventoryOpen(UUID uuid) {
-		return openInventories.get(uuid) != null;
-	}
-
-	/**
-	 * Gets which clickable inventory the player with the given uuid has currently open
-	 *
-	 * @param uuid
-	 *            UUID of the player
-	 * @return The clickable inventory the player has currently open or null if the player has no inventory open
-	 */
-	public static ClickableInventory getOpenInventory(UUID uuid) {
-		return openInventories.get(uuid);
+		return ClickableInventoryManager.getOpenClickable(uuid) != null;
 	}
 
 	/**
 	 * Gets which clickable inventory the given player has currently open
-	 *
-	 * @param p
-	 *            Player whose ClickableInventory is returned
-	 * @return The ClickableInventory the player has currently open or null if the either the player has no inventory
-	 *         open or if the given player object was null
+	 * @see ClickableInventoryManager#getOpenClickable(Player)
 	 */
-	public static ClickableInventory getOpenInventory(Player p) {
-		return p != null ? getOpenInventory(p.getUniqueId()) : null;
+	@Deprecated
+	public static ClickableInventory getOpenInventory(Player player) {
+		return ClickableInventoryManager.getOpenClickable(player);
+	}
+
+	/**
+	 * Gets which clickable inventory the player with the given uuid has currently open
+	 * @see ClickableInventoryManager#getOpenClickable(UUID)
+	 */
+	@Deprecated
+	public static ClickableInventory getOpenInventory(UUID uuid) {
+		return ClickableInventoryManager.getOpenClickable(uuid);
 	}
 
 }

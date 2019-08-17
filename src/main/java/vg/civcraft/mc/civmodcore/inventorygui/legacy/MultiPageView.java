@@ -1,4 +1,4 @@
-package vg.civcraft.mc.civmodcore.inventorygui;
+package vg.civcraft.mc.civmodcore.inventorygui.legacy;
 
 import java.util.List;
 import org.bukkit.ChatColor;
@@ -6,11 +6,12 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
+import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventory;
 
 /**
  * Utility to automate creating views, which have multiple pages and automatically adjust their size
- *
  */
+@Deprecated
 public class MultiPageView {
 
 	private Player p;
@@ -147,4 +148,5 @@ public class MultiPageView {
 	public void setPage(int page) {
 		this.currentPage = page;
 	}
+
 }

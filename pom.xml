@@ -108,6 +108,10 @@
 									<pattern>${project.groupId}.database</pattern>
 									<shadedPattern>${project.groupId}.dao</shadedPattern>
 								</relocation>
+								<relocation>
+									<pattern>${project.groupId}.inventorygui.legacy</pattern>
+									<shadedPattern>${project.groupId}.inventorygui</shadedPattern>
+								</relocation>
 							</relocations>
 						</configuration>
 					</execution>

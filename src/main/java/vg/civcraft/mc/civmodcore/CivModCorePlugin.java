@@ -6,7 +6,7 @@ import vg.civcraft.mc.civmodcore.api.EnchantingAPI;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.dialog.DialogManager;
 import vg.civcraft.mc.civmodcore.database.ManagedDatasource;
-import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventoryListener;
+import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventoryManager;
 
 /**
  * The sole purpose of this class is to make Spigot recognize this library as a plugin and automatically load the
@@ -27,7 +27,7 @@ public final class CivModCorePlugin extends ACivMod {
 		saveResource("materials.csv", false);
 		saveResource("potions.csv", false);
 		// Register listeners
-		registerListener(new ClickableInventoryListener());
+		registerListener(ClickableInventoryManager.instance);
 		registerListener(DialogManager.instance);
 		// Load APIs
 		ItemAPI.loadItemNames();
