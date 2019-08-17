@@ -3,7 +3,6 @@ package vg.civcraft.mc.civmodcore.dialog;
 import java.util.List;
 
 import io.protonull.utilities.Exists;
-import lombok.Getter;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.ConversationFactory;
@@ -14,7 +13,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class Dialog {
 
-	@Getter
 	private final Player player;
 	private final Conversation conversation;
 
@@ -45,6 +43,10 @@ public abstract class Dialog {
 		this.conversation.begin();
 	}
 
+	public Player getPlayer() {
+		return this.player;
+	}
+
 	/**
 	 * @deprecated Kept for backwards compatibility, please use .onResponse(String) instead.
 	 * @see Dialog .onResponse(String)
@@ -62,7 +64,7 @@ public abstract class Dialog {
 	}
 
 	/**
-	 * Overwrite this method!
+	 * Override this method!
 	 * */
 	public void onResponse(String message) {
 		if (Exists.string(message)) {
@@ -74,7 +76,7 @@ public abstract class Dialog {
 	}
 
 	/**
-	 * Overwrite this method!
+	 * Override this method!
 	 * */
 	public List<String> onTabComplete(String word, String message) {
 		if (Exists.string(message)) {
@@ -86,7 +88,7 @@ public abstract class Dialog {
 	}
 
 	/**
-	 * Overwrite this method!
+	 * Override this method!
 	 * */
 	public void onCancelled() {
 

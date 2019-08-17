@@ -1,6 +1,5 @@
 package vg.civcraft.mc.civmodcore;
 
-import lombok.Getter;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.event.HandlerList;
 import vg.civcraft.mc.civmodcore.api.EnchantingAPI;
@@ -17,7 +16,6 @@ import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventoryListener;
  */
 public final class CivModCorePlugin extends ACivMod {
 
-	@Getter
 	private static CivModCorePlugin instance;
 
 	@Override
@@ -45,6 +43,10 @@ public final class CivModCorePlugin extends ACivMod {
 		ItemAPI.resetItemNames();
 		EnchantingAPI.resetEnchantmentNames();
 		ConfigurationSerialization.unregisterClass(ManagedDatasource.class);
+	}
+
+	public static CivModCorePlugin getInstance() {
+		return instance;
 	}
 
 }

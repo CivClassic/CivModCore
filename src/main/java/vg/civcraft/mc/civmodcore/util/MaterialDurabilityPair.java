@@ -3,14 +3,11 @@ package vg.civcraft.mc.civmodcore.util;
 import io.protonull.utilities.libs.javax.validation.constraints.Max;
 import io.protonull.utilities.libs.javax.validation.constraints.Min;
 import io.protonull.utilities.libs.javax.validation.constraints.NotNull;
-import lombok.Getter;
 import org.bukkit.Material;
 
 public final class MaterialDurabilityPair {
 
-	@Getter
 	private Material material;
-	@Getter
 	private short durability;
 
 	public MaterialDurabilityPair(@NotNull Material material) {
@@ -26,6 +23,14 @@ public final class MaterialDurabilityPair {
 	public MaterialDurabilityPair(@NotNull Material material, @Min(0) @Max(Short.MAX_VALUE) int durability) {
 		this.material = material;
 		this.durability = (short) durability;
+	}
+
+	public Material getMaterial() {
+		return this.material;
+	}
+
+	public short getDurability() {
+		return this.durability;
 	}
 
 }
