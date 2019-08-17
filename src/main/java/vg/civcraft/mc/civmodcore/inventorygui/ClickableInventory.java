@@ -51,6 +51,12 @@ public class ClickableInventory {
 		this.size = size;
 	}
 
+	public ClickableInventory(@NotNull Inventory inventory) {
+		this.inventory = inventory;
+		this.buttons = new IClickable[this.inventory.getSize()];
+		this.size = this.buttons.length;
+	}
+
 	public final @Nonnull Occupation isSlotOccupied(int slot) {
 		if (slot < 0 || slot >= this.size) {
 			return Occupation.NONE;
@@ -62,6 +68,19 @@ public class ClickableInventory {
 			return Occupation.ITEM;
 		}
 		return Occupation.NONE;
+	}
+
+	/**
+	 * Shutdown the inventory
+	 * */
+	public final void prepareForClose() {
+		for (int i = 0; i < this.size; i++) {
+			ClickableButton button = getButtonSlot(i);
+			if (button == null) {
+				continue;
+			}
+			button.onInventoryClose(this, i);
+		}
 	}
 
 	/**

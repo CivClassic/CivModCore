@@ -37,6 +37,7 @@ public final class ClickableInventoryManager implements Listener {
         if (player == null || inventory == null) {
             return false;
         }
+        closeInventory(player);
         player.openInventory(inventory.getInventory());
         clickables.put(player.getUniqueId(), inventory);
         return true;
@@ -61,15 +62,22 @@ public final class ClickableInventoryManager implements Listener {
         if (player == null) {
             return;
         }
-        clickables.remove(player.getUniqueId());
+        ClickableInventory inventory = clickables.get(player.getUniqueId());
+        if (inventory == null) {
+        	return;
+		}
+		clickables.remove(player.getUniqueId());
+		if (!clickables.containsValue(inventory)) {
+			inventory.prepareForClose();
+		}
     }
 
     public static void closeInventory(Player player) {
         if (player == null) {
             return;
         }
+		inventoryClosed(player);
         player.closeInventory();
-        inventoryClosed(player);
     }
 
     @EventHandler

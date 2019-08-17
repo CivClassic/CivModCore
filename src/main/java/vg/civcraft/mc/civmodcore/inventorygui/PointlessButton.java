@@ -19,7 +19,7 @@ public class PointlessButton extends ClickableButton {
 	 * Gets the item that will represent this button within the GUI.
 	 */
 	@Override
-	public ItemStack getButtonItem() {
+	public final ItemStack getButtonItem() {
 		return this.item;
 	}
 
@@ -46,5 +46,16 @@ public class PointlessButton extends ClickableButton {
 	 * @param slot      The slot of the inventory of the GUI.
 	 */
 	public void onRemovedFromInventory(ClickableInventory inventory, int slot) {}
+
+	/**
+	 * Called when the GUI is no longer being viewed.
+	 *
+	 * @param inventory The GUI that is no longer being viewed.
+	 * @param slot      The slot of the inventory of the GUI.
+	 */
+	@Override
+	public void onInventoryClose(ClickableInventory inventory, int slot) {
+		inventory.emptyOutSlot(slot);
+	}
 
 }

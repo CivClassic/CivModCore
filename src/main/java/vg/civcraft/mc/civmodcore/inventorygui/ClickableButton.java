@@ -53,4 +53,12 @@ public abstract class ClickableButton implements IClickable {
 	 */
 	public abstract void onRemovedFromInventory(ClickableInventory inventory, int slot);
 
+	/**
+	 * Called when the GUI is no longer being viewed.
+	 *
+	 * @param inventory The GUI that is no longer being viewed.
+	 * @param slot      The slot of the inventory of the GUI.
+	 * */
+	public abstract void onInventoryClose(ClickableInventory inventory, int slot);
+
 }

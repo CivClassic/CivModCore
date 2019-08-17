@@ -82,6 +82,22 @@ public class AnimatedClickable extends ClickableButton {
 	 */
 	@Override
 	public void onRemovedFromInventory(ClickableInventory inventory, int slot) {
+		stopAnimation();
+	}
+
+	/**
+	 * Called when the GUI is no longer being viewed.
+	 *
+	 * @param inventory The GUI that is no longer being viewed.
+	 * @param slot      The slot of the inventory of the GUI.
+	 */
+	@Override
+	public void onInventoryClose(ClickableInventory inventory, int slot) {
+		stopAnimation();
+		inventory.emptyOutSlot(slot);
+	}
+
+	private void stopAnimation() {
 		if (this.task != null) {
 			this.task.cancel();
 			this.task = null;
