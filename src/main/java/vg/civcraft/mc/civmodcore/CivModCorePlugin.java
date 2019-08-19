@@ -31,7 +31,7 @@ public final class CivModCorePlugin extends ACivMod {
 		registerListener(DialogManager.instance);
 		// Load APIs
 		ItemAPI.loadItemNames();
-		EnchantingAPI.loadEnchantmentNames();
+		EnchantingAPI.loadEnchantmentDetails();
 		ConfigurationSerialization.registerClass(ManagedDatasource.class);
 	}
 
@@ -41,7 +41,7 @@ public final class CivModCorePlugin extends ACivMod {
 		instance = null;
 		HandlerList.unregisterAll(this);
 		ItemAPI.resetItemNames();
-		EnchantingAPI.resetEnchantmentNames();
+		EnchantingAPI.resetEnchantmentDetails();
 		ConfigurationSerialization.unregisterClass(ManagedDatasource.class);
 	}
 

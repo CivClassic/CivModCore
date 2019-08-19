@@ -7,6 +7,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import vg.civcraft.mc.civmodcore.CivModCorePlugin;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,11 +20,19 @@ import java.util.logging.Logger;
 public final class EnchantingAPI {
 	private EnchantingAPI() {} // Make the class effectively static
 
+	/**
+	 * Determines whether an enchantment is considered safe.
+	 * It is considered safe if the enchantment exists and the level is within the bounds of the enchantment's minimum
+	 * and maximum level.
+	 * */
 	public static boolean isSafeEnchantment(Enchantment enchantment, int level) {
 		return enchantment != null && level >= enchantment.getStartLevel() && level <= enchantment.getMaxLevel();
 	}
 
-	public static Map<Enchantment, Integer> getItemEnchantments(ItemStack item) {
+	/**
+	 * Gets the enchantments from an item
+	 * */
+	public static @Nonnull Map<Enchantment, Integer> getEnchantments(ItemStack item) {
 		ItemMeta meta = ItemAPI.getItemMeta(item);
 		if (meta == null || !meta.hasEnchants()) {
 			return new HashMap<>();
@@ -30,10 +40,21 @@ public final class EnchantingAPI {
 		return meta.getEnchants();
 	}
 
+	/**
+	 * Adds a safe enchantment to an item.
+	 * @return Returns whether the enchantment was successfully added.
+	 * @see EnchantingAPI#isSafeEnchantment(Enchantment, int)
+	 * */
 	public static boolean addEnchantment(ItemStack item, Enchantment enchantment, int level) {
 		return addEnchantment(item, enchantment, level, true);
 	}
 
+	/**
+	 * Adds an enchantment to an item.
+	 * @param onlyAllowSafeEnchantments Determines whether the enchantment should be added only if it's safe.
+	 * @return Returns whether the enchantment was successfully added.
+	 * @see EnchantingAPI#isSafeEnchantment(Enchantment, int)
+	 * */
 	public static boolean addEnchantment(ItemStack item, Enchantment enchantment, int level, boolean onlyAllowSafeEnchantments) {
 		ItemMeta meta = ItemAPI.getItemMeta(item);
 		if (meta == null || enchantment == null) {
@@ -49,6 +70,9 @@ public final class EnchantingAPI {
 		return true;
 	}
 
+	/**
+	 * Removes an enchantment from an item.
+	 * */
 	public static boolean removeEnchantment(ItemStack item, Enchantment enchantment) {
 		ItemMeta meta = ItemAPI.getItemMeta(item);
 		if (meta == null || enchantment == null) {
@@ -61,16 +85,16 @@ public final class EnchantingAPI {
 		return true;
 	}
 
+	/**
+	 * Removes all enchantments from an item.
+	 * */
 	public static boolean clearEnchantments(ItemStack item) {
 		ItemMeta meta = ItemAPI.getItemMeta(item);
 		if (meta == null || !meta.hasEnchants()) {
 			return true;
 		}
-		for (Enchantment enchant : meta.getEnchants().keySet()) {
-			if (!meta.removeEnchant(enchant)) {
-				return false;
-			}
-		}
+		meta.getEnchants().clear();
+		item.setItemMeta(meta);
 		return true;
 	}
 
@@ -81,13 +105,19 @@ public final class EnchantingAPI {
 	private static Map<Enchantment, String> enchantmentNames = new HashMap<>();
 	private static Map<Enchantment, String> enchantmentInitials = new HashMap<>();
 
-	public static void resetEnchantmentNames() {
+	/**
+	 * Resets all enchantments names and initials.
+	 * */
+	public static void resetEnchantmentDetails() {
 		enchantmentNames.clear();
 		enchantmentInitials.clear();
 	}
 
-	public static void loadEnchantmentNames() {
-		resetEnchantmentNames();
+	/**
+	 * Loads enchantment names and initials from the config.
+	 * */
+	public static void loadEnchantmentDetails() {
+		resetEnchantmentDetails();
 		Logger logger = Bukkit.getLogger();
 		try {
 			InputStream in = CivModCorePlugin.class.getResourceAsStream("/enchantments.csv");
@@ -141,14 +171,22 @@ public final class EnchantingAPI {
 		}
 	}
 
-	public static String getEnchantmentName(Enchantment enchantment) {
+	/**
+	 * Returns an enchantment's name, e.g: DIG_SPEED -> Efficiency
+	 * WARNING: May return null.
+	 * */
+	public static @Nullable String getEnchantmentName(Enchantment enchantment) {
 		if (enchantment == null) {
 			return null;
 		}
 		return enchantmentNames.get(enchantment);
 	}
 
-	public static String getEnchantmentInitials(Enchantment enchantment) {
+	/**
+	 * Returns an enchantment's initials, e.g: DIG_SPEED -> E
+	 * WARNING: May return null.
+	 * */
+	public static @Nullable String getEnchantmentInitials(Enchantment enchantment) {
 		if (enchantment == null) {
 			return null;
 		}

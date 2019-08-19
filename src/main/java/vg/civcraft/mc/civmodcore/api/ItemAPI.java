@@ -10,6 +10,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import vg.civcraft.mc.civmodcore.CivModCorePlugin;
 import vg.civcraft.mc.civmodcore.util.MaterialDurabilityPair;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +30,8 @@ public final class ItemAPI {
 	/**
 	 * Some blocks use durability as a discriminator, to create sub
 	 * block types, take Stone and Polished Granite for example.
-	 * Minecraft 1.13 will make this function redundant.
+	 *
+	 * @deprecated 1.13 will make this function redundant.
 	 * */
 	public static boolean hasDiscriminator(Material material) {
 		switch (material) {
@@ -80,6 +83,8 @@ public final class ItemAPI {
 	 * Instead it has a new meta interface, Damageable, that can be
 	 * instanceof'd, so this function is to duplicate that until
 	 * the update to 1.13 or above.
+	 *
+	 * @deprecated 1.13 will make this function redundant.
 	 * */
 	public static boolean instanceofDamageable(Material material) {
 		switch (material) {
@@ -140,10 +145,22 @@ public final class ItemAPI {
 		return false;
 	}
 
+	/**
+	 * Gets a material's slug, e.g: STONE:0
+	 * WARNING: May return null.
+	 *
+	 * @deprecated 1.13 will make this function redundant.
+	 * */
 	public static String getMaterialSlug(Material material) {
 		return getMaterialSlug(material, (short) 0);
 	}
 
+	/**
+	 * Gets a material's slug, e.g: STONE:0
+	 * WARNING: May return null.
+	 *
+	 * @deprecated 1.13 will make this function redundant.
+	 * */
 	public static String getMaterialSlug(Material material, short durability) {
 		if (material == null) {
 			return null;
@@ -154,6 +171,12 @@ public final class ItemAPI {
 		return material.name() + ":" + durability;
 	}
 
+	/**
+	 * Gets a material by its slug, e.g: STONE or STONE:0
+	 * WARNING: May return null.
+	 *
+	 * @deprecated 1.13 will make this function redundant.
+	 * */
 	public static MaterialDurabilityPair getMaterialFromSlug(String slug) {
 		if (!Exists.string(slug)) {
 			return null;
@@ -170,6 +193,7 @@ public final class ItemAPI {
 			}
 			catch (NumberFormatException error) {
 				Bukkit.getLogger().warning("Could not parse durability [" + splitSlug[1] + "] into a short!");
+				return null;
 			}
 		}
 		if (durability < 0) {
@@ -178,10 +202,19 @@ public final class ItemAPI {
 		return new MaterialDurabilityPair(material, durability);
 	}
 
+	/**
+	 * Determines whether two item stacks are functionally identical.
+	 * WARNING: Will not return true if both stacks are null.
+	 * */
 	public static boolean areItemsEqual(ItemStack former, ItemStack latter) {
 		return Equals.notNull(former, latter);
 	}
 
+	/**
+	 * Determines whether two item stacks are similar.
+	 * NOTE: This is practically areItemsEqual() but without the check on amount.
+	 * WARNING: Will not return true if both stacks are null.
+	 * */
 	public static boolean areItemsSimilar(ItemStack former, ItemStack latter) {
 		if (former == null || latter == null) {
 			return false;
@@ -189,13 +222,21 @@ public final class ItemAPI {
 		return former.isSimilar(latter);
 	}
 
-	public static ItemMeta getItemMeta(ItemStack item) {
+	/**
+	 * Retrieves the ItemMeta from an item.
+	 * WARNING: May return null.
+	 * */
+	public static @Nullable ItemMeta getItemMeta(ItemStack item) {
 		if (item == null || !item.hasItemMeta()) {
 			return null;
 		}
 		return item.getItemMeta();
 	}
 
+	/**
+	 * Retrieves the display name from an item.
+	 * WARNING: May return null.
+	 * */
 	public static String getDisplayName(ItemStack item) {
 		ItemMeta meta = getItemMeta(item);
 		if (meta == null || !meta.hasDisplayName()) {
@@ -204,6 +245,11 @@ public final class ItemAPI {
 		return meta.getDisplayName();
 	}
 
+	/**
+	 * Sets a display name to an item.
+	 * NOTE: Setting the display name to null will remove the display name from the item.
+	 * @return Whether the setting was successful.
+	 * */
 	public static boolean setDisplayName(ItemStack item, String name) {
 		if (item == null) {
 			return false;
@@ -214,7 +260,10 @@ public final class ItemAPI {
 		return true;
 	}
 
-	public static List<String> getLore(ItemStack item) {
+	/**
+	 * Retrieves the lore from an item.
+	 * */
+	public static @Nonnull List<String> getLore(ItemStack item) {
 		ItemMeta meta = getItemMeta(item);
 		if (meta == null || !meta.hasLore()) {
 			return new ArrayList<>();
