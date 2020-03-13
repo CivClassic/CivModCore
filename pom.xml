@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>vg.civcraft.mc.civmodcore</groupId>
-	<artifactId>CivModCore</artifactId>
-	<version>1.6.4</version>
+    <groupId>vg.civcraft.mc.civmodcore</groupId>
+    <artifactId>CivModCore</artifactId>
+    <version>1.6.4</version>
 
-	<name>CivModCore</name>
-	<url>https://github.com/DevotedMC/CivModCore/</url>
+    <name>CivModCore</name>
+    <url>https://github.com/DevotedMC/CivModCore/</url>
 
     <properties>
         <encoding>UTF-8</encoding>
@@ -83,7 +83,8 @@
                                 </includes>
                             </artifactSet>
                             <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
                                         <Built-By>${project.name}</Built-By>
                                     </manifestEntries>
@@ -98,7 +99,9 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>2.17</version>
                 <configuration>
-                    <configLocation>https://build.devotedmc.com/job/Style-guide-master/lastSuccessfulBuild/artifact/src/main/resources/devoted_checks.xml</configLocation>
+                    <configLocation>
+                        https://build.devotedmc.com/job/Style-guide-master/lastSuccessfulBuild/artifact/src/main/resources/devoted_checks.xml
+                    </configLocation>
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>false</failsOnError>
                 </configuration>
@@ -132,19 +135,19 @@
         </plugins>
     </reporting>
 
-	<dependencies>
+    <dependencies>
         <!-- Hard Dependencies -->
-		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot</artifactId>
-			<version>1.12.2-R0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.zaxxer</groupId>
-			<artifactId>HikariCP</artifactId>
-			<version>3.4.2</version>
-		</dependency>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>3.4.2</version>
+        </dependency>
         <dependency>
             <groupId>org.javatuples</groupId>
             <artifactId>javatuples</artifactId>
@@ -157,13 +160,13 @@
             <version>4.13</version>
             <scope>test</scope>
         </dependency>
-	</dependencies>
+    </dependencies>
 
-	<repositories>
-		<repository>
-			<id>devoted-repo</id>
-			<url>https://build.devotedmc.com/plugin/repository/everything/</url>
-		</repository>
-	</repositories>
+    <repositories>
+        <repository>
+            <id>devoted-repo</id>
+            <url>https://build.devotedmc.com/plugin/repository/everything/</url>
+        </repository>
+    </repositories>
 
 </project>
