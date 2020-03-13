@@ -16,25 +16,25 @@ import vg.civcraft.mc.civmodcore.itemHandling.NiceNames;
  */
 public class CivModCorePlugin extends ACivMod {
 
-	private static CivModCorePlugin instance;
+    private static CivModCorePlugin instance;
 
-	@Override
-	public void onEnable() {
-		super.onEnable();
-		instance = this;
+    @Override
+    public void onEnable() {
+        super.onEnable();
+        instance = this;
         // Save default resources
         saveDefaultResource("enchantments.csv");
         saveDefaultResource("materials.csv");
         // Register event listeners
-		registerEvent(new ClickableInventoryListener());
+        registerEvent(new ClickableInventoryListener());
         registerEvent(new ChatListener());
-		// Load APIs
+        // Load APIs
         EnchantNames.loadEnchantmentNames();
-		new NiceNames().loadNames();
+        new NiceNames().loadNames();
         new DialogManager();
         // Register serializations
         ConfigurationSerialization.registerClass(ManagedDatasource.class);
-	}
+    }
 
     @Override
     public void onDisable() {
@@ -46,8 +46,8 @@ public class CivModCorePlugin extends ACivMod {
         ConfigurationSerialization.unregisterClass(ManagedDatasource.class);
     }
 
-	public static CivModCorePlugin getInstance() {
-		return instance;
-	}
+    public static CivModCorePlugin getInstance() {
+        return instance;
+    }
 
 }
