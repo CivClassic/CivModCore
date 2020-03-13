@@ -6,27 +6,27 @@ import org.bukkit.event.HandlerList;
 
 public abstract class CustomEvent extends Event implements Cancellable {
 
-	private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
 
-	private boolean isCancelled = false;
+    private boolean isCancelled = false;
 
-	@Override
-	public boolean isCancelled() {
-		return isCancelled;
-	}
+    @Override
+    public boolean isCancelled() {
+        return isCancelled;
+    }
 
-	@Override
-	public void setCancelled(boolean value) {
-		isCancelled = value;
-	}
+    @Override
+    public void setCancelled(boolean value) {
+        isCancelled = value;
+    }
 
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
 
-	public static HandlerList getHandlerList() {
-		return handlers;
-	}
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 
 }

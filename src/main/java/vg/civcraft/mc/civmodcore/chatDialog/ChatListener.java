@@ -9,19 +9,19 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class ChatListener implements Listener {
 
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
-	public void tabComplete(PlayerChatTabCompleteEvent e) {
-		Dialog dia = DialogManager.instance.getDialog(e.getPlayer());
-		if (dia != null) {
-			Collection<String> completes = e.getTabCompletions();
-			completes.clear();
-			completes.addAll(dia.onTabComplete(e.getLastToken(), e.getChatMessage().split(" ")));
-		}
-	}
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+    public void tabComplete(PlayerChatTabCompleteEvent e) {
+        Dialog dia = DialogManager.instance.getDialog(e.getPlayer());
+        if (dia != null) {
+            Collection<String> completes = e.getTabCompletions();
+            completes.clear();
+            completes.addAll(dia.onTabComplete(e.getLastToken(), e.getChatMessage().split(" ")));
+        }
+    }
 
-	@EventHandler
-	public void logoff(PlayerQuitEvent e) {
-		DialogManager.instance.forceEndDialog(e.getPlayer());
-	}
+    @EventHandler
+    public void logoff(PlayerQuitEvent e) {
+        DialogManager.instance.forceEndDialog(e.getPlayer());
+    }
 
 }

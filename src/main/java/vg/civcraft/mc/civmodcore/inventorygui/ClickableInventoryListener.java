@@ -15,34 +15,34 @@ import org.bukkit.event.player.PlayerQuitEvent;
  */
 public class ClickableInventoryListener implements Listener {
 
-	@EventHandler
-	public void inventoryClick(InventoryClickEvent e) {
-		if (!(e.getWhoClicked() instanceof Player)) {
-			return;
-		}
-		Player p = (Player) e.getWhoClicked();
-		ClickableInventory ci = ClickableInventory.getOpenInventory(p);
-		if (ci != null) {
-			e.setCancelled(true); // always cancel first to prevent dupes
-			ci.itemClick(p, e.getRawSlot());
-		}
-	}
+    @EventHandler
+    public void inventoryClick(InventoryClickEvent e) {
+        if (!(e.getWhoClicked() instanceof Player)) {
+            return;
+        }
+        Player p = (Player) e.getWhoClicked();
+        ClickableInventory ci = ClickableInventory.getOpenInventory(p);
+        if (ci != null) {
+            e.setCancelled(true); // always cancel first to prevent dupes
+            ci.itemClick(p, e.getRawSlot());
+        }
+    }
 
-	@EventHandler
-	public void inventoryClose(InventoryCloseEvent e) {
-		// for some reason getPlayer apparently isnt always a player here, but
-		// just a LivingEntity
-		if (!(e.getPlayer() instanceof Player)) {
-			return;
-		}
-		Player p = (Player) e.getPlayer();
-		ClickableInventory.inventoryWasClosed(p);
-	}
+    @EventHandler
+    public void inventoryClose(InventoryCloseEvent e) {
+        // for some reason getPlayer apparently isnt always a player here, but
+        // just a LivingEntity
+        if (!(e.getPlayer() instanceof Player)) {
+            return;
+        }
+        Player p = (Player) e.getPlayer();
+        ClickableInventory.inventoryWasClosed(p);
+    }
 
-	@EventHandler
-	public void playerLogoff(PlayerQuitEvent e) {
-		// this just does nothing if no inventory was open
-		ClickableInventory.inventoryWasClosed(e.getPlayer());
-	}
+    @EventHandler
+    public void playerLogoff(PlayerQuitEvent e) {
+        // this just does nothing if no inventory was open
+        ClickableInventory.inventoryWasClosed(e.getPlayer());
+    }
 
 }

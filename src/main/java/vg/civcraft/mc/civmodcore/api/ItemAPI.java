@@ -9,7 +9,8 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public final class ItemAPI {
 
-    private ItemAPI() { }
+    private ItemAPI() {
+    }
 
     /**
      * Checks whether an item would be considered valid.

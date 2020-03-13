@@ -9,7 +9,8 @@ public final class NullCoalescing {
         T get() throws Exception;
     }
 
-    private NullCoalescing() { }
+    private NullCoalescing() {
+    }
 
     /**
      * Returns the first non-null given parameter, if any are given.
@@ -19,7 +20,7 @@ public final class NullCoalescing {
      * @return Returns the first non-null value found, or null.
      *
      * @apiNote Attempts to fulfill the functionality of the Nullish coalescing operator in JavaScript.
-     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator
+     *         https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator
      */
     @SafeVarargs
     public static <T> T coalesce(T... items) {
@@ -39,7 +40,7 @@ public final class NullCoalescing {
      * @return Returns the result of the chained statement, or null if the chain failed.
      *
      * @apiNote Attempts to fulfill the functionality of the Optional Chaining feature.
-     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
+     *         https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
      */
     public static <T> T chain(NullChecker<T> statement) {
         return chain(statement, null);
@@ -54,10 +55,10 @@ public final class NullCoalescing {
      * @return Returns the result of the chained statement, or null if the chain failed.
      *
      * @apiNote Attempts to fulfill the functionality of the Optional Chaining feature matched together with the
-     * Nullish coalescing operator. Please use this only to retrieve nested values.
+     *         Nullish coalescing operator. Please use this only to retrieve nested values.
      *
-     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
-     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator
+     *         https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining
+     *         https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator
      */
     public static <T> T chain(NullChecker<T> statement, T fallback) {
         if (statement == null) {

@@ -93,8 +93,8 @@ public final class EnchantNames {
                     }
                     // Put the enchantment and name into the system
                     enchantmentDetails.add(new EnchantNameAbbrevTuple(enchantment, abbreviation, displayName));
-                    logger.info(String.format("[Config] Enchantment parsed: %s = %s = %s", enchantment.getName(),
-                            abbreviation, displayName));
+                    logger.info(String.format("[Config] Enchantment parsed: %s = %s = %s",
+                            enchantment.getName(), abbreviation, displayName));
                     line = reader.readLine();
                 }
                 reader.close();

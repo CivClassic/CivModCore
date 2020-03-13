@@ -11,50 +11,49 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class Dialog {
 
-	private Player player;
+    private Player player;
 
-	private Conversation convo;
+    private Conversation convo;
 
-	public Dialog(Player player, JavaPlugin plugin) {
-		this(player, plugin, null);
-	}
+    public Dialog(Player player, JavaPlugin plugin) {
+        this(player, plugin, null);
+    }
 
-	public Dialog(Player player, JavaPlugin plugin, final String toDisplay) {
-		DialogManager.instance.registerDialog(player, this);
-		this.player = player;
+    public Dialog(Player player, JavaPlugin plugin, final String toDisplay) {
+        DialogManager.instance.registerDialog(player, this);
+        this.player = player;
 
-		convo = new ConversationFactory(plugin).withModality(false).withLocalEcho(false)
-				.withFirstPrompt(new StringPrompt() {
+        convo = new ConversationFactory(plugin).withModality(false).withLocalEcho(false).withFirstPrompt(new StringPrompt() {
 
-					@Override
-					public String getPromptText(ConversationContext arg0) {
-						if (toDisplay != null) {
-							return toDisplay;
-						}
-						return "";
-					}
+            @Override
+            public String getPromptText(ConversationContext arg0) {
+                if (toDisplay != null) {
+                    return toDisplay;
+                }
+                return "";
+            }
 
-					@Override
-					public Prompt acceptInput(ConversationContext arg0, String arg1) {
-						onReply(arg1.split(" "));
-						return Prompt.END_OF_CONVERSATION;
-					}
+            @Override
+            public Prompt acceptInput(ConversationContext arg0, String arg1) {
+                onReply(arg1.split(" "));
+                return Prompt.END_OF_CONVERSATION;
+            }
 
-				}).buildConversation(player);
+        }).buildConversation(player);
 
-		convo.begin();
-	}
+        convo.begin();
+    }
 
-	public abstract void onReply(String[] message);
+    public abstract void onReply(String[] message);
 
-	public abstract List<String> onTabComplete(String wordCompleted, String[] fullMessage);
+    public abstract List<String> onTabComplete(String wordCompleted, String[] fullMessage);
 
-	public Player getPlayer() {
-		return player;
-	}
+    public Player getPlayer() {
+        return player;
+    }
 
-	public void end() {
-		convo.abandon();
-	}
+    public void end() {
+        convo.abandon();
+    }
 
 }

@@ -4,6 +4,6 @@ import org.bukkit.entity.Player;
 
 public interface IDisabler extends ICompat {
 
-	boolean isBergecraftDisabledFor(Player player);
+    boolean isBergecraftDisabledFor(Player player);
 
 }

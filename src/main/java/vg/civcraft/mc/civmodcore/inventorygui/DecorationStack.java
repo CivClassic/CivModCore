@@ -5,12 +5,13 @@ import org.bukkit.inventory.ItemStack;
 
 public class DecorationStack extends Clickable {
 
-	public DecorationStack(ItemStack item) {
-		super(item);
-	}
+    public DecorationStack(ItemStack item) {
+        super(item);
+    }
 
-	@Override
-	public void clicked(Player p) {
-		// dont do anything here, it's supposed to be just decoration
-	}
+    @Override
+    public void clicked(Player p) {
+        // dont do anything here, it's supposed to be just decoration
+    }
+
 }

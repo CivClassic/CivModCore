@@ -1,44 +1,50 @@
 package vg.civcraft.mc.civmodcore.itemHandling;
 
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.List;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import vg.civcraft.mc.civmodcore.api.ItemAPI;
+import vg.civcraft.mc.civmodcore.util.NullCoalescing;
 
+@Deprecated
 public class ISUtils {
 
-	public static void addLore(ItemStack is, String... lore) {
-		ItemMeta im = is.getItemMeta();
-		List<String> loreList = im.getLore();
-		if (loreList == null) {
-			loreList = new LinkedList<>();
-		}
-		for (String currLore : lore) {
-			loreList.add(currLore);
-		}
-		im.setLore(loreList);
-		is.setItemMeta(im);
+    public static void addLore(ItemStack item, String... lore) {
+        if (lore == null || lore.length < 1) {
+            return;
+        }
+        ItemAPI.handleItemMeta((item), (meta) -> {
+            if (meta.hasLore()) {
+                List<String> current = meta.getLore();
+                current.addAll(Arrays.asList(lore));
+                return true;
+            }
+            meta.setLore(Arrays.asList(lore));
+            return true;
+        });
+    }
 
-	}
+    public static void setLore(ItemStack item, String... lore) {
+        ItemAPI.handleItemMeta((item), (meta) -> {
+            if (lore == null || lore.length < 1) {
+                meta.setLore(null);
+            }
+            else {
+                meta.setLore(Arrays.asList(lore));
+            }
+            return true;
+        });
+    }
 
-	public static void setLore(ItemStack is, String... lore) {
-		ItemMeta im = is.getItemMeta();
-		List<String> loreList = new LinkedList<>();
-		for (String currLore : lore) {
-			loreList.add(currLore);
-		}
-		im.setLore(loreList);
-		is.setItemMeta(im);
-	}
+    public static void setName(ItemStack item, String name) {
+        ItemAPI.handleItemMeta((item), (meta) -> {
+            meta.setDisplayName(name);
+            return true;
+        });
+    }
 
-	public static void setName(ItemStack is, String name) {
-		ItemMeta im = is.getItemMeta();
-		im.setDisplayName(name);
-		is.setItemMeta(im);
-	}
-
-	public static String getName(ItemStack is) {
-		return is.getItemMeta().getDisplayName();
-	}
+    public static String getName(ItemStack item) {
+        return NullCoalescing.chain(() -> item.getItemMeta().getDisplayName());
+    }
 
 }
