@@ -25,18 +25,15 @@ public class NiceNames {
 
         private NameSearchObject(Material material, short durability, List<String> lore) {
             StringBuilder builder = new StringBuilder();
-            builder.append(material.toString());
+            builder.append(material.name());
             builder.append("#");
             builder.append(durability);
-            for (String line : lore) {
-                builder.append(line);
-            }
+            NullCoalescing.exists(lore, (list) -> list.forEach(builder::append));
             this.data = builder.toString();
         }
 
         private NameSearchObject(ItemStack item) {
-            this(item.getType(), item.getDurability(),
-                    NullCoalescing.chain(() -> item.getItemMeta().getLore(), new ArrayList<>()));
+            this(item.getType(), item.getDurability(), NullCoalescing.chain(() -> item.getItemMeta().getLore()));
         }
 
         @Override
@@ -93,7 +90,7 @@ public class NiceNames {
                 NameSearchObject nso = new NameSearchObject(
                         Material.valueOf(content[1]),
                         Short.parseShort(content[2]),
-                        new LinkedList<>());
+                        null);
                 ITEMS.put(nso, content[0]);
                 line = reader.readLine();
             }
