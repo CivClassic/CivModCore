@@ -1,4 +1,4 @@
-package vg.civcraft.mc.civmodcore.api;
+package vg.civcraft.mc.civmodcore.serialization;
 
 import com.google.common.base.Strings;
 import com.google.common.io.ByteArrayDataInput;
@@ -47,6 +47,17 @@ public class NBTCompound implements Cloneable {
     public NBTCompound(NBTTagCompound tag) {
         Preconditions.checkNotNull(tag, "Cannot create an NBTCompound from that tag: the tag is null.");
         this.tag = tag;
+    }
+
+    /**
+     * Creates a new NBTCompound by wrapping and serialising an NBTSerializable object.
+     *
+     * @param object The NBTSerializable to wrap and serialize.
+     */
+    public <T extends NBTSerializable> NBTCompound(T object) {
+        this();
+        Preconditions.checkNotNull(object, "Cannot create an NBTCompound from that tag: the tag is null.");
+        object.serialize(this);
     }
 
     /**
@@ -117,6 +128,16 @@ public class NBTCompound implements Cloneable {
     }
 
     /**
+     * Adopts the NBT data from another compound.
+     *
+     * @param nbt The NBT data to copy and adopt.
+     */
+    public void adopt(NBTCompound nbt) {
+        Preconditions.checkNotNull(nbt, "Cannot adopt that NBTCompound: the NBT is null.");
+        this.tag = (NBTTagCompound) nbt.tag.clone();
+    }
+
+    /**
      * Gets a primitive boolean value from a key.
      *
      * @param key The key to get the value of.
@@ -165,16 +186,20 @@ public class NBTCompound implements Cloneable {
      *
      * @param key The key to set to values to.
      * @param values The values to set to the key.
-     * @throws IllegalArgumentException Throws if the key is null or empty, or if the array is null.
+     * @throws IllegalArgumentException Throws if the key is null or empty.
      */
-    public void setBooleanArray(@Nonnull String key, @Nonnull boolean[] values) {
+    public void setBooleanArray(@Nonnull String key, boolean[] values) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(key), "Cannot set that boolean array: the key is null or empty.");
-        Preconditions.checkNotNull(values, "Cannot set that boolean array: the array is null. Please use .remove(key) instead.");
-        byte[] cache = new byte[values.length];
-        for (int i = 0; i < values.length; i++) {
-            cache[i] = (byte) (values[i] ? 0x1 : 0x0);
+        if (values == null || values.length < 1) {
+            remove(key);
         }
-        this.tag.setByteArray(key, cache);
+        else {
+            byte[] cache = new byte[values.length];
+            for (int i = 0; i < values.length; i++) {
+                cache[i] = (byte) (values[i] ? 0x1 : 0x0);
+            }
+            this.tag.setByteArray(key, cache);
+        }
     }
 
     /**
@@ -221,12 +246,16 @@ public class NBTCompound implements Cloneable {
      *
      * @param key The key to set to values to.
      * @param values The values to set to the key.
-     * @throws IllegalArgumentException Throws if the key is null or empty, or if the array is null.
+     * @throws IllegalArgumentException Throws if the key is null or empty.
      */
-    public void setByteArray(@Nonnull String key, @Nonnull byte[] values) {
+    public void setByteArray(@Nonnull String key, byte[] values) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(key), "Cannot set that byte array: the key is null or empty.");
-        Preconditions.checkNotNull(values, "Cannot set that byte array: the array is null. Please use .remove(key) instead.");
-        this.tag.setByteArray(key, values);
+        if (values == null || values.length < 1) {
+            remove(key);
+        }
+        else {
+            this.tag.setByteArray(key, values);
+        }
     }
 
     /**
@@ -287,16 +316,20 @@ public class NBTCompound implements Cloneable {
      *
      * @param key The key to set to values to.
      * @param values The values to set to the key.
-     * @throws IllegalArgumentException Throws if the key is null or empty, or if the array is null.
+     * @throws IllegalArgumentException Throws if the key is null or empty.
      */
-    public void setShortArray(@Nonnull String key, @Nonnull short[] values) {
+    public void setShortArray(@Nonnull String key, short[] values) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(key), "Cannot set that short array: the key is null or empty.");
-        Preconditions.checkNotNull(values, "Cannot set that short array: the array is null. Please use .remove(key) instead.");
-        NBTTagList list = new NBTTagList();
-        for (short value : values) {
-            list.add(new NBTTagShort(value));
+        if (values == null || values.length < 1) {
+            remove(key);
         }
-        this.tag.set(key, list);
+        else {
+            NBTTagList list = new NBTTagList();
+            for (short value : values) {
+                list.add(new NBTTagShort(value));
+            }
+            this.tag.set(key, list);
+        }
     }
 
     /**
@@ -343,12 +376,16 @@ public class NBTCompound implements Cloneable {
      *
      * @param key The key to set to values to.
      * @param values The values to set to the key.
-     * @throws IllegalArgumentException Throws if the key is null or empty, or if the array is null.
+     * @throws IllegalArgumentException Throws if the key is null or empty.
      */
-    public void setIntegerArray(@Nonnull String key, @Nonnull int[] values) {
+    public void setIntegerArray(@Nonnull String key, int[] values) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(key), "Cannot set that integer array: the key is null or empty.");
-        Preconditions.checkNotNull(values, "Cannot set that integer array: the array is null. Please use .remove(key) instead.");
-        this.tag.setIntArray(key, values);
+        if (values == null || values.length < 1) {
+            remove(key);
+        }
+        else {
+            this.tag.setIntArray(key, values);
+        }
     }
 
     /**
@@ -409,16 +446,20 @@ public class NBTCompound implements Cloneable {
      *
      * @param key The key to set to values to.
      * @param values The values to set to the key.
-     * @throws IllegalArgumentException Throws if the key is null or empty, or if the array is null.
+     * @throws IllegalArgumentException Throws if the key is null or empty.
      */
-    public void setLongArray(@Nonnull String key, @Nonnull long[] values) {
+    public void setLongArray(@Nonnull String key, long[] values) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(key), "Cannot set that long array: the key is null or empty.");
-        Preconditions.checkNotNull(values, "Cannot set that long array: the array is null. Please use .remove(key) instead.");
-        NBTTagList list = new NBTTagList();
-        for (long value : values) {
-            list.add(new NBTTagLong(value));
+        if (values == null || values.length < 1) {
+            remove(key);
         }
-        this.tag.set(key, list);
+        else {
+            NBTTagList list = new NBTTagList();
+            for (long value : values) {
+                list.add(new NBTTagLong(value));
+            }
+            this.tag.set(key, list);
+        }
     }
 
     /**
@@ -470,16 +511,20 @@ public class NBTCompound implements Cloneable {
      *
      * @param key The key to set to values to.
      * @param values The values to set to the key.
-     * @throws IllegalArgumentException Throws if the key is null or empty, or if the array is null.
+     * @throws IllegalArgumentException Throws if the key is null or empty.
      */
-    public void setFloatArray(@Nonnull String key, @Nonnull float[] values) {
+    public void setFloatArray(@Nonnull String key, float[] values) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(key), "Cannot set that float array: the key is null or empty.");
-        Preconditions.checkNotNull(values, "Cannot set that float array: the array is null. Please use .remove(key) instead.");
-        NBTTagList list = new NBTTagList();
-        for (float value : values) {
-            list.add(new NBTTagFloat(value));
+        if (values == null || values.length < 1) {
+            remove(key);
         }
-        this.tag.set(key, list);
+        else {
+            NBTTagList list = new NBTTagList();
+            for (float value : values) {
+                list.add(new NBTTagFloat(value));
+            }
+            this.tag.set(key, list);
+        }
     }
 
     /**
@@ -531,16 +576,20 @@ public class NBTCompound implements Cloneable {
      *
      * @param key The key to set to values to.
      * @param values The values to set to the key.
-     * @throws IllegalArgumentException Throws if the key is null or empty, or if the array is null.
+     * @throws IllegalArgumentException Throws if the key is null or empty.
      */
-    public void setDoubleArray(@Nonnull String key, @Nonnull double[] values) {
+    public void setDoubleArray(@Nonnull String key, double[] values) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(key), "Cannot set that double array: the key is null or empty.");
-        Preconditions.checkNotNull(values, "Cannot set that double array: the array is null. Please use .remove(key) instead.");
-        NBTTagList list = new NBTTagList();
-        for (double value : values) {
-            list.add(new NBTTagDouble(value));
+        if (values == null || values.length < 1) {
+            remove(key);
         }
-        this.tag.set(key, list);
+        else {
+            NBTTagList list = new NBTTagList();
+            for (double value : values) {
+                list.add(new NBTTagDouble(value));
+            }
+            this.tag.set(key, list);
+        }
     }
 
     /**
@@ -566,26 +615,34 @@ public class NBTCompound implements Cloneable {
      *
      * @param key The key to set to value to.
      * @param value The value to set to the key.
-     * @throws IllegalArgumentException Throws if the key is null or empty, or if the value is null.
+     * @throws IllegalArgumentException Throws if the key is null or empty.
      */
-    public void setUUID(@Nonnull String key, @Nonnull UUID value) {
+    public void setUUID(@Nonnull String key, UUID value) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(key), "Cannot set that UUID: the key is null or empty.");
-        Preconditions.checkNotNull(value, "Cannot set that UUID: the value is null. Please use .remove(key) instead.");
-        this.tag.a(key, value);
+        if (value == null) {
+            remove(key);
+        }
+        else {
+            this.tag.a(key, value);
+        }
     }
 
     /**
      * Gets a UUID value from a key.
      *
      * @param key The key to get the value of.
-     * @return The value of the key, which is never null.
+     * @return The value of the key.
      *
      * @throws IllegalArgumentException Throws if the key is null or empty.
      */
-    @Nonnull
     public String getString(@Nonnull String key) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(key), "Cannot get that String: the key is null or empty.");
-        return this.tag.getString(key);
+        if (!this.tag.hasKeyOfType(key, 8)) {
+            return null;
+        }
+        else {
+            return this.tag.getString(key);
+        }
     }
 
     /**
@@ -593,12 +650,16 @@ public class NBTCompound implements Cloneable {
      *
      * @param key The key to set to value to.
      * @param value The value to set to the key.
-     * @throws IllegalArgumentException Throws if the key is null or empty, or if the value is null.
+     * @throws IllegalArgumentException Throws if the key is null or empty.
      */
-    public void setString(@Nonnull String key, @Nonnull String value) {
+    public void setString(@Nonnull String key, String value) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(key), "Cannot set that String: the key is null or empty.");
-        Preconditions.checkNotNull(value, "Cannot set that String: the value is null. Please use .remove(key) instead.");
-        this.tag.setString(key, value);
+        if (Strings.isNullOrEmpty(value)) {
+            remove(key);
+        }
+        else {
+            this.tag.setString(key, value);
+        }
     }
 
     /**
@@ -623,6 +684,9 @@ public class NBTCompound implements Cloneable {
             }
             else {
                 result[i] = ((NBTTagString) base).c_();
+                if (result[i].equals("\u0000")) {
+                    result[i] = null;
+                }
             }
         }
         return result;
@@ -633,16 +697,25 @@ public class NBTCompound implements Cloneable {
      *
      * @param key The key to set to values to.
      * @param values The values to set to the key.
-     * @throws IllegalArgumentException Throws if the key is null or empty, or if the array is null.
+     * @throws IllegalArgumentException Throws if the key is null or empty.
      */
-    public void setStringArray(@Nonnull String key, @Nonnull String[] values) {
+    public void setStringArray(@Nonnull String key, String[] values) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(key), "Cannot set that String array: the key is null or empty.");
-        Preconditions.checkNotNull(values, "Cannot set that String array: the array is null. Please use .remove(key) instead.");
-        NBTTagList list = new NBTTagList();
-        for (String value : values) {
-            list.add(new NBTTagString(value));
+        if (values == null || values.length < 1) {
+            remove(key);
         }
-        this.tag.set(key, list);
+        else {
+            NBTTagList list = new NBTTagList();
+            for (String value : values) {
+                if (value == null) {
+                    list.add(new NBTTagString("\u0000"));
+                }
+                else {
+                    list.add(new NBTTagString(value));
+                }
+            }
+            this.tag.set(key, list);
+        }
     }
 
     /**
@@ -664,12 +737,16 @@ public class NBTCompound implements Cloneable {
      *
      * @param key The key to set to value to.
      * @param value The value to set to the key.
-     * @throws IllegalArgumentException Throws if the key is null or empty, or if the value is null.
+     * @throws IllegalArgumentException Throws if the key is null or empty.
      */
-    public void setCompound(@Nonnull String key, @Nonnull NBTCompound value) {
+    public void setCompound(@Nonnull String key, NBTCompound value) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(key), "Cannot set that tag compound: the key is null or empty.");
-        Preconditions.checkNotNull(value, "Cannot set that tag compound: the value is null. Please use .remove(key) instead.");
-        this.tag.set(key, value.tag);
+        if (value == null || value.isEmpty()) {
+            remove(key);
+        }
+        else {
+            this.tag.set(key, value.tag);
+        }
     }
 
     /**
@@ -702,16 +779,20 @@ public class NBTCompound implements Cloneable {
      *
      * @param key The key to set to values to.
      * @param values The values to set to the key.
-     * @throws IllegalArgumentException Throws if the key is null or empty, or if the array is null.
+     * @throws IllegalArgumentException Throws if the key is null or empty.
      */
-    public void setCompoundArray(@Nonnull String key, @Nonnull NBTCompound[] values) {
+    public void setCompoundArray(@Nonnull String key, NBTCompound[] values) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(key), "Cannot set that tag compound array: the key is null or empty.");
-        Preconditions.checkNotNull(values, "Cannot set that tag compound array: the array is null. Please use .remove(key) instead.");
-        NBTTagList list = new NBTTagList();
-        for (NBTCompound value : values) {
-            list.add(value.tag);
+        if (values == null || values.length < 1) {
+            remove(key);
         }
-        this.tag.set(key, list);
+        else {
+            NBTTagList list = new NBTTagList();
+            for (NBTCompound value : values) {
+                list.add(value.tag);
+            }
+            this.tag.set(key, list);
+        }
     }
 
     /**
@@ -795,7 +876,8 @@ public class NBTCompound implements Cloneable {
         if (bytes == null || bytes.length <= 0) {
             throw new IllegalArgumentException("Cannot deserialize that NBT data: data is empty.");
         }
-        @SuppressWarnings("UnstableApiUsage") ByteArrayDataInput input = ByteStreams.newDataInput(bytes);
+        @SuppressWarnings("UnstableApiUsage")
+        ByteArrayDataInput input = ByteStreams.newDataInput(bytes);
         NBTCompound nbt = new NBTCompound();
         try {
             nbt.tag = NBTCompressedStreamTools.a(input, NBTReadLimiter.a);
@@ -819,7 +901,8 @@ public class NBTCompound implements Cloneable {
         if (nbt == null) {
             throw new IllegalArgumentException("Cannot serialize that NBT data: NBT is null.");
         }
-        @SuppressWarnings("UnstableApiUsage") ByteArrayDataOutput output = ByteStreams.newDataOutput();
+        @SuppressWarnings("UnstableApiUsage")
+        ByteArrayDataOutput output = ByteStreams.newDataOutput();
         try {
             NBTCompressedStreamTools.a(nbt.tag, output);
         }
