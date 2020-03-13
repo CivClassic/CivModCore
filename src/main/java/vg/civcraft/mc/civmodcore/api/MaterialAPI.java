@@ -1,11 +1,11 @@
 package vg.civcraft.mc.civmodcore.api;
 
+import com.google.common.base.Strings;
 import org.bukkit.Material;
 
 /**
  * This is a static class of generally useful APIs regarding materials.
  */
-@SuppressWarnings("unused")
 public final class MaterialAPI {
 
     private MaterialAPI() {
@@ -28,6 +28,29 @@ public final class MaterialAPI {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Attempts to retrieve a material by its slug or by its ID.
+     *
+     * @param value The value to search for a matching material by.
+     * @return Returns a matched material or null.
+     */
+    @SuppressWarnings("deprecation")
+    public static Material getMaterial(String value) {
+        if (Strings.isNullOrEmpty(value)) {
+            return null;
+        }
+        Material material = Material.getMaterial(value.toUpperCase());
+        if (material != null) {
+            return material;
+        }
+        try {
+            return Material.getMaterial(Integer.parseInt(value));
+        }
+        catch (NumberFormatException ignored) {
+        }
+        return null;
     }
 
     /**
@@ -161,6 +184,106 @@ public final class MaterialAPI {
             case INK_SACK:
             case MONSTER_EGG:
             case SKULL_ITEM:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Checks if the material is a type of sword.
+     *
+     * @param material The material to check.
+     * @return Returns true if the material represents a type of sword.
+     */
+    @SuppressWarnings("Duplicates")
+    public static boolean isSword(Material material) {
+        switch (material) {
+            case WOOD_SWORD:
+            case STONE_SWORD:
+            case IRON_SWORD:
+            case GOLD_SWORD:
+            case DIAMOND_SWORD:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Checks if the material is a type of shovel.
+     *
+     * @param material The material to check.
+     * @return Returns true if the material represents a type of shovel.
+     */
+    @SuppressWarnings("Duplicates")
+    public static boolean isShovel(Material material) {
+        switch (material) {
+            case WOOD_SPADE:
+            case STONE_SPADE:
+            case IRON_SPADE:
+            case GOLD_SPADE:
+            case DIAMOND_SPADE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Checks if the material is a type of pickaxe.
+     *
+     * @param material The material to check.
+     * @return Returns true if the material represents a type of pickaxe.
+     */
+    @SuppressWarnings("Duplicates")
+    public static boolean isPickaxe(Material material) {
+        switch (material) {
+            case WOOD_PICKAXE:
+            case STONE_PICKAXE:
+            case IRON_PICKAXE:
+            case GOLD_PICKAXE:
+            case DIAMOND_PICKAXE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Checks if the material is a type of axe.
+     *
+     * @param material The material to check.
+     * @return Returns true if the material represents a type of axe.
+     */
+    @SuppressWarnings("Duplicates")
+    public static boolean isAxe(Material material) {
+        switch (material) {
+            case WOOD_AXE:
+            case STONE_AXE:
+            case IRON_AXE:
+            case GOLD_AXE:
+            case DIAMOND_AXE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Checks if the material is a type of hoe.
+     *
+     * @param material The material to check.
+     * @return Returns true if the material represents a type of hoe.
+     */
+    @SuppressWarnings("Duplicates")
+    public static boolean isHoe(Material material) {
+        switch (material) {
+            case WOOD_HOE:
+            case STONE_HOE:
+            case IRON_HOE:
+            case GOLD_HOE:
+            case DIAMOND_HOE:
                 return true;
             default:
                 return false;
