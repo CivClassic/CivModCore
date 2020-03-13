@@ -3,110 +3,109 @@ package vg.civcraft.mc.civmodcore.itemHandling;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import vg.civcraft.mc.civmodcore.api.EnchantNames;
+import vg.civcraft.mc.civmodcore.util.NullCoalescing;
 
 public class NiceNames {
 
-	private static Map<NameSearchObject, String> items;
+    private static final Map<NameSearchObject, String> ITEMS = new HashMap<>();
 
-	private static Map<Enchantment, String> enchants;
+    private static class NameSearchObject {
 
-	private static Map<Enchantment, String> enchantAcronyms;
+        private String data;
 
-	private static class NameSearchObject {
+        private NameSearchObject(Material material, short durability, List<String> lore) {
+            StringBuilder builder = new StringBuilder();
+            builder.append(material.toString());
+            builder.append("#");
+            builder.append(durability);
+            for (String line : lore) {
+                builder.append(line);
+            }
+            this.data = builder.toString();
+        }
 
-		private String data;
+        private NameSearchObject(ItemStack item) {
+            this(item.getType(), item.getDurability(),
+                    NullCoalescing.chain(() -> item.getItemMeta().getLore(), new ArrayList<>()));
+        }
 
-		private NameSearchObject(Material m, short dura, List<String> lore) {
-			StringBuilder sb = new StringBuilder();
-			sb.append(m.toString());
-			sb.append("#");
-			sb.append(dura);
-			for (String s : lore) {
-				sb.append(s);
-			}
-			data = sb.toString();
-		}
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.data);
+        }
 
-		private NameSearchObject(ItemStack is) {
-			this(is.getType(), is.getDurability(), is.getItemMeta().hasLore() ? is.getItemMeta().getLore()
-					: new LinkedList<String>());
-		}
+        @Override
+        public boolean equals(Object other) {
+            return other instanceof NameSearchObject && Objects.equals(((NameSearchObject) other).data, this.data);
+        }
 
-		@Override
-		public int hashCode() {
-			return data.hashCode();
-		}
+    }
 
-		@Override
-		public boolean equals(Object o) {
-			return o instanceof NameSearchObject && ((NameSearchObject) o).getData().equals(data);
-		}
+    public static String getName(ItemStack item) {
+        return ITEMS.get(new NameSearchObject(item));
+    }
 
-		private String getData() {
-			return data;
-		}
-	}
+    /**
+     * Gets the nice name of an enchantment.
+     *
+     * @param enchant The enchantment to get the nice name of.
+     * @return Returns the abbreviation or null.
+     *
+     * @deprecated Use {@link EnchantNames#findByEnchantment(Enchantment)} instead.
+     */
+    @Deprecated
+    public static String getName(Enchantment enchant) {
+        return NullCoalescing.chain(() -> EnchantNames.findByEnchantment(enchant).getDisplayName());
+    }
 
-	public static String getName(ItemStack is) {
-		return items.get(new NameSearchObject(is));
-	}
+    /**
+     * Gets the abbreviation of an enchantment.
+     *
+     * @param enchant The enchantment to get the abbreviation of.
+     * @return Returns the abbreviation or null.
+     *
+     * @deprecated Use {@link EnchantNames#findByEnchantment(Enchantment)} instead.
+     */
+    @Deprecated
+    public static String getAcronym(Enchantment enchant) {
+        return NullCoalescing.chain(() -> EnchantNames.findByEnchantment(enchant).getAbbreviation());
+    }
 
-	public static String getName(Enchantment enchant) {
-		return enchants.get(enchant);
-	}
+    public void loadNames() {
+        // item aliases
+        ITEMS.clear();
+        try {
+            InputStream in = getClass().getResourceAsStream("/materials.csv");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String line = reader.readLine();
+            while (line != null) {
+                String[] content = line.split(",");
+                NameSearchObject nso = new NameSearchObject(
+                        Material.valueOf(content[1]),
+                        Short.parseShort(content[2]),
+                        new LinkedList<>());
+                ITEMS.put(nso, content[0]);
+                line = reader.readLine();
+            }
+            reader.close();
+        }
+        catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
 
-	public static String getAcronym(Enchantment enchant) {
-		return enchantAcronyms.get(enchant);
-	}
-
-	public void loadNames() {
-		// item aliases
-		items = new HashMap<>();
-		try {
-			InputStream in = getClass().getResourceAsStream("/materials.csv");
-			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-			String line = reader.readLine();
-			while (line != null) {
-				String[] content = line.split(",");
-				NameSearchObject nso = new NameSearchObject(Material.valueOf(content[1]), Short.valueOf(content[3]),
-						new LinkedList<String>());
-				items.put(nso, content[0]);
-				line = reader.readLine();
-			}
-			reader.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		// enchantment aliases
-		enchants = new HashMap<>();
-		enchantAcronyms = new HashMap<>();
-		try {
-			InputStream in = getClass().getResourceAsStream("/enchantments.csv");
-			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-			String line = reader.readLine();
-			while (line != null) {
-				String[] content = line.split(",");
-				Enchantment enchant = Enchantment.getByName(content[1]);
-				enchants.put(enchant, content[2]);
-				enchantAcronyms.put(enchant, content[0]);
-				line = reader.readLine();
-			}
-			reader.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void registerItem(ItemStack is, String name) {
-		items.put(new NameSearchObject(is), name);
-	}
+    public static void registerItem(ItemStack item, String name) {
+        ITEMS.put(new NameSearchObject(item), name);
+    }
 
 }
