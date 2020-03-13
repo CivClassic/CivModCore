@@ -1,149 +1,230 @@
 package vg.civcraft.mc.civmodcore;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import vg.civcraft.mc.civmodcore.chatDialog.ChatListener;
-import vg.civcraft.mc.civmodcore.chatDialog.DialogManager;
 import vg.civcraft.mc.civmodcore.command.CommandHandler;
-import vg.civcraft.mc.civmodcore.dao.ManagedDatasource;
-import vg.civcraft.mc.civmodcore.interfaces.ApiManager;
-import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventoryListener;
-import vg.civcraft.mc.civmodcore.itemHandling.NiceNames;
+import vg.civcraft.mc.civmodcore.serialization.NBTSerializable;
+import vg.civcraft.mc.civmodcore.serialization.NBTSerialization;
 
 public abstract class ACivMod extends JavaPlugin {
 
-	protected CommandHandler handle;
+    private final List<Class<? extends NBTSerializable>> serializableClasses = new ArrayList<>();
 
-	private static boolean initializedAPIs = false;
+    protected CommandHandler handle;
 
-	public ClassLoader classLoader = null;
+    public ClassLoader classLoader = null;
 
-	public ApiManager apis;
+    @Override
+    public void onEnable() {
+        registerEvent(new Listener() {
+            @EventHandler
+            public void onPluginDisable(PluginDisableEvent event) {
+                String pluginName = event.getPlugin().getName();
+                if (getDescription().getDepend().contains(pluginName)) {
+                    warning("Plugin [" + pluginName + "] has been disabled, disabling this plugin.");
+                    getPluginLoader().disablePlugin(ACivMod.this);
+                }
+            }
+        });
+    }
 
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		return handle == null ? false : handle.execute(sender, command, args);
-	}
+    @Override
+    public void onDisable() {
+        for (Class<? extends NBTSerializable> serializableClass : this.serializableClasses) {
+            NBTSerialization.unregisterNBTSerializable(serializableClass);
+        }
+        HandlerList.unregisterAll(this);
+        Bukkit.getMessenger().unregisterIncomingPluginChannel(this);
+        Bukkit.getMessenger().unregisterOutgoingPluginChannel(this);
+        Bukkit.getScheduler().cancelTasks(this);
+    }
 
-	@Override
-	public void onEnable() {
-		initApis(this);
-	}
+    public void saveDefaultResource(String path) {
+        if (getResource(path) == null) {
+            saveResource(path, false);
+        }
+    }
 
-	private static synchronized void initApis(ACivMod instance) {
-		if (!initializedAPIs) {
-			initializedAPIs = true;
-			instance.registerEvents();
-			new NiceNames().loadNames();
-			new DialogManager();
-			ConfigurationSerialization.registerClass(ManagedDatasource.class);
-		}
-	}
+    public void registerEvent(Listener listener) {
+        getServer().getPluginManager().registerEvents(listener, this);
+    }
 
-	private void registerEvents() {
-		getServer().getPluginManager().registerEvents(new ClickableInventoryListener(), this);
-		getServer().getPluginManager().registerEvents(new ChatListener(), this);
-	}
+    public <T extends NBTSerializable> void registerSerializable(Class<T> serializable) {
+        NBTSerialization.registerNBTSerializable(serializable);
+        this.serializableClasses.add(serializable);
+    }
 
-	@Deprecated
-	public boolean toBool(String value) {
-		if (value.equals("1") || value.equalsIgnoreCase("true")) {
-			return true;
-		}
-		return false;
-	}
+    public boolean isDebugEnabled() {
+        FileConfiguration config = getConfig();
+        if (config == null) {
+            return false;
+        }
+        return config.getBoolean("debug", false);
+    }
 
-	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
-		return handle == null ? null : handle.complete(sender, cmd, args);
-	}
+    @Deprecated
+    public boolean toBool(String value) {
+        return value.equals("1") || value.equalsIgnoreCase("true");
+    }
 
-	public CommandHandler getCommandHandler() {
-		return handle;
-	}
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] arguments) {
+        return this.handle != null && this.handle.execute(sender, command, arguments);
+    }
 
-	protected void setCommandHandler(CommandHandler handle) {
-		this.handle = handle;
-	}
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] arguments) {
+        return this.handle == null ? null : this.handle.complete(sender, command, arguments);
+    }
 
-	protected abstract String getPluginName();
+    public CommandHandler getCommandHandler() {
+        return this.handle;
+    }
 
-	/**
-	 * Simple SEVERE level logging.
-	 */
-	public void severe(String message) {
-		getLogger().log(Level.SEVERE, message);
-	}
+    protected void setCommandHandler(CommandHandler handle) {
+        this.handle = handle;
+    }
 
-	/**
-	 * Simple SEVERE level logging with Throwable record.
-	 */
-	public void severe(String message, Throwable error) {
-		getLogger().log(Level.SEVERE, message, error);
-	}
+    @Deprecated
+    protected String getPluginName() {
+        return getName();
+    }
 
-	/**
-	 * Simple WARNING level logging.
-	 */
-	public void warning(String message) {
-		getLogger().log(Level.WARNING, message);
-	}
+    /**
+     * Simple SEVERE level logging.
+     */
+    public void severe(String message) {
+        getLogger().log(Level.SEVERE, message);
+    }
 
-	/**
-	 * Simple WARNING level logging with Throwable record.
-	 */
-	public void warning(String message, Throwable error) {
-		getLogger().log(Level.WARNING, message, error);
-	}
+    /**
+     * Simple SEVERE level logging with Throwable record.
+     */
+    public void severe(String message, Throwable error) {
+        getLogger().log(Level.SEVERE, message, error);
+    }
 
-	/**
-	 * Simple WARNING level logging with ellipsis notation shortcut for defered injection argument array.
-	 */
-	public void warning(String message, Object... vars) {
-		getLogger().log(Level.WARNING, message, vars);
-	}
+    /**
+     * Simple WARNING level logging.
+     */
+    public void warning(String message) {
+        getLogger().log(Level.WARNING, message);
+    }
 
-	/**
-	 * Simple INFO level logging
-	 */
-	public void info(String message) {
-		getLogger().log(Level.INFO, message);
-	}
+    /**
+     * Simple WARNING level logging with Throwable record.
+     */
+    public void warning(String message, Throwable error) {
+        getLogger().log(Level.WARNING, message, error);
+    }
 
-	/**
-	 * Simple INFO level logging with ellipsis notation shortcut for defered injection argument array.
-	 */
-	public void info(String message, Object... vars) {
-		getLogger().log(Level.INFO, message, vars);
-	}
+    /**
+     * Simple WARNING level logging with ellipsis notation shortcut for deferred injection argument array.
+     */
+    public void warning(String message, Object... vars) {
+        getLogger().log(Level.WARNING, message, vars);
+    }
 
-	/**
-	 * Live activatable debug message (using {@link Config#DebugLog} to decide) at INFO level.
-	 *
-	 * Skipped if DebugLog is false.
-	 */
-	public void debug(String message) {
-		if (getConfig() != null && getConfig().getBoolean("debug", false)) {
-			getLogger().log(Level.INFO, message);
-		}
-	}
+    /**
+     * Simple INFO level logging
+     */
+    public void info(String message) {
+        getLogger().log(Level.INFO, message);
+    }
 
-	/**
-	 * Live activatable debug message (using {@link Config#DebugLog} to decide) at INFO level with ellipsis notation
-	 * shorcut for defered injection argument array.
-	 *
-	 * Skipped if DebugLog is false.
-	 */
-	public void debug(String message, Object... vars) {
-		if (getConfig() != null && getConfig().getBoolean("debug", false)) {
-			getLogger().log(Level.INFO, message, vars);
-		}
-	}
+    /**
+     * Simple INFO level logging with ellipsis notation shortcut for deferred injection argument array.
+     */
+    public void info(String message, Object... vars) {
+        getLogger().log(Level.INFO, message, vars);
+    }
+
+    /**
+     * Live activatable debug message (using {@link ACivMod#getConfig()} to decide) at INFO level.
+     *
+     * Skipped if DebugLog is false.
+     */
+    public void debug(String message) {
+        if (isDebugEnabled()) {
+            getLogger().log(Level.INFO, message);
+        }
+    }
+
+    /**
+     * Live activatable debug message (using {@link ACivMod#getConfig()} to decide) at INFO level with ellipsis notation
+     * shortcut for deferred injection argument array.
+     *
+     * Skipped if DebugLog is false.
+     */
+    public void debug(String message, Object... vars) {
+        if (isDebugEnabled()) {
+            getLogger().log(Level.INFO, message, vars);
+        }
+    }
+
+    /**
+     * Attempts to retrieve a plugin's instance through several known means.
+     *
+     * 1. If there's an instance of the class currently enabled. (Don't request ACivMod.class, or you'll just get the
+     * the first result.
+     *
+     * 2. If there's a public static .getInstance() method.
+     *
+     * 3. If there's a static instance field.
+     *
+     * @param <T> The type of the plugin.
+     * @param clazz The class object of the plugin.
+     * @return Returns the first found instance of the plugin, or null.
+     *
+     * @apiNote Returning null doesn't necessarily mean there isn't an instance of the plugin in existence. It could
+     *         just be that it's located some unexpected place. Additionally, just because an instance has been
+     *         returned does not mean that instance is enabled.
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends JavaPlugin> T getInstance(Class<T> clazz) {
+        if (clazz == null) {
+            return null;
+        }
+        for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+            if (clazz.isAssignableFrom(plugin.getClass())) {
+                return (T) plugin;
+            }
+        }
+        try {
+            Method method = clazz.getDeclaredMethod("getInstance");
+            if (Modifier.isPublic(method.getModifiers()) &&
+                    Modifier.isStatic(method.getModifiers()) &&
+                    clazz.isAssignableFrom(method.getReturnType())) {
+                return (T) method.invoke(null);
+            }
+        }
+        catch (Exception ignored) {
+        }
+        try {
+            Field field = clazz.getField("instance");
+            if (Modifier.isStatic(field.getModifiers()) &&
+                    clazz.isAssignableFrom(field.getType())) {
+                return (T) field.get(null);
+            }
+        }
+        catch (Exception ignored) {
+        }
+        // Otherwise there's no instance of the plugin, or it's stored in an usual way
+        return null;
+    }
 
 }
