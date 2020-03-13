@@ -1,7 +1,14 @@
+Air,AIR,0
 Stone,STONE,0
+Granite,STONE,1
+Polished Granite,STONE,2
+Diorite,STONE,3
+Polished Diorite,STONE,4
+Andesite,STONE,5
+Polished Andesite,STONE,6
 Grass Block,GRASS,0
 Dirt,DIRT,0
-Grassless Dirt,DIRT,1
+Coarse Dirt,DIRT,1
 Podzol,DIRT,2
 Cobblestone,COBBLESTONE,0
 Oak Wood Planks,WOOD,0
@@ -18,10 +25,11 @@ Acacia Sapling,SAPLING,4
 Dark Oak Sapling,SAPLING,5
 Bedrock,BEDROCK,0
 Water,WATER,0
-Stationary Water,STATIONARY_WATER,0
+Water,STATIONARY_WATER,0
 Lava,LAVA,0
-Stationary Lava,STATIONARY_LAVA,0
+Lava,STATIONARY_LAVA,0
 Sand,SAND,0
+Red Sand,SAND,1
 Gravel,GRAVEL,0
 Gold Ore,GOLD_ORE,0
 Iron Ore,IRON_ORE,0
@@ -30,25 +38,31 @@ Oak Wood,LOG,0
 Spruce Wood,LOG,1
 Birch Wood,LOG,2
 Jungle Wood,LOG,3
-Leaves,LEAVES,0
+Oak Leaves,LEAVES,0
+Spruce Leaves,LEAVES,1
+Birch Leaves,LEAVES,2
+Jungle Leaves,LEAVES,3
 Sponge,SPONGE,0
+Wet Sponge,SPONGE,1
 Glass,GLASS,0
-Lapis Ore,LAPIS_ORE,0
-Lapis Block,LAPIS_BLOCK,0
+Lapis Lazuli Ore,LAPIS_ORE,0
+Lapis Lazuli Block,LAPIS_BLOCK,0
 Dispenser,DISPENSER,0
 Sandstone,SANDSTONE,0
+Chiseled Sandstone,SANDSTONE,1
+Smooth Sandstone,SANDSTONE,2
 Note Block,NOTE_BLOCK,0
-Bed Block,BED_BLOCK,0
+Bed,BED_BLOCK,0
 Powered Rail,POWERED_RAIL,0
 Detector Rail,DETECTOR_RAIL,0
-Piston Sticky Base,PISTON_STICKY_BASE,0
-Web,WEB,0
-Shrub,LONG_GRASS,0
+Sticky Piston,PISTON_STICKY_BASE,0
+Cobweb,WEB,0
+Dead Shrub,LONG_GRASS,0
 Grass,LONG_GRASS,1
 Fern,LONG_GRASS,2
 Dead Bush,DEAD_BUSH,0
-Piston Base,PISTON_BASE,0
-Piston Extension,PISTON_EXTENSION,0
+Piston,PISTON_BASE,0
+Piston,PISTON_EXTENSION,0
 White Wool,WOOL,0
 Orange Wool,WOOL,1
 Magenta Wool,WOOL,2
@@ -65,7 +79,7 @@ Brown Wool,WOOL,12
 Green Wool,WOOL,13
 Red Wool,WOOL,14
 Black Wool,WOOL,15
-Piston Moving Piece,PISTON_MOVING_PIECE,0
+Moving Piston Piece,PISTON_MOVING_PIECE,0
 Dandelion,YELLOW_FLOWER,0
 Poppy,RED_ROSE,0
 Blue Orchid,RED_ROSE,1
@@ -81,9 +95,22 @@ Red Mushroom,RED_MUSHROOM,0
 Gold Block,GOLD_BLOCK,0
 Iron Block,IRON_BLOCK,0
 Double Stone Slab,DOUBLE_STEP,0
-Nether Brick Slab,DOUBLE_STEP,6
+Double Sandstone Slab,DOUBLE_STEP,1
+Double Oak Wood Slab,DOUBLE_STEP,2
+Double Cobblestone Slab,DOUBLE_STEP,3
+Double Brick Slab,DOUBLE_STEP,4
+Double Stone Brick Slab,DOUBLE_STEP,5
+Double Nether Brick Slab,DOUBLE_STEP,6
+Double Quartz Slab,DOUBLE_STEP,7
 Stone Slab,STEP,0
-Brick,BRICK,0
+Sandstone Slab,STEP,1
+Oak Wood Slab,STEP,2
+Cobblestone Slab,STEP,3
+Brick Slab,STEP,4
+Stone Brick Slab,STEP,5
+Nether Brick Slab,STEP,6
+Quartz Slab,STEP,7
+Bricks,BRICK,0
 TNT,TNT,0
 Bookshelf,BOOKSHELF,0
 Mossy Cobblestone,MOSSY_COBBLESTONE,0
@@ -91,48 +118,48 @@ Obsidian,OBSIDIAN,0
 Torch,TORCH,0
 Fire,FIRE,0
 Mob Spawner,MOB_SPAWNER,0
-Wood Stairs,WOOD_STAIRS,0
+Oak Wood Stairs,WOOD_STAIRS,0
 Chest,CHEST,0
-Redstone Wire,REDSTONE_WIRE,0
+Redstone,REDSTONE_WIRE,0
 Diamond Ore,DIAMOND_ORE,0
 Diamond Block,DIAMOND_BLOCK,0
-Workbench,WORKBENCH,0
-Crops,CROPS,0
-Soil,SOIL,0
+Crafting Table,WORKBENCH,0
+Wheat Crops,CROPS,0
+Farmland,SOIL,0
 Furnace,FURNACE,0
-Burning Furnace,BURNING_FURNACE,0
-Sign Post,SIGN_POST,0
+Furnace,BURNING_FURNACE,0
+Sign,SIGN_POST,0
 Wooden Door,WOODEN_DOOR,0
 Ladder,LADDER,0
 Rail,RAILS,0
 Cobblestone Stairs,COBBLESTONE_STAIRS,0
-Wall Sign,WALL_SIGN,0
+Sign,WALL_SIGN,0
 Lever,LEVER,0
-Stone Plate,STONE_PLATE,0
-Iron Door Block,IRON_DOOR_BLOCK,0
-Wood Plate,WOOD_PLATE,0
+Stone Pressure Plate,STONE_PLATE,0
+Iron Door,IRON_DOOR_BLOCK,0
+Wooden Pressure Plate,WOOD_PLATE,0
 Redstone Ore,REDSTONE_ORE,0
-Glowing Redstone Ore,GLOWING_REDSTONE_ORE,0
-Redstone Torch Off,REDSTONE_TORCH_OFF,0
-Redstone Torch On,REDSTONE_TORCH_ON,0
+Redstone Ore,GLOWING_REDSTONE_ORE,0
+Redstone Torch,REDSTONE_TORCH_OFF,0
+Redstone Torch,REDSTONE_TORCH_ON,0
 Stone Button,STONE_BUTTON,0
 Snow,SNOW,0
 Ice,ICE,0
 Snow Block,SNOW_BLOCK,0
 Cactus,CACTUS,0
 Clay,CLAY,0
-Sugar Cane Block,SUGAR_CANE_BLOCK,0
+Sugarcane,SUGAR_CANE_BLOCK,0
 Jukebox,JUKEBOX,0
-Fence,FENCE,0
+Oak Fence,FENCE,0
 Pumpkin,PUMPKIN,0
 Netherrack,NETHERRACK,0
 Soul Sand,SOUL_SAND,0
 Glowstone,GLOWSTONE,0
-Portal,PORTAL,0
-Jack O Lantern,JACK_O_LANTERN,0
-Cake Block,CAKE_BLOCK,0
-Diode Block Off,DIODE_BLOCK_OFF,0
-Diode Block On,DIODE_BLOCK_ON,0
+Nether Portal,PORTAL,0
+Jack o'Lantern,JACK_O_LANTERN,0
+Cake,CAKE_BLOCK,0
+Redstone Repeater,DIODE_BLOCK_OFF,0
+Redstone Repeater,DIODE_BLOCK_ON,0
 White Stained Glass,STAINED_GLASS,0
 Orange Stained Glass,STAINED_GLASS,1
 Magenta Stained Glass,STAINED_GLASS,2
@@ -149,41 +176,56 @@ Brown Stained Glass,STAINED_GLASS,12
 Green Stained Glass,STAINED_GLASS,13
 Red Stained Glass,STAINED_GLASS,14
 Black Stained Glass,STAINED_GLASS,15
-Trap Door,TRAP_DOOR,0
-Monster Eggs,MONSTER_EGGS,0
+Wooden Trapdoor,TRAP_DOOR,0
+Stone Monster Egg,MONSTER_EGGS,0
+Cobblestone Monster Egg,MONSTER_EGGS,1
+Stone Brick Monster Egg,MONSTER_EGGS,2
+Mossy Stone Brick Monster Egg,MONSTER_EGGS,3
+Cracked Stone Brick Monster Egg,MONSTER_EGGS,4
+Chiseled Stone Brick Monster Egg,MONSTER_EGGS,5
 Stone Brick,SMOOTH_BRICK,0
 Mossy Stone Brick,SMOOTH_BRICK,1
 Cracked Stone Brick,SMOOTH_BRICK,2
 Chiseled Stone Brick,SMOOTH_BRICK,3
-Huge Mushroom 1,HUGE_MUSHROOM_1,0
-Huge Mushroom 2,HUGE_MUSHROOM_2,0
-Iron Fence,IRON_FENCE,0
-Thin Glass,THIN_GLASS,0
-Melon Block,MELON_BLOCK,0
+Brown Mushroom Block,HUGE_MUSHROOM_1,0
+Red Mushroom Block,HUGE_MUSHROOM_2,0
+Iron Bars,IRON_FENCE,0
+Glass Pane,THIN_GLASS,0
+Melon,MELON_BLOCK,0
 Pumpkin Stem,PUMPKIN_STEM,0
 Melon Stem,MELON_STEM,0
-Vine,VINE,0
+Vines,VINE,0
 Fence Gate,FENCE_GATE,0
 Brick Stairs,BRICK_STAIRS,0
-Smooth Stairs,SMOOTH_STAIRS,0
-Mycel,MYCEL,0
-Water Lily,WATER_LILY,0
+Stone Brick Stairs,SMOOTH_STAIRS,0
+Mycelium,MYCEL,0
+Lily Pad,WATER_LILY,0
 Nether Brick,NETHER_BRICK,0
-Nether Fence,NETHER_FENCE,0
+Nether Brick Fence,NETHER_FENCE,0
 Nether Brick Stairs,NETHER_BRICK_STAIRS,0
-Nether Wart Block,NETHER_WARTS,0
+Nether Wart,NETHER_WARTS,0
 Enchantment Table,ENCHANTMENT_TABLE,0
 Brewing Stand,BREWING_STAND,0
 Cauldron,CAULDRON,0
 Ender Portal,ENDER_PORTAL,0
 Ender Portal Frame,ENDER_PORTAL_FRAME,0
-Ender Stone,ENDER_STONE,0
+End Stone,ENDER_STONE,0
 Dragon Egg,DRAGON_EGG,0
-Redstone Lamp Off,REDSTONE_LAMP_OFF,0
-Redstone Lamp On,REDSTONE_LAMP_ON,0
-Wood Double Step,WOOD_DOUBLE_STEP,0
-Wood Step,WOOD_STEP,0
-Cocoa Stalk,COCOA,0
+Redstone Lamp,REDSTONE_LAMP_OFF,0
+Redstone Lamp,REDSTONE_LAMP_ON,0
+Double Oak Wood Slab,WOOD_DOUBLE_STEP,0
+Double Spruce Wood Slab,WOOD_DOUBLE_STEP,1
+Double Birch Wood Slab,WOOD_DOUBLE_STEP,2
+Double Jungle Wood Slab,WOOD_DOUBLE_STEP,3
+Double Acacia Wood Slab,WOOD_DOUBLE_STEP,4
+Double Dark Oak Wood Slab,WOOD_DOUBLE_STEP,5
+Oak Wood Slab,WOOD_STEP,0
+Spruce Wood Slab,WOOD_STEP,1
+Birch Wood Slab,WOOD_STEP,2
+Jungle Wood Slab,WOOD_STEP,3
+Acacia Wood Slab,WOOD_STEP,4
+Dark Oak Wood Slab,WOOD_STEP,5
+Cocoa,COCOA,0
 Sandstone Stairs,SANDSTONE_STAIRS,0
 Emerald Ore,EMERALD_ORE,0
 Ender Chest,ENDER_CHEST,0
@@ -193,28 +235,47 @@ Emerald Block,EMERALD_BLOCK,0
 Spruce Wood Stairs,SPRUCE_WOOD_STAIRS,0
 Birch Wood Stairs,BIRCH_WOOD_STAIRS,0
 Jungle Wood Stairs,JUNGLE_WOOD_STAIRS,0
-Command,COMMAND,0
+Command Block,COMMAND,0
 Beacon,BEACON,0
-Cobble Wall,COBBLE_WALL,0
+Cobblestone Wall,COBBLE_WALL,0
+Mossy Cobblestone Wall,COBBLE_WALL,1
 Flower Pot,FLOWER_POT,0
 Carrot Crop,CARROT,0
 Potato Crop,POTATO,0
-Wood Button,WOOD_BUTTON,0
+Wooden Button,WOOD_BUTTON,0
 Skull,SKULL,0
 Anvil,ANVIL,0
 Trapped Chest,TRAPPED_CHEST,0
-Gold Plate,GOLD_PLATE,0
-Iron Plate,IRON_PLATE,0
-Redstone Comparator Off,REDSTONE_COMPARATOR_OFF,0
-Redstone Comparator On,REDSTONE_COMPARATOR_ON,0
-Daylight Detector,DAYLIGHT_DETECTOR,0
+Gold Pressure Plate,GOLD_PLATE,0
+Iron Pressure Plate,IRON_PLATE,0
+Redstone Comparator,REDSTONE_COMPARATOR_OFF,0
+Redstone Comparator,REDSTONE_COMPARATOR_ON,0
+Daylight Sensor,DAYLIGHT_DETECTOR,0
 Redstone Block,REDSTONE_BLOCK,0
-Quartz Ore,QUARTZ_ORE,0
+Nether Quartz Ore,QUARTZ_ORE,0
 Hopper,HOPPER,0
 Quartz Block,QUARTZ_BLOCK,0
+Chiseled Quartz Block,QUARTZ_BLOCK,1
+Pillar Quartz Block,QUARTZ_BLOCK,2
 Quartz Stairs,QUARTZ_STAIRS,0
 Activator Rail,ACTIVATOR_RAIL,0
 Dropper,DROPPER,0
+White Terracotta,STAINED_CLAY,0
+Orange Terracotta,STAINED_CLAY,1
+Magenta Terracotta,STAINED_CLAY,2
+Light Blue Terracotta,STAINED_CLAY,3
+Yellow Terracotta,STAINED_CLAY,4
+Lime Terracotta,STAINED_CLAY,5
+Pink Terracotta,STAINED_CLAY,6
+Gray Terracotta,STAINED_CLAY,7
+Light Gray Terracotta,STAINED_CLAY,8
+Cyan Terracotta,STAINED_CLAY,9
+Purple Terracotta,STAINED_CLAY,10
+Blue Terracotta,STAINED_CLAY,11
+Brown Terracotta,STAINED_CLAY,12
+Green Terracotta,STAINED_CLAY,13
+Red Terracotta,STAINED_CLAY,14
+Black Terracotta,STAINED_CLAY,15
 White Stained Glass Pane,STAINED_GLASS_PANE,0
 Orange Stained Glass Pane,STAINED_GLASS_PANE,1
 Magenta Stained Glass Pane,STAINED_GLASS_PANE,2
@@ -231,13 +292,159 @@ Brown Stained Glass Pane,STAINED_GLASS_PANE,12
 Green Stained Glass Pane,STAINED_GLASS_PANE,13
 Red Stained Glass Pane,STAINED_GLASS_PANE,14
 Black Stained Glass Pane,STAINED_GLASS_PANE,15
+Acacia Leaves,LEAVES_2,0
+Dark Oak Leaves,LEAVES_2,1
 Acacia Wood,LOG_2,0
 Dark Oak Wood,LOG_2,1
+Acacia Wood Stairs,ACACIA_STAIRS,0
+Dark Oak Wood Stairs,DARK_OAK_STAIRS,0
+Slime Block,SLIME_BLOCK,0
+Barrier,BARRIER,0
+Iron Trapdoor,IRON_TRAPDOOR,0
+Prismarine,PRISMARINE,0
+Prismarine Bricks,PRISMARINE,1
+Dark Prismarine,PRISMARINE,2
+Sea Lantern,SEA_LANTERN,0
+Hay Bale,HAY_BLOCK,0
+White Carpet,CARPET,0
+Orange Carpet,CARPET,1
+Magenta Carpet,CARPET,2
+Light Blue Carpet,CARPET,3
+Yellow Carpet,CARPET,4
+Lime Carpet,CARPET,5
+Pink Carpet,CARPET,6
+Gray Carpet,CARPET,7
+Light Gray Carpet,CARPET,8
+Cyan Carpet,CARPET,9
+Purple Carpet,CARPET,10
+Blue Carpet,CARPET,11
+Brown Carpet,CARPET,12
+Green Carpet,CARPET,13
+Red Carpet,CARPET,14
+Black Carpet,CARPET,15
+Terracotta,HARD_CLAY,0
+Coal Block,COAL_BLOCK,0
 Packed Ice,PACKED_ICE,0
+Sunflower,DOUBLE_PLANT,0
+Lilac,DOUBLE_PLANT,1
+Double Tallgrass,DOUBLE_PLANT,2
+Large Fern,DOUBLE_PLANT,3
+Rose Bush,DOUBLE_PLANT,4
+Peony,DOUBLE_PLANT,5
+Banner,STANDING_BANNER,0
+Banner,WALL_BANNER,0
+Inverted Daylight Sensor,DAYLIGHT_DETECTOR_INVERTED,0
+Red Sandstone,RED_SANDSTONE,0
+Chiseled Red Sandstone,RED_SANDSTONE,1
+Smooth Red Sandstone,RED_SANDSTONE,2
+Red Sandstone Stairs,RED_SANDSTONE_STAIRS,0
+Double Red Sandstone Slab,DOUBLE_STONE_SLAB2,0
+Red Sandstone Slab,STONE_SLAB2,0
+Spruce Fence Gate,SPRUCE_FENCE_GATE,0
+Birch Fence Gate,BIRCH_FENCE_GATE,0
+Jungle Fence Gate,JUNGLE_FENCE_GATE,0
+Dark Oak Fence Gate,DARK_OAK_FENCE_GATE,0
+Acacia Fence Gate,ACACIA_FENCE_GATE,0
+Spruce Fence,SPRUCE_FENCE,0
+Birch Fence,BIRCH_FENCE,0
+Jungle Fence,JUNGLE_FENCE,0
+Dark Oak Fence,DARK_OAK_FENCE,0
+Acacia Fence,ACACIA_FENCE,0
+Spruce Door,SPRUCE_DOOR,0
+Birch Door,BIRCH_DOOR,0
+Jungle Door,JUNGLE_DOOR,0
+Acacia Door,ACACIA_DOOR,0
+Dark Oak Door,DARK_OAK_DOOR,0
+End Rod,END_ROD,0
+Chorus Plan,CHORUS_PLANT,0
+Chorus Flower,CHORUS_FLOWER,0
+Purpur Block,PURPUR_BLOCK,0
+Purpur Pillar,PURPUR_PILLAR,0
+Purpur Stairs,PURPUR_STAIRS,0
+Purpur Double Slab,PURPUR_DOUBLE_SLAB,0
+Purpur Slab,PURPUR_SLAB,0
+End Stone Brick,END_BRICKS,0
+Beetroot,BEETROOT_BLOCK,0
+Grass Path,GRASS_PATH,0
+End Gateway,END_GATEWAY,0
+Repeating Command Block,COMMAND_REPEATING,0
+Chain Command Block,COMMAND_CHAIN,0
+Frosted Ice,FROSTED_ICE,0
+Magma Block,MAGMA,0
+Nether Wart Block,NETHER_WART_BLOCK,0
+Red Nether Brick,RED_NETHER_BRICK,0
+Bone Block,BONE_BLOCK,0
+Structure Void,STRUCTURE_VOID,0
+Observer,OBSERVER,0
+White Shulker Box,WHITE_SHULKER_BOX,0
+Orange Shulker Box,ORANGE_SHULKER_BOX,0
+Magenta Shulker Box,MAGENTA_SHULKER_BOX,0
+Light Blue Shulker Box,LIGHT_BLUE_SHULKER_BOX,0
+Yellow Shulker Box,YELLOW_SHULKER_BOX,0
+Lime Shulker Box,LIME_SHULKER_BOX,0
+Pink Shulker Box,PINK_SHULKER_BOX,0
+Gray Shulker Box,GRAY_SHULKER_BOX,0
+Light Gray Shulker Box,SILVER_SHULKER_BOX,0
+Cyan Shulker Box,CYAN_SHULKER_BOX,0
+Purple Shulker Box,PURPLE_SHULKER_BOX,0
+Blue Shulker Box,BLUE_SHULKER_BOX,0
+Brown Shulker Box,BROWN_SHULKER_BOX,0
+Green Shulker Box,GREEN_SHULKER_BOX,0
+Red Shulker Box,RED_SHULKER_BOX,0
+Black Shulker Box,BLACK_SHULKER_BOX,0
+White Glazed Terracotta,WHITE_GLAZED_TERRACOTTA,0
+Orange Glazed Terracotta,ORANGE_GLAZED_TERRACOTTA,0
+Magenta Glazed Terracotta,MAGENTA_GLAZED_TERRACOTTA,0
+Light Blue Glazed Terracotta,LIGHT_BLUE_GLAZED_TERRACOTTA,0
+Yellow Glazed Terracotta,YELLOW_GLAZED_TERRACOTTA,0
+Lime Glazed Terracotta,LIME_GLAZED_TERRACOTTA,0
+Pink Glazed Terracotta,PINK_GLAZED_TERRACOTTA,0
+Gray Glazed Terracotta,GRAY_GLAZED_TERRACOTTA,0
+Light Gray Glazed Terracotta,SILVER_GLAZED_TERRACOTTA,0
+Cyan Glazed Terracotta,CYAN_GLAZED_TERRACOTTA,0
+Purple Glazed Terracotta,PURPLE_GLAZED_TERRACOTTA,0
+Blue Glazed Terracotta,BLUE_GLAZED_TERRACOTTA,0
+Brown Glazed Terracotta,BROWN_GLAZED_TERRACOTTA,0
+Green Glazed Terracotta,GREEN_GLAZED_TERRACOTTA,0
+Red Glazed Terracotta,RED_GLAZED_TERRACOTTA,0
+Black Glazed Terracotta,BLACK_GLAZED_TERRACOTTA,0
+White Concrete,CONCRETE,0
+Orange Concrete,CONCRETE,1
+Magenta Concrete,CONCRETE,2
+Light Blue Concrete,CONCRETE,3
+Yellow Concrete,CONCRETE,4
+Lime Concrete,CONCRETE,5
+Pink Concrete,CONCRETE,6
+Gray Concrete,CONCRETE,7
+Light Gray Concrete,CONCRETE,8
+Cyan Concrete,CONCRETE,9
+Purple Concrete,CONCRETE,10
+Blue Concrete,CONCRETE,11
+Brown Concrete,CONCRETE,12
+Green Concrete,CONCRETE,13
+Red Concrete,CONCRETE,14
+Black Concrete,CONCRETE,15
+White Concrete Powder,CONCRETE_POWDER,0
+Orange Concrete Powder,CONCRETE_POWDER,1
+Magenta Concrete Powder,CONCRETE_POWDER,2
+Light Blue Concrete Powder,CONCRETE_POWDER,3
+Yellow Concrete Powder,CONCRETE_POWDER,4
+Lime Concrete Powder,CONCRETE_POWDER,5
+Pink Concrete Powder,CONCRETE_POWDER,6
+Gray Concrete Powder,CONCRETE_POWDER,7
+Light Gray Concrete Powder,CONCRETE_POWDER,8
+Cyan Concrete Powder,CONCRETE_POWDER,9
+Purple Concrete Powder,CONCRETE_POWDER,10
+Blue Concrete Powder,CONCRETE_POWDER,11
+Brown Concrete Powder,CONCRETE_POWDER,12
+Green Concrete Powder,CONCRETE_POWDER,13
+Red Concrete Powder,CONCRETE_POWDER,14
+Black Concrete Powder,CONCRETE_POWDER,15
+Structure Block,STRUCTURE_BLOCK,0
 Iron Spade,IRON_SPADE,0
 Iron Pickaxe,IRON_PICKAXE,0
 Iron Axe,IRON_AXE,0
-Flint And Steel,FLINT_AND_STEEL,0
+Flint and Steel,FLINT_AND_STEEL,0
 Apple,APPLE,0
 Bow,BOW,0
 Arrow,ARROW,0
@@ -298,12 +505,13 @@ Gold Chestplate,GOLD_CHESTPLATE,-218
 Gold Leggings,GOLD_LEGGINGS,-218
 Gold Boots,GOLD_BOOTS,-218
 Flint,FLINT,0
-Pork,PORK,0
-Grilled Pork,GRILLED_PORK,0
+Raw Porkchop,PORK,0
+Cooked Porkchop,GRILLED_PORK,0
 Painting,PAINTING,0
 Golden Apple,GOLDEN_APPLE,0
+Enchanted Golden Apple,GOLDEN_APPLE,1
 Sign,SIGN,0
-Wood Door,WOOD_DOOR,0
+Oak Door,WOOD_DOOR,0
 Bucket,BUCKET,0
 Water Bucket,WATER_BUCKET,0
 Lava Bucket,LAVA_BUCKET,0
@@ -311,8 +519,8 @@ Minecart,MINECART,0
 Saddle,SADDLE,0
 Iron Door,IRON_DOOR,0
 Redstone,REDSTONE,0
-Snow Ball,SNOW_BALL,0
-Boat,BOAT,0
+Snowball,SNOW_BALL,0
+Oak Boat,BOAT,0
 Leather,LEATHER,0
 Milk Bucket,MILK_BUCKET,0
 Clay Brick,CLAY_BRICK,0
@@ -326,16 +534,18 @@ Powered Minecart,POWERED_MINECART,0
 Egg,EGG,0
 Compass,COMPASS,0
 Fishing Rod,FISHING_ROD,0
-Watch,WATCH,0
+Clock,WATCH,0
 Glowstone Dust,GLOWSTONE_DUST,0
 Raw Fish,RAW_FISH,0
 Raw Salmon,RAW_FISH,1
+Clownfish,RAW_FISH,2
+Pufferfish,RAW_FISH,3
 Cooked Fish,COOKED_FISH,0
-Cooked Salmon,RAW_FISH,1
+Cooked Salmon,COOKED_FISH,1
 Ink Sack,INK_SACK,0
 Rose Red,INK_SACK,1
 Cactus Green,INK_SACK,2
-Cocoa,INK_SACK,3
+Cocoa Beans,INK_SACK,3
 Lapis Lazuli,INK_SACK,4
 Purple Dye,INK_SACK,5
 Cyan Dye,INK_SACK,6
@@ -351,16 +561,31 @@ Bone Meal,INK_SACK,15
 Bone,BONE,0
 Sugar,SUGAR,0
 Cake,CAKE,0
-Bed,BED,0
-Diode,DIODE,0
+White Bed,BED,0
+Orange Bed,BED,1
+Magenta Bed,BED,2
+Light Blue Bed,BED,3
+Yellow Bed,BED,4
+Lime Bed,BED,5
+Pink Bed,BED,6
+Gray Bed,BED,7
+Light Gray Bed,BED,8
+Cyan Bed,BED,9
+Purple Bed,BED,10
+Blue Bed,BED,11
+Brown Bed,BED,12
+Green Bed,BED,13
+Red Bed,BED,14
+Black Bed,BED,15
+Redstone Repeater,DIODE,0
 Cookie,COOKIE,0
 Map,MAP,0
 Shears,SHEARS,0
-Melon,MELON,0
+Slice of Melon,MELON,0
 Pumpkin Seeds,PUMPKIN_SEEDS,0
 Melon Seeds,MELON_SEEDS,0
 Raw Beef,RAW_BEEF,0
-Cooked Beef,COOKED_BEEF,0
+Steak,COOKED_BEEF,0
 Raw Chicken,RAW_CHICKEN,0
 Cooked Chicken,COOKED_CHICKEN,0
 Rotten Flesh,ROTTEN_FLESH,0
@@ -369,62 +594,157 @@ Blaze Rod,BLAZE_ROD,0
 Ghast Tear,GHAST_TEAR,0
 Gold Nugget,GOLD_NUGGET,0
 Nether Wart,NETHER_STALK,0
-Clear Potion,POTION,7
-Diffuse Potion,POTION,11
-Artless Potion,POTION,13
-Bungling Potion,POTION,23
-Suave Potion,POTION,29
-Smooth Potion,POTION,91
-Refined Potion,POTION,107
-Cordial Potion,POTION,109
-Potent Potion,POTION,112
-Acrid Potion,POTION,123
-Gross Potion,POTION,125
 Potion,POTION,0
 Glass Bottle,GLASS_BOTTLE,0
 Spider Eye,SPIDER_EYE,0
 Fermented Spider Eye,FERMENTED_SPIDER_EYE,0
 Blaze Powder,BLAZE_POWDER,0
 Magma Cream,MAGMA_CREAM,0
-Brewing Stand Item,BREWING_STAND_ITEM,0
-Cauldron Item,CAULDRON_ITEM,0
-Eye Of Ender,EYE_OF_ENDER,0
-Speckled Melon,SPECKLED_MELON,0
-Monster Egg,MONSTER_EGG,0
-Exp Bottle,EXP_BOTTLE,0
+Brewing Stand,BREWING_STAND_ITEM,0
+Cauldron,CAULDRON_ITEM,0
+Glistering Melon,SPECKLED_MELON,0
+Eye of Ender,EYE_OF_ENDER,0
+Spawn Elder Guardian,MONSTER_EGG,2
+Spawn Wither Skeleton,MONSTER_EGG,5
+Spawn Stray,MONSTER_EGG,6
+Spawn Husk,MONSTER_EGG,23
+Spawn Zombie Villager,MONSTER_EGG,27
+Spawn Skeleton Horse,MONSTER_EGG,28
+Spawn Zombie Horse,MONSTER_EGG,29
+Spawn Donkey,MONSTER_EGG,31
+Spawn Mule,MONSTER_EGG,32
+Spawn Evoker,MONSTER_EGG,34
+Spawn Vex,MONSTER_EGG,35
+Spawn Vindicator,MONSTER_EGG,36
+Spawn Creeper,MONSTER_EGG,50
+Spawn Skeleton,MONSTER_EGG,51
+Spawn Spider,MONSTER_EGG,52
+Spawn Zombie,MONSTER_EGG,54
+Spawn Slime,MONSTER_EGG,55
+Spawn Ghast,MONSTER_EGG,56
+Spawn Zombie Pigman,MONSTER_EGG,57
+Spawn Enderman,MONSTER_EGG,58
+Spawn Cave Spider,MONSTER_EGG,59
+Spawn Silverfish,MONSTER_EGG,60
+Spawn Blaze,MONSTER_EGG,61
+Spawn Magma Cube,MONSTER_EGG,62
+Spawn Bat,MONSTER_EGG,65
+Spawn Witch,MONSTER_EGG,66
+Spawn Endermite,MONSTER_EGG,67
+Spawn Guardian,MONSTER_EGG,68
+Spawn Shulker,MONSTER_EGG,69
+Spawn Pig,MONSTER_EGG,90
+Spawn Sheep,MONSTER_EGG,91
+Spawn Cow,MONSTER_EGG,92
+Spawn Chicken,MONSTER_EGG,93
+Spawn Squid,MONSTER_EGG,94
+Spawn Wolf,MONSTER_EGG,95
+Spawn Mooshroom,MONSTER_EGG,96
+Spawn Ocelot,MONSTER_EGG,98
+Spawn Horse,MONSTER_EGG,100
+Spawn Rabbit,MONSTER_EGG,101
+Spawn Polar Bear,MONSTER_EGG,102
+Spawn Llama,MONSTER_EGG,103
+Spawn Parrot,MONSTER_EGG,105
+Spawn Villager,MONSTER_EGG,120
+Bottle o' Enchanting,EXP_BOTTLE,0
 Fireball,FIREBALL,0
-Book And Quill,BOOK_AND_QUILL,0
+Book and Quill,BOOK_AND_QUILL,0
 Written Book,WRITTEN_BOOK,0
 Emerald,EMERALD,0
 Item Frame,ITEM_FRAME,0
-Flower Pot Item,FLOWER_POT_ITEM,0
+Flower Pot,FLOWER_POT_ITEM,0
 Carrot,CARROT_ITEM,0
 Potato,POTATO_ITEM,0
 Baked Potato,BAKED_POTATO,0
 Poisonous Potato,POISONOUS_POTATO,0
 Empty Map,EMPTY_MAP,0
 Golden Carrot,GOLDEN_CARROT,0
-Skull Item,SKULL_ITEM,0
-Carrot Stick,CARROT_STICK,0
+Skeleton Skull,SKULL_ITEM,0
+Wither Skeleton Skull,SKULL_ITEM,1
+Zombie Head,SKULL_ITEM,2
+Player Head,SKULL_ITEM,3
+Creeper Head,SKULL_ITEM,4
+Dragon Head,SKULL_ITEM,5
+Carrot on a Stick,CARROT_STICK,0
 Nether Star,NETHER_STAR,0
 Pumpkin Pie,PUMPKIN_PIE,0
-Firework,FIREWORK,0
-Firework Charge,FIREWORK_CHARGE,0
+Firework Rocket,FIREWORK,0
+Firework Star,FIREWORK_CHARGE,0
 Enchanted Book,ENCHANTED_BOOK,0
 Redstone Comparator,REDSTONE_COMPARATOR,0
-Nether Brick Item,NETHER_BRICK_ITEM,0
-Quartz,QUARTZ,0
-Explosive Minecart,EXPLOSIVE_MINECART,0
+Nether Brick,NETHER_BRICK_ITEM,0
+Nether Quartz,QUARTZ,0
+TNT Minecart,EXPLOSIVE_MINECART,0
 Hopper Minecart,HOPPER_MINECART,0
-Gold Record,GOLD_RECORD,0
-Green Record,GREEN_RECORD,0
-Record 3,RECORD_3,0
-Record 4,RECORD_4,0
-Record 5,RECORD_5,0
-Record 6,RECORD_6,0
-Record 7,RECORD_7,0
-Record 8,RECORD_8,0
-Record 9,RECORD_9,0
-Record 10,RECORD_10,0
-Record 11,RECORD_11,0
-Record 12,RECORD_12,0
+Prismarine Shard,PRISMARINE_SHARD,0
+Prismarine Crystals,PRISMARINE_CRYSTALS,0
+Raw Rabbit,RABBIT,0
+Cooked Rabbit,COOKED_RABBIT,0
+Rabbit Stew,RABBIT_STEW,0
+Rabbit's Foot,RABBIT_FOOT,0
+Rabbit Hide,RABBIT_HIDE,0
+Armor Stand,ARMOR_STAND,0
+Iron Horse Armor,IRON_BARDING,0
+Gold Horse Armor,GOLD_BARDING,0
+Diamond Horse Armor,DIAMOND_BARDING,0
+Lead,LEASH,0
+Name Tag,NAME_TAG,0
+Minecart with Command Block,COMMAND_MINECART,0
+Raw Mutton,MUTTON,0
+Cooked Mutton,COOKED_MUTTON,0
+Black Banner,BANNER,0
+Red Banner,BANNER,1
+Green Banner,BANNER,2
+Brown Banner,BANNER,3
+Blue Banner,BANNER,4
+Purple Banner,BANNER,5
+Cyan Banner,BANNER,6
+Light Gray Banner,BANNER,7
+Gray Banner,BANNER,8
+Pink Banner,BANNER,9
+Lime Banner,BANNER,10
+Yellow Banner,BANNER,11
+Light Blue Banner,BANNER,12
+Magenta Banner,BANNER,13
+Orange Banner,BANNER,14
+White Banner,BANNER,15
+End Crystal,END_CRYSTAL,0
+Spruce Door,SPRUCE_DOOR_ITEM,0
+Birch Door,BIRCH_DOOR_ITEM,0
+Jungle Door,JUNGLE_DOOR_ITEM,0
+Acacia Door,ACACIA_DOOR_ITEM,0
+Dark Oak Door,DARK_OAK_DOOR_ITEM,0
+Chorus Fruit,CHORUS_FRUIT,0
+Popped Chorus Fruit,CHORUS_FRUIT_POPPED,0
+Beetroot,BEETROOT,0
+Beetroot Seeds,BEETROOT_SEEDS,0
+Beetroot Soup,BEETROOT_SOUP,0
+Dragon's Breath,DRAGONS_BREATH,0
+Splash Potion,SPLASH_POTION,0
+Spectral Arrow,SPECTRAL_ARROW,0
+Tipped Arrow,TIPPED_ARROW,0
+Lingering Potion,LINGERING_POTION,0
+Shield,SHIELD,0
+Elytra,ELYTRA,0
+Spruce Boat,BOAT_SPRUCE,0
+Birch Boat,BOAT_BIRCH,0
+Jungle Boat,BOAT_JUNGLE,0
+Acacia Boat,BOAT_ACACIA,0
+Dark Oak Boat,BOAT_DARK_OAK,0
+Totem of Undying,TOTEM,0
+Shulker Shell,SHULKER_SHELL,0
+Iron Nugget,IRON_NUGGET,0
+Knowledge Book,KNOWLEDGE_BOOK,0
+13 Disc,GOLD_RECORD,0
+Cat Disc,GREEN_RECORD,0
+Blocks Disc,RECORD_3,0
+Chirp Disc,RECORD_4,0
+Far Disc,RECORD_5,0
+Mall Disc,RECORD_6,0
+Mellohi Disc,RECORD_7,0
+Stal Disc,RECORD_8,0
+Strad Disc,RECORD_9,0
+Ward Disc,RECORD_10,0
+11 Disc,RECORD_11,0
+Wait Disc,RECORD_12,0
