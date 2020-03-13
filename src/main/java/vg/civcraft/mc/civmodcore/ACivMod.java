@@ -1,5 +1,6 @@
 package vg.civcraft.mc.civmodcore;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -53,8 +54,19 @@ public abstract class ACivMod extends JavaPlugin {
         Bukkit.getScheduler().cancelTasks(this);
     }
 
+    public File getResourceFile(String path) {
+        return new File(getDataFolder(), path);
+    }
+
+    /**
+     * Saves a default resource.
+     *
+     * @param path The path of the resource.
+     *
+     * @see JavaPlugin#saveDefaultConfig() Uses the same backend code as this.
+     */
     public void saveDefaultResource(String path) {
-        if (getResource(path) == null) {
+        if (!getResourceFile(path).exists()) {
             saveResource(path, false);
         }
     }

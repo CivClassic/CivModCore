@@ -1,6 +1,6 @@
 name: ${project.name}
 version: ${project.version}
-authors: [valadian, rourke750]
+authors: [valadian, rourke750, Protonull]
 main: ${mainClass}
 api-version: ${mcVersion}
 softdepend: [Mercury]
