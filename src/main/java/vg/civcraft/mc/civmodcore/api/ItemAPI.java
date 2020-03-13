@@ -3,6 +3,7 @@ package vg.civcraft.mc.civmodcore.api;
 import java.util.function.Function;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import vg.civcraft.mc.civmodcore.serialization.NBTCompound;
 
 /**
  * This is a static class of generally useful APIs regarding items.
@@ -88,6 +89,37 @@ public final class ItemAPI {
             return item.setItemMeta(meta);
         }
         return true;
+    }
+
+    /**
+     * Attempts to retrieve an item's repair cost.
+     *
+     * @param item The item to get the repair cost of.
+     * @return Returns the repair cost, or zero if the item is null or has no repair cost.
+     *
+     * @apiNote This is deprecated in 1.13 and above as it's replaced by the Repairable item meta.
+     */
+    public static int getItemRepairCost(ItemStack item) {
+        if (item == null) {
+            return 0;
+        }
+        NBTCompound nbt = NBTCompound.fromItem(item);
+        return nbt.getInteger("RepairCost");
+    }
+
+    /**
+     * Attempts to set an item's repair cost.
+     *
+     * @param item The item to set the repair cost to.
+     * @param cost The repair cost to set.
+     * @return Returns the item with the new repair cost. Use this and not the given item.
+     *
+     * @apiNote This is deprecated in 1.13 and above as it's replaced by the Repairable item meta.
+     */
+    public static ItemStack setItemRepairCost(ItemStack item, int cost) {
+        return NBTCompound.processItem(item, (nbt) -> {
+            nbt.setInteger("RepairCost", cost);
+        });
     }
 
 }
