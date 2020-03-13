@@ -60,13 +60,13 @@ public abstract class CommandHandler {
 			if (args.length == 0) {
 				completeArg = "";
 			} else {
-				completeArg = args[args.length - 1].toLowerCase();
+				completeArg = args[args.length - 1];
 			}
 			if (completes == null) {
-				completes = new LinkedList<String>();
-				for (Player p : Bukkit.getOnlinePlayers()) {
-					if (p.getName().toLowerCase().startsWith(completeArg)) {
-						completes.add(p.getName());
+				completes = new LinkedList<>();
+				for (Player player : Bukkit.getOnlinePlayers()) {
+				    if (TextUtil.startsWith(player.getName(), completeArg)) {
+						completes.add(player.getName());
 					}
 				}
 				return completes;
@@ -78,9 +78,9 @@ public abstract class CommandHandler {
 	}
 
 	protected void helpPlayer(Command command, CommandSender sender) {
-		sender.sendMessage(new StringBuilder().append(ChatColor.RED + "Command: ").append(command.getName()).toString());
-		sender.sendMessage(new StringBuilder().append(ChatColor.RED + "Description: ").append(command.getDescription())
-				.toString());
-		sender.sendMessage(new StringBuilder().append(ChatColor.RED + "Usage: ").append(command.getUsage()).toString());
+		sender.sendMessage(ChatColor.RED + "Command: " + command.getName());
+		sender.sendMessage(ChatColor.RED + "Description: " + command.getDescription());
+		sender.sendMessage(ChatColor.RED + "Usage: " + command.getUsage());
 	}
+
 }
