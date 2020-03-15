@@ -3,6 +3,7 @@ package vg.civcraft.mc.civmodcore.itemHandling;
 import java.util.Arrays;
 import java.util.List;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.util.NullCoalescing;
 
@@ -13,7 +14,7 @@ public class ISUtils {
         if (lore == null || lore.length < 1) {
             return;
         }
-        ItemAPI.handleItemMeta((item), (meta) -> {
+        ItemAPI.handleItemMeta((item), (ItemMeta meta) -> {
             if (meta.hasLore()) {
                 List<String> current = meta.getLore();
                 current.addAll(Arrays.asList(lore));
@@ -25,7 +26,7 @@ public class ISUtils {
     }
 
     public static void setLore(ItemStack item, String... lore) {
-        ItemAPI.handleItemMeta((item), (meta) -> {
+        ItemAPI.handleItemMeta((item), (ItemMeta meta) -> {
             if (lore == null || lore.length < 1) {
                 meta.setLore(null);
             }
@@ -37,7 +38,7 @@ public class ISUtils {
     }
 
     public static void setName(ItemStack item, String name) {
-        ItemAPI.handleItemMeta((item), (meta) -> {
+        ItemAPI.handleItemMeta((item), (ItemMeta meta) -> {
             meta.setDisplayName(name);
             return true;
         });
