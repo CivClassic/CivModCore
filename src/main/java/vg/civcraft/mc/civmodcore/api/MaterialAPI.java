@@ -290,4 +290,164 @@ public final class MaterialAPI {
         }
     }
 
+    /**
+     * Checks whether a material is air.
+     * Will also return true if the given material is null.
+     *
+     * @param material The material to check.
+     * @return Returns true if the material is air.
+     * */
+    public static boolean isAir(Material material) {
+        return material == Material.AIR;
+    }
+
+    /**
+     * Checks whether a material is a log.
+     *
+     * @param material The material to check.
+     * @return Returns true if the material is a log.
+     * */
+    public static boolean isLog(Material material) {
+        switch (material) {
+            case LOG:
+            case LOG_2:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Checks whether a material is a wood plank.
+     *
+     * @param material The material to check.
+     * @return Returns true if the material is a wood plank.
+     * */
+    public static boolean isPlank(Material material) {
+        return material == Material.WOOD;
+    }
+
+    /**
+     * Checks whether a material can be placed into a pot.
+     *
+     * @param material The material to check.
+     * @return Returns true if the material can be potted.
+     * */
+    public static boolean isPottable(Material material) {
+        switch (material) {
+            case SAPLING:
+            case RED_ROSE:
+            case BROWN_MUSHROOM:
+            case CACTUS:
+            case YELLOW_FLOWER:
+            case DEAD_BUSH:
+            case RED_MUSHROOM:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Checks whether a material is a crop. Something is a crop if it's a plant that can grow, excluding Saplings.
+     *
+     * @param material The material to check.
+     * @return Returns true if the material is a crop.
+     * */
+    public static boolean isCrop(Material material) {
+        switch (material) {
+            case BEETROOT_BLOCK:
+            case CACTUS:
+            case CARROT:
+            case CHORUS_FLOWER:
+            case CHORUS_PLANT:
+            case COCOA:
+            case MELON_STEM:
+            case NETHER_WART_BLOCK:
+            case POTATO:
+            case PUMPKIN_STEM:
+            case SUGAR_CANE:
+            case WHEAT:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Checks whether a material is a skull/head.
+     *
+     * @param material The material to check.
+     * @return Returns true if the material is a skull/head.
+     * */
+    public static boolean isSkull(Material material) {
+        switch (material) {
+            case SKULL:
+            case SKULL_ITEM:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Checks whether a material is a glass block, coloured or otherwise.
+     *
+     * @param material The material to check.
+     * @return Returns true if the material is a glass block.
+     * */
+    public static boolean isGlassBlock(Material material) {
+        switch (material) {
+            case GLASS:
+            case STAINED_GLASS:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Checks whether a material is a glass pane, coloured or otherwise.
+     *
+     * @param material The material to check.
+     * @return Returns true if the material is a glass pane.
+     * */
+    public static boolean isGlassPane(Material material) {
+        switch (material) {
+            case THIN_GLASS:
+            case STAINED_GLASS_PANE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Checks whether a material is an infested block. This is what used to be referred to as Monster Egg blocks.
+     *
+     * @param material The material to check.
+     * @return Returns true if the material is infested.
+     * */
+    public static boolean isInfested(Material material) {
+        return material == Material.MONSTER_EGGS;
+    }
+
+    /**
+     * Checks whether a material is a dirt like block.
+     *
+     * @param material The material to check.
+     * @return Returns true if the material is dirty.
+     * */
+    public static boolean isDirt(Material material) {
+        switch (material) {
+            case DIRT:
+            case MYCEL:
+            case SOIL:
+            case GRASS_PATH:
+                return true;
+            default:
+                return false;
+        }
+    }
+
 }
