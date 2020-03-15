@@ -241,7 +241,13 @@ public class ClonedInventory implements Inventory {
         if (inventory instanceof ClonedInventory) {
             return (ClonedInventory) inventory;
         }
-        Inventory clone = Bukkit.createInventory(inventory.getHolder(), inventory.getType(), inventory.getTitle());
+        Inventory clone;
+        if (inventory.getType() == InventoryType.CHEST) {
+            clone = Bukkit.createInventory(inventory.getHolder(), inventory.getSize(), inventory.getTitle());
+        }
+        else {
+            clone = Bukkit.createInventory(inventory.getHolder(), inventory.getType(), inventory.getTitle());
+        }
         if (clone == null) {
             return null;
         }
