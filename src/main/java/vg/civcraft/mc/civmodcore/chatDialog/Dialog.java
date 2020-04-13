@@ -1,7 +1,6 @@
 package vg.civcraft.mc.civmodcore.chatDialog;
 
 import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationContext;
@@ -13,52 +12,52 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class Dialog {
 
-	protected Player player;
+    protected Player player;
 
-	private Conversation convo;
+    private Conversation convo;
 
-	public Dialog(Player player, JavaPlugin plugin) {
-		this(player, plugin, null);
-	}
+    public Dialog(Player player, JavaPlugin plugin) {
+        this(player, plugin, null);
+    }
 
-	public Dialog(Player player, JavaPlugin plugin, final String toDisplay) {
-		DialogManager.registerDialog(player, this);
-		this.player = player;
+    public Dialog(Player player, JavaPlugin plugin, final String toDisplay) {
+        DialogManager.registerDialog(player, this);
+        this.player = player;
 
-		Bukkit.getScheduler().runTask(plugin, player::closeInventory);
+        Bukkit.getScheduler().runTask(plugin, player::closeInventory);
 
-		convo = new ConversationFactory(plugin).withModality(false).withLocalEcho(false)
-				.withFirstPrompt(new StringPrompt() {
+        convo = new ConversationFactory(plugin).withModality(false).withLocalEcho(false)
+                .withFirstPrompt(new StringPrompt() {
 
-					@Override
-					public String getPromptText(ConversationContext arg0) {
-						if (toDisplay != null) {
-							return toDisplay;
-						}
-						return "";
-					}
+                    @Override
+                    public String getPromptText(ConversationContext arg0) {
+                        if (toDisplay != null) {
+                            return toDisplay;
+                        }
+                        return "";
+                    }
 
-					@Override
-					public Prompt acceptInput(ConversationContext arg0, String arg1) {
-						onReply(arg1.split(" "));
-						return Prompt.END_OF_CONVERSATION;
-					}
+                    @Override
+                    public Prompt acceptInput(ConversationContext arg0, String arg1) {
+                        onReply(arg1.split(" "));
+                        return Prompt.END_OF_CONVERSATION;
+                    }
 
-				}).buildConversation(player);
+                }).buildConversation(player);
 
-		convo.begin();
-	}
+        convo.begin();
+    }
 
-	public abstract void onReply(String[] message);
+    public abstract void onReply(String[] message);
 
-	public abstract List<String> onTabComplete(String wordCompleted, String[] fullMessage);
+    public abstract List<String> onTabComplete(String wordCompleted, String[] fullMessage);
 
-	public Player getPlayer() {
-		return player;
-	}
+    public Player getPlayer() {
+        return player;
+    }
 
-	public void end() {
-		convo.abandon();
-	}
+    public void end() {
+        convo.abandon();
+    }
 
 }

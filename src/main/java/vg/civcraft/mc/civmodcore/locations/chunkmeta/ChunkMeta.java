@@ -1,135 +1,129 @@
 package vg.civcraft.mc.civmodcore.locations.chunkmeta;
 
 import org.bukkit.World;
-
 import vg.civcraft.mc.civmodcore.locations.chunkmeta.block.StorageEngine;
 
 /**
  * Represents data for one specific chunk for one specific plugin.
- * 
+ *
  * Subclasses must implement their own static deserialization method as shown in
  * this class
- * 
+ *
  * None of the methods specified here should be called by anything outside of
  * this package, except for setDirty(true)
- * 
  */
 public abstract class ChunkMeta<S extends StorageEngine> {
 
-	protected short pluginID;
-	protected World world;
-	protected final S storage;
-	protected ChunkCoord chunkCoord;
+    protected final S storage;
+    protected short pluginID;
+    protected World world;
+    protected ChunkCoord chunkCoord;
 
-	private CacheState cacheState;
+    private CacheState cacheState;
 
-	/**
-	 * 
-	 * @param isNew Whether this instance is new or if it has been saved to the
-	 *              database before. Should always be true for any instanciations
-	 *              outside of this package
-	 */
-	public ChunkMeta(boolean isNew, S storage) {
-		this.cacheState = isNew ? CacheState.NEW : CacheState.NORMAL;
-		this.storage = storage;
-	}
+    /**
+     * @param isNew Whether this instance is new or if it has been saved to the
+     *         database before. Should always be true for any instanciations
+     *         outside of this package
+     */
+    public ChunkMeta(boolean isNew, S storage) {
+        this.cacheState = isNew ? CacheState.NEW : CacheState.NORMAL;
+        this.storage = storage;
+    }
 
-	/**
-	 * Deletes the instances data from the storage
-	 * 
-	 */
-	public abstract void delete();
+    /**
+     * Deletes the instances data from the storage
+     */
+    public abstract void delete();
 
-	/**
-	 * @return Whether this instance has data changed since it was last synced with
-	 *         the database and needs to be written back there
-	 */
-	public CacheState getCacheState() {
-		return cacheState;
-	}
-	
-	/**
-	 * @return ChunkCoord describing where this instance is
-	 */
-	public ChunkCoord getChunkCoord() {
-		return chunkCoord;
-	}
+    /**
+     * @return Whether this instance has data changed since it was last synced with
+     *         the database and needs to be written back there
+     */
+    public CacheState getCacheState() {
+        return cacheState;
+    }
 
-	/**
-	 * Gets the id of the plugin to which plugin this instance belongs to
-	 */
-	public short getPluginID() {
-		return pluginID;
-	}
+    /**
+     * Sets the cache state, which specifies whether this instance has changed since
+     * it was last synced with the database and needs to be written back there
+     *
+     * @param state New dirty state
+     */
+    public void setCacheState(CacheState state) {
+        this.cacheState = this.cacheState.progress(state);
+    }
 
-	/**
-	 * @return World this cache is in
-	 */
-	public World getWorld() {
-		return world;
-	}
+    /**
+     * @return ChunkCoord describing where this instance is
+     */
+    public ChunkCoord getChunkCoord() {
+        return chunkCoord;
+    }
 
-	/**
-	 * Inserts this instances data into the storage *
-	 * 
-	 */
-	public abstract void insert();
+    void setChunkCoord(ChunkCoord chunk) {
+        this.chunkCoord = chunk;
+    }
 
-	/**
-	 * Instances may be filled with data and emptied later on without the instance
-	 * ever being explicitly deleted. This method is used to cull these empty
-	 * metadata objects
-	 * 
-	 * @return Is this instance void of any data which needs to be persisted
-	 */
-	public abstract boolean isEmpty();
+    /**
+     * Gets the id of the plugin to which plugin this instance belongs to
+     */
+    public short getPluginID() {
+        return pluginID;
+    }
 
-	/**
-	 * Loads this instances data from the storage engine
-	 * 
-	 */
-	public abstract void populate();
+    /**
+     * Sets the id of the plugin to which plugin this instance belongs to
+     */
+    void setPluginID(short pluginID) {
+        this.pluginID = pluginID;
+    }
 
-	/**
-	 * Sets the cache state, which specifies whether this instance has changed since
-	 * it was last synced with the database and needs to be written back there
-	 * 
-	 * @param state New dirty state
-	 */
-	public void setCacheState(CacheState state) {
-		this.cacheState = this.cacheState.progress(state);
-	}
+    /**
+     * @return World this cache is in
+     */
+    public World getWorld() {
+        return world;
+    }
 
-	void setChunkCoord(ChunkCoord chunk) {
-		this.chunkCoord = chunk;
-	}
+    /**
+     * Sets the world this cache is in
+     *
+     * @param world World the cache is in
+     */
+    void setWorld(World world) {
+        this.world = world;
+    }
 
-	/**
-	 * Sets the id of the plugin to which plugin this instance belongs to
-	 */
-	void setPluginID(short pluginID) {
-		this.pluginID = pluginID;
-	}
-	
-	/**
-	 * @return Whether this data should always be kept loaded
-	 */
-	boolean loadAlways() {
-		return storage.stayLoaded();
-	}
+    /**
+     * Inserts this instances data into the storage *
+     */
+    public abstract void insert();
 
-	/**
-	 * Sets the world this cache is in
-	 * 
-	 * @param world World the cache is in
-	 */
-	void setWorld(World world) {
-		this.world = world;
-	}
+    /**
+     * Instances may be filled with data and emptied later on without the instance
+     * ever being explicitly deleted. This method is used to cull these empty
+     * metadata objects
+     *
+     * @return Is this instance void of any data which needs to be persisted
+     */
+    public abstract boolean isEmpty();
 
-	/**
-	 * Updates the instances data in the storage
-	 */
-	public abstract void update();
+    /**
+     * Loads this instances data from the storage engine
+     */
+    public abstract void populate();
+
+    /**
+     * @return Whether this data should always be kept loaded
+     */
+    boolean loadAlways() {
+        return storage.stayLoaded();
+    }
+
+    /**
+     * Updates the instances data in the storage
+     */
+    public abstract void update();
 
 }

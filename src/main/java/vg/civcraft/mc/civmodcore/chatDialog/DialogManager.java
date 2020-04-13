@@ -3,40 +3,40 @@ package vg.civcraft.mc.civmodcore.chatDialog;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
-
 import org.bukkit.entity.Player;
 
 public class DialogManager {
 
-	private static Map<UUID, Dialog> dialogs = new TreeMap<>();
-	
-	private DialogManager() {}
+    private static Map<UUID, Dialog> dialogs = new TreeMap<>();
 
-	public static Dialog getDialog(Player p) {
-		return getDialog(p.getUniqueId());
-	}
+    private DialogManager() {
+    }
 
-	public static Dialog getDialog(UUID uuid) {
-		return dialogs.get(uuid);
-	}
+    public static Dialog getDialog(Player p) {
+        return getDialog(p.getUniqueId());
+    }
 
-	public static void registerDialog(Player p, Dialog dialog) {
-		Dialog current = dialogs.get(p.getUniqueId());
-		if (current != null) {
-			current.end();
-		}
-		dialogs.put(p.getUniqueId(), dialog);
-	}
+    public static Dialog getDialog(UUID uuid) {
+        return dialogs.get(uuid);
+    }
 
-	public static void forceEndDialog(Player p) {
-		forceEndDialog(p.getUniqueId());
-	}
+    public static void registerDialog(Player p, Dialog dialog) {
+        Dialog current = dialogs.get(p.getUniqueId());
+        if (current != null) {
+            current.end();
+        }
+        dialogs.put(p.getUniqueId(), dialog);
+    }
 
-	public static void forceEndDialog(UUID uuid) {
-		Dialog dia = dialogs.remove(uuid);
-		if (dia != null) {
-			dia.end();
-		}
-	}
+    public static void forceEndDialog(Player p) {
+        forceEndDialog(p.getUniqueId());
+    }
+
+    public static void forceEndDialog(UUID uuid) {
+        Dialog dia = dialogs.remove(uuid);
+        if (dia != null) {
+            dia.end();
+        }
+    }
 
 }

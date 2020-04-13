@@ -1,9 +1,7 @@
 package vg.civcraft.mc.civmodcore;
 
 import java.sql.SQLException;
-
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
-
 import vg.civcraft.mc.civmodcore.api.EnchantmentNames;
 import vg.civcraft.mc.civmodcore.api.ItemNames;
 import vg.civcraft.mc.civmodcore.chatDialog.ChatListener;
@@ -20,81 +18,81 @@ import vg.civcraft.mc.civmodcore.serialization.NBTSerialization;
 
 public final class CivModCorePlugin extends ACivMod {
 
-	private static CivModCorePlugin instance;
-	private GlobalChunkMetaManager chunkMetaManager;
-	private ManagedDatasource database;
+    private static CivModCorePlugin instance;
+    private GlobalChunkMetaManager chunkMetaManager;
+    private ManagedDatasource database;
 
-	@Override
-	public void onEnable() {
-		super.onEnable();
-		instance = this;
-		// Save default resources
-		saveDefaultResource("enchantments.csv");
-		// Register listeners
-		registerListener(new ClickableInventoryListener());
-		registerListener(new ChatListener());
-		registerListener(new ScoreBoardListener());
-		// Register commands, which must be done traditionally
-		// We can't use command annotations here as the annotation processor isn't available yet
-		this.newCommandHandler.registerCommand(new ConfigCommand());
-		ConfigurationSerialization.registerClass(ManagedDatasource.class);
-		// Load Database
-		try {
-			database = (ManagedDatasource) getConfig().get("database");
-		}
-		catch (Exception error) {
-			warning("Cannot get database from config.", error);
-			database = null;
-		}
-		// Load APIs
-		ItemNames.loadItemNames();
-		EnchantmentNames.loadEnchantmentNames();
-		BottomLineAPI.init();
-		if (database != null) {
-			ChunkDAO dao = new ChunkDAO(database, this);
-			if (dao.updateDatabase()) {
-				chunkMetaManager = new GlobalChunkMetaManager(dao);
-				info("Setup database successfully");
-			}
-			else {
-				warning("Could not setup database");
-			}
-		}
-		else {
-			warning("Could not setup database, none specified in config");
-		}
-	}
+    public static CivModCorePlugin getInstance() {
+        return instance;
+    }
 
-	@Override
-	public void onDisable() {
-		super.onDisable();
-		// Unload APIs
-		ItemNames.resetItemNames();
-		EnchantmentNames.resetEnchantmentNames();
-		NBTSerialization.clearAllRegistrations();
-		ChunkMetaAPI.saveAll();
-		chunkMetaManager = null;
-		// Disconnect database
-		if (database != null) {
-			try {
-				database.close();
-			}
-			catch (SQLException error) {
-				warning("Was unable to close the database.", error);
-			}
-			database = null;
-		}
-		PlayerSettingAPI.saveAll();
-		ConfigurationSerialization.unregisterClass(ManagedDatasource.class);
-		instance = null;
-	}
+    @Override
+    public void onEnable() {
+        super.onEnable();
+        instance = this;
+        // Save default resources
+        saveDefaultResource("enchantments.csv");
+        // Register listeners
+        registerListener(new ClickableInventoryListener());
+        registerListener(new ChatListener());
+        registerListener(new ScoreBoardListener());
+        // Register commands, which must be done traditionally
+        // We can't use command annotations here as the annotation processor isn't available yet
+        this.newCommandHandler.registerCommand(new ConfigCommand());
+        ConfigurationSerialization.registerClass(ManagedDatasource.class);
+        // Load Database
+        try {
+            database = (ManagedDatasource) getConfig().get("database");
+        }
+        catch (Exception error) {
+            warning("Cannot get database from config.", error);
+            database = null;
+        }
+        // Load APIs
+        ItemNames.loadItemNames();
+        EnchantmentNames.loadEnchantmentNames();
+        BottomLineAPI.init();
+        if (database != null) {
+            ChunkDAO dao = new ChunkDAO(database, this);
+            if (dao.updateDatabase()) {
+                chunkMetaManager = new GlobalChunkMetaManager(dao);
+                info("Setup database successfully");
+            }
+            else {
+                warning("Could not setup database");
+            }
+        }
+        else {
+            warning("Could not setup database, none specified in config");
+        }
+    }
 
-	public static CivModCorePlugin getInstance() {
-		return instance;
-	}
-	
-	public GlobalChunkMetaManager getChunkMetaManager() {
-		return chunkMetaManager;
-	}
+    @Override
+    public void onDisable() {
+        super.onDisable();
+        // Unload APIs
+        ItemNames.resetItemNames();
+        EnchantmentNames.resetEnchantmentNames();
+        NBTSerialization.clearAllRegistrations();
+        ChunkMetaAPI.saveAll();
+        chunkMetaManager = null;
+        // Disconnect database
+        if (database != null) {
+            try {
+                database.close();
+            }
+            catch (SQLException error) {
+                warning("Was unable to close the database.", error);
+            }
+            database = null;
+        }
+        PlayerSettingAPI.saveAll();
+        ConfigurationSerialization.unregisterClass(ManagedDatasource.class);
+        instance = null;
+    }
+
+    public GlobalChunkMetaManager getChunkMetaManager() {
+        return chunkMetaManager;
+    }
 
 }

@@ -9,29 +9,29 @@ import java.util.function.Supplier;
 
 public class ChunkMetaFactory {
 
-	private static ChunkMetaFactory instance;
-	public static ChunkMetaFactory getInstance() {
-		if (instance == null) {
-			instance = new ChunkMetaFactory();
-		}
-		return instance;
-	}
-	private Map<String, Short> pluginToInternalIdMapping;
+    private static ChunkMetaFactory instance;
+    private Map<String, Short> pluginToInternalIdMapping;
+    private Map<Short, Supplier<ChunkMeta<?>>> metaInstanciators;
 
-	private Map<Short, Supplier<ChunkMeta<?>>> metaInstanciators;
+    private ChunkMetaFactory() {
+        pluginToInternalIdMapping = new HashMap<>();
+        metaInstanciators = new TreeMap<>();
+    }
 
-	private ChunkMetaFactory() {
-		pluginToInternalIdMapping = new HashMap<>();
-		metaInstanciators = new TreeMap<>();
-	}
+    public static ChunkMetaFactory getInstance() {
+        if (instance == null) {
+            instance = new ChunkMetaFactory();
+        }
+        return instance;
+    }
 
-	Collection<Entry<Short, Supplier<ChunkMeta<?>>>> getEmptyChunkFunctions() {
-		return metaInstanciators.entrySet();
-	}
+    Collection<Entry<Short, Supplier<ChunkMeta<?>>>> getEmptyChunkFunctions() {
+        return metaInstanciators.entrySet();
+    }
 
-	public void registerPlugin(String name, short id, Supplier<ChunkMeta<?>> generator) {
-		metaInstanciators.put(id, generator);
-		pluginToInternalIdMapping.put(name, id);
-	}
+    public void registerPlugin(String name, short id, Supplier<ChunkMeta<?>> generator) {
+        metaInstanciators.put(id, generator);
+        pluginToInternalIdMapping.put(name, id);
+    }
 
 }

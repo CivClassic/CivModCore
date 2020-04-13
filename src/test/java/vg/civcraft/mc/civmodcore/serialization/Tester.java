@@ -6,27 +6,27 @@ import vg.civcraft.mc.civmodcore.api.NBTCompound;
 
 public class Tester {
 
-	@Test
-	public void testSerialization() {
-		NBTSerialization.registerNBTSerializable(ExampleSerializable.class);
+    @Test
+    public void testSerialization() {
+        NBTSerialization.registerNBTSerializable(ExampleSerializable.class);
 
-		String testString = "Hello, World!";
+        String testString = "Hello, World!";
 
-		// Create an instance of the example serializable and store the example text
-		ExampleSerializable example = new ExampleSerializable();
-		example.setMessage(testString);
+        // Create an instance of the example serializable and store the example text
+        ExampleSerializable example = new ExampleSerializable();
+        example.setMessage(testString);
 
-		// Serialize the class into an NBT compound, which *should* hold the relevant data
-		// to convert it back into an ExampleSerializable, given that it was also registered
-		NBTCompound nbt = NBTSerialization.serialize(example);
+        // Serialize the class into an NBT compound, which *should* hold the relevant data
+        // to convert it back into an ExampleSerializable, given that it was also registered
+        NBTCompound nbt = NBTSerialization.serialize(example);
 
-		// Attempts to create an ExampleSerializable instance based on the NBT data
-		ExampleSerializable returned = (ExampleSerializable) NBTSerialization.deserialize(nbt);
+        // Attempts to create an ExampleSerializable instance based on the NBT data
+        ExampleSerializable returned = (ExampleSerializable) NBTSerialization.deserialize(nbt);
 
-		// Tests if the message from the new instance matches that of the serialized class
-		assertEquals(returned.getMessage(), example.getMessage());
+        // Tests if the message from the new instance matches that of the serialized class
+        assertEquals(returned.getMessage(), example.getMessage());
 
-		NBTSerialization.clearAllRegistrations();
-	}
+        NBTSerialization.clearAllRegistrations();
+    }
 
 }
