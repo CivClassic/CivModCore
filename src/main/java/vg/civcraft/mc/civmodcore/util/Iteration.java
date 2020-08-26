@@ -18,20 +18,20 @@ public final class Iteration {
 		void accept(T former, boolean latter);
 	}
 
-    /**
-     * <p>Determines whether an array is null or empty.</p>
+	/**
+	 * <p>Determines whether an array is null or empty.</p>
 	 *
 	 * <p>Note: This will not check the elements within the array. It only checks if the array itself exists and has
 	 * elements. If for example the array has 100 null elements, this function would still return true.</p>
-     *
-     * @param <T> The type of the array.
-     * @param array The array to check.
-     * @return Returns true if the array exists and at least one item.
-     */
-    @SafeVarargs
-    public static <T> boolean isNullOrEmpty(T... array) {
-        return array == null || array.length < 1;
-    }
+	 *
+	 * @param <T> The type of the array.
+	 * @param array The array to check.
+	 * @return Returns true if the array exists and at least one item.
+	 */
+	@SafeVarargs
+	public static <T> boolean isNullOrEmpty(T... array) {
+		return array == null || array.length < 1;
+	}
 
 	/**
 	 * <p>Determines whether a collection is null or empty.</p>
@@ -43,8 +43,8 @@ public final class Iteration {
 	 * @param collection The collection to check.
 	 * @return Returns true if the collection exists and at least one item.
 	 */
-    public static <T> boolean isNullOrEmpty(Collection<T> collection) {
-    	return collection == null || collection.isEmpty();
+	public static <T> boolean isNullOrEmpty(Collection<T> collection) {
+		return collection == null || collection.isEmpty();
 	}
 
 	/**
@@ -55,7 +55,7 @@ public final class Iteration {
 	 * @return Returns the length of the array, or 0 if null.
 	 */
 	public static <T> int arrayLength(T[] array) {
-    	return array == null ? 0 : array.length;
+		return array == null ? 0 : array.length;
 	}
 
 	/**
@@ -66,56 +66,56 @@ public final class Iteration {
 	 * @return Returns the size of the collection, or 0 if null.
 	 */
 	public static <T> int collectionSize(Collection<T> collection) {
-    	return collection == null ? 0 : collection.size();
+		return collection == null ? 0 : collection.size();
 	}
 
-    /**
-     * Returns the first matching item in the parameters, which is particularly useful when you need to match Materials
-     * without necessarily needing to create a new {@link vg.civcraft.mc.civmodcore.api.MaterialAPI MaterialAPI}.
-     *
-     * @param <T> The type of the object to match.
-     * @param base The object to match.
-     * @param values An array of items to match against.
-     * @return Returns true if the base is found within the values.
-     */
-    @SafeVarargs
-    public static <T> boolean contains(T base, T... values) {
-        if (isNullOrEmpty(values)) {
-            return false;
-        }
-        for (T value : values) {
-            if (Objects.equals(base, value)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Iterates through a collection before clearing it completely. Useful for wiping out data on plugin disable.
-     *
-     * @param <T> The generic type of the collection.
-     * @param collection The collection to iterate and clear.
-     * @param processor The iteration processor which will be called for each item in the collection.
-     */
-    public static <T> void iterateThenClear(Collection<T> collection, Consumer<T> processor) {
-    	if (isNullOrEmpty(collection) || processor == null) {
-    		return;
+	/**
+	 * Returns the first matching item in the parameters, which is particularly useful when you need to match Materials
+	 * without necessarily needing to create a new {@link vg.civcraft.mc.civmodcore.api.MaterialAPI MaterialAPI}.
+	 *
+	 * @param <T> The type of the object to match.
+	 * @param base The object to match.
+	 * @param values An array of items to match against.
+	 * @return Returns true if the base is found within the values.
+	 */
+	@SafeVarargs
+	public static <T> boolean contains(T base, T... values) {
+		if (isNullOrEmpty(values)) {
+			return false;
 		}
-        for (T element : collection) {
-            processor.accept(element);
-        }
-        collection.clear();
-    }
+		for (T value : values) {
+			if (Objects.equals(base, value)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    /**
+	/**
+	 * Iterates through a collection before clearing it completely. Useful for wiping out data on plugin disable.
+	 *
+	 * @param <T> The generic type of the collection.
+	 * @param collection The collection to iterate and clear.
+	 * @param processor The iteration processor which will be called for each item in the collection.
+	 */
+	public static <T> void iterateThenClear(Collection<T> collection, Consumer<T> processor) {
+		if (isNullOrEmpty(collection) || processor == null) {
+			return;
+		}
+		for (T element : collection) {
+			processor.accept(element);
+		}
+		collection.clear();
+	}
+
+	/**
 	 * Iterates through a collection, whereby each element has knowledge of whether it's the last element.
 	 *
 	 * @param <T> The generic type of the collection.
 	 * @param collection The collection to iterate.
 	 * @param processor The iteration processor which will be called for each item in the collection.
 	 */
-    public static <T> void iterateHasNext(Collection<T> collection, ElementAndBoolConsumer<T> processor) {
+	public static <T> void iterateHasNext(Collection<T> collection, ElementAndBoolConsumer<T> processor) {
 		if (isNullOrEmpty(collection) || processor == null) {
 			return;
 		}
@@ -125,7 +125,7 @@ public final class Iteration {
 		}
 	}
 
-    /**
+	/**
 	 * Fills an array with a particular value.
 	 *
 	 * @param <T> The type of the array.
@@ -133,35 +133,35 @@ public final class Iteration {
 	 * @param value The value to fill the array with.
 	 * @return Returns the given array with the filled values.
 	 */
-    public static <T> T[] fill(T[] array, T value) {
-    	if (isNullOrEmpty(array)) {
-    		return array;
+	public static <T> T[] fill(T[] array, T value) {
+		if (isNullOrEmpty(array)) {
+			return array;
 		}
 		Arrays.fill(array, value);
-    	return array;
+		return array;
 	}
 
-    /**
-     * Say you have three objects and you know two are the same but don't know which. This is useful when you're
-     * attempting to find the other block of a double chest or a bed or a door, etc.
-     *
-     * @param <T> The type of the object to find the other of.
-     * @param base The baseline object to check against, the known location.
-     * @param former The first of the two unknowns.
-     * @param latter The second of the two unknowns.
-     * @return Returns either the former or the latter parameter if either match, or null if neither do.
-     */
-    public static <T> T other(T base, T former, T latter) {
-        if (Objects.equals(base, former)) {
-            return latter;
-        }
-        if (Objects.equals(base, latter)) {
-            return former;
-        }
-        return null;
-    }
+	/**
+	 * Say you have three objects and you know two are the same but don't know which. This is useful when you're
+	 * attempting to find the other block of a double chest or a bed or a door, etc.
+	 *
+	 * @param <T> The type of the object to find the other of.
+	 * @param base The baseline object to check against, the known location.
+	 * @param former The first of the two unknowns.
+	 * @param latter The second of the two unknowns.
+	 * @return Returns either the former or the latter parameter if either match, or null if neither do.
+	 */
+	public static <T> T other(T base, T former, T latter) {
+		if (Objects.equals(base, former)) {
+			return latter;
+		}
+		if (Objects.equals(base, latter)) {
+			return former;
+		}
+		return null;
+	}
 
-    /**
+	/**
 	 * <p>Tests whether there is at least one element in the given array that passes the criteria of the given
 	 * predicate.</p>
 	 *
@@ -173,19 +173,19 @@ public final class Iteration {
 	 * @return Returns true if at least one element passes the predicate test. Or false if the array fails the
 	 * {@link Iteration#isNullOrEmpty(Object[]) isNullOrEmpty()} test, or true if the give predicate is null.
 	 */
-    public static <T> boolean some(T[] array, Predicate<T> predicate) {
-    	if (isNullOrEmpty(array)) {
-    		return false;
+	public static <T> boolean some(T[] array, Predicate<T> predicate) {
+		if (isNullOrEmpty(array)) {
+			return false;
 		}
-    	if (predicate == null) {
-    		return true;
+		if (predicate == null) {
+			return true;
 		}
-    	for (T element : array) {
-    		if (predicate.test(element)) {
-    			return true;
+		for (T element : array) {
+			if (predicate.test(element)) {
+				return true;
 			}
 		}
-    	return false;
+		return false;
 	}
 
 	/**
@@ -240,7 +240,7 @@ public final class Iteration {
 	 * @param constructor The constructor for the collection.
 	 * @param elements The elements to add to the collection.
 	 * @return Returns a new collection, or null if no constructor was given, or the constructor didn't produce a new
-	 *     collection.
+	 * collection.
 	 */
 	@SafeVarargs
 	public static <T, K extends Collection<T>> K collect(Supplier<K> constructor, T... elements) {
