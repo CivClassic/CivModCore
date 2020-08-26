@@ -1,5 +1,7 @@
 package vg.civcraft.mc.civmodcore.util;
 
+import org.apache.commons.lang.ArrayUtils;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -258,6 +260,21 @@ public final class Iteration {
 			collection.add(element);
 		}
 		return collection;
+	}
+
+	/**
+	 * <p>Concatinates two arrays together.</p>
+	 *
+	 * <p>This is effectively just a more readable shortcut for an {@link ArrayUtils} method.</p>
+	 *
+	 * @param <T> The type of the array's elements.
+	 * @param former The array that'll be prepended.
+	 * @param latter The elements that'll be appended.
+	 * @return Returns a new array with the former and latter's elements.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T[] concat(final T[] former, final T... latter) {
+		return (T[]) ArrayUtils.addAll(former, latter);
 	}
 
 }
