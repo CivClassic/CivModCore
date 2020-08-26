@@ -70,7 +70,7 @@ public final class LocationAPI {
 		if (former == null || latter == null) {
 			return false;
 		}
-		return NullCoalescing.equalsNotNull(former.getWorld(), latter.getWorld());
+		return NullCoalescing.equals(getLocationWorld(former), getLocationWorld(latter));
 	}
 
 }
