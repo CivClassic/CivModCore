@@ -1,12 +1,31 @@
 package vg.civcraft.mc.civmodcore.api;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import vg.civcraft.mc.civmodcore.util.NullCoalescing;
 
 /**
  * Class of utility functions for Locations.
  */
 public final class LocationAPI {
+
+	/**
+	 * Retrieves the world from a location.
+	 *
+	 * @param location The location to retrieve the world from.
+	 * @return Returns the world if loaded, or null.
+	 */
+	public static World getLocationWorld(Location location) {
+		if (location == null) {
+			return null;
+		}
+		try {
+			return location.getWorld();
+		}
+		catch (IllegalArgumentException ignored) {
+			return null;
+		}
+	}
 
 	/**
 	 * Determines whether a location is valid and safe to use.
