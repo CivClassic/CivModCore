@@ -45,6 +45,28 @@ public final class Iteration {
     	return collection == null || collection.isEmpty();
 	}
 
+	/**
+	 * Returns the length of an array, including a null arrays.
+	 *
+	 * @param <T> The type of the array.
+	 * @param array The array to retrieve the length of.
+	 * @return Returns the length of the array, or 0 if null.
+	 */
+	public static <T> int arrayLength(T[] array) {
+    	return array == null ? 0 : array.length;
+	}
+
+	/**
+	 * Returns the size of a collection, including a null collection.
+	 *
+	 * @param <T> The type of the collection.
+	 * @param collection The collection to retrieve the size of.
+	 * @return Returns the size of the collection, or 0 if null.
+	 */
+	public static <T> int collectionSize(Collection<T> collection) {
+    	return collection == null ? 0 : collection.size();
+	}
+
     /**
      * Returns the first matching item in the parameters, which is particularly useful when you need to match Materials
      * without necessarily needing to create a new {@link vg.civcraft.mc.civmodcore.api.MaterialAPI MaterialAPI}.
