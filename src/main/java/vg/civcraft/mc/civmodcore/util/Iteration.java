@@ -81,7 +81,7 @@ public final class Iteration {
     @SafeVarargs
     public static <T> boolean contains(T base, T... values) {
         if (isNullOrEmpty(values)) {
-            return true;
+            return false;
         }
         for (T value : values) {
             if (Objects.equals(base, value)) {
