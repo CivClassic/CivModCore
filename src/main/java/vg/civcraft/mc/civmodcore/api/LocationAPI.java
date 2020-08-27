@@ -1,7 +1,9 @@
 package vg.civcraft.mc.civmodcore.api;
 
+import com.google.common.base.Preconditions;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.util.Vector;
 import vg.civcraft.mc.civmodcore.util.NullCoalescing;
 
 /**
@@ -21,8 +23,7 @@ public final class LocationAPI {
 		}
 		try {
 			return location.getWorld();
-		}
-		catch (IllegalArgumentException ignored) {
+		} catch (IllegalArgumentException ignored) {
 			return null;
 		}
 	}
@@ -60,6 +61,22 @@ public final class LocationAPI {
 	}
 
 	/**
+	 * Converts a location into a block's mid point.
+	 *
+	 * @param location The location to convert.
+	 * @return Returns a block's mid point, or null if the given location was null.
+	 */
+	public static Location getMidBlockLocation(Location location) {
+		if (location == null) {
+			return null;
+		}
+		return new Location(location.getWorld(),
+				location.getBlockX() + 0.5d,
+				location.getBlockY() + 0.5d,
+				location.getBlockZ() + 0.5d);
+	}
+
+	/**
 	 * Determines whether two locations share the same world.
 	 *
 	 * @param former The first location.
@@ -71,6 +88,19 @@ public final class LocationAPI {
 			return false;
 		}
 		return NullCoalescing.equals(getLocationWorld(former), getLocationWorld(latter));
+	}
+
+	/**
+	 * Creates a vector representing the direction the given location should face to look at the given point.
+	 *
+	 * @param base   The base location to look from.
+	 * @param lookAt The location to look towards.
+	 * @return Returns the direction.
+	 */
+	public static Vector lookAtLocation(final Location base, final Location lookAt) {
+		Preconditions.checkArgument(areLocationsSameWorld(base, lookAt),
+				"Both locations must be valid and within the same world!");
+		return lookAt.clone().subtract(base).toVector().normalize();
 	}
 
 }
