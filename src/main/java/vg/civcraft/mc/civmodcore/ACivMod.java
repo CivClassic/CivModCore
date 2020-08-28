@@ -1,6 +1,7 @@
 package vg.civcraft.mc.civmodcore;
 
 import com.google.common.collect.Lists;
+import java.io.Closeable;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -23,7 +24,7 @@ import vg.civcraft.mc.civmodcore.serialization.NBTSerializable;
 import vg.civcraft.mc.civmodcore.serialization.NBTSerialization;
 import vg.civcraft.mc.civmodcore.util.Iteration;
 
-public abstract class ACivMod extends JavaPlugin {
+public abstract class ACivMod extends JavaPlugin implements Closeable {
 
 	private final List<Class<? extends NBTSerializable>> serializableClasses = Lists.newArrayList();
 
@@ -57,6 +58,10 @@ public abstract class ACivMod extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		this.useNewCommandHandler = true;
+		if (this.newCommandHandler != null) {
+			this.newCommandHandler.reset();
+			this.newCommandHandler = null;
+		}
 		Iteration.iterateThenClear(this.serializableClasses, NBTSerialization::unregisterNBTSerializable);
 		HandlerList.unregisterAll(this);
 		Bukkit.getMessenger().unregisterIncomingPluginChannel(this);
@@ -64,12 +69,21 @@ public abstract class ACivMod extends JavaPlugin {
 		Bukkit.getScheduler().cancelTasks(this);
 	}
 
+	// Effectively an .onUnload()
+	@Override
+	public void close() {
+		if (this.handle != null) {
+			this.handle.reset();
+			this.handle = null;
+		}
+	}
+
 	/**
 	 * Registers a listener class with this plugin.
 	 *
 	 * @param listener The listener class to register.
 	 */
-	protected void registerListener(Listener listener) {
+	public void registerListener(Listener listener) {
 		if (listener == null) {
 			throw new IllegalArgumentException("Cannot register a listener if it's null, you dummy");
 		}
@@ -156,7 +170,7 @@ public abstract class ACivMod extends JavaPlugin {
 	 *
 	 * @param handler The legacy command handler to set. Null will cause de-registration.
 	 */
-	protected void setCommandHandler(CommandHandler handler) {
+	public void setCommandHandler(CommandHandler handler) {
 		this.handle = handler;
 	}
 
@@ -177,7 +191,7 @@ public abstract class ACivMod extends JavaPlugin {
 	 *
 	 * @param handler The standalone command handler to set. Null will cause de-registration.
 	 */
-	protected void setStandaloneCommandHandler(StandaloneCommandHandler handler) {
+	public void setStandaloneCommandHandler(StandaloneCommandHandler handler) {
 		this.newCommandHandler = handler;
 	}
 
