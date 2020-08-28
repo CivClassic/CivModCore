@@ -78,14 +78,7 @@ public final class CustomItems {
 	}
 
 	public static boolean matchesCustomItem(ItemCriteria criteria, ItemStack target) {
-		return matchesCustomItem(criteria, null, target);
-	}
-
-	public static boolean matchesCustomItem(ItemCriteria criteria, ItemStack template, ItemStack target) {
 		if (criteria == null || target == null) {
-			return false;
-		}
-		if (template != null && !template.isSimilar(target)) {
 			return false;
 		}
 		if (!criteria.matches(target)) {
