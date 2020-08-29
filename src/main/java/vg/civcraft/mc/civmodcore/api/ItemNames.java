@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import vg.civcraft.mc.civmodcore.CivModCorePlugin;
-import vg.civcraft.mc.civmodcore.custom.items.ItemCriteria;
+import vg.civcraft.mc.civmodcore.custom.items.CustomItem;
 import vg.civcraft.mc.civmodcore.custom.items.CustomItems;
 import vg.civcraft.mc.civmodcore.util.ResourceUtils;
 import vg.civcraft.mc.civmodcore.util.TextUtil;
@@ -105,8 +105,8 @@ public final class ItemNames {
 		if (!Strings.isNullOrEmpty(cached)) {
 			return cached;
 		}
-		ItemCriteria criteria = CustomItems.findMatch(item);
-		if (criteria == null) {
+		CustomItem criteria = CustomItems.findMatch(item);
+		if (criteria == null || Strings.isNullOrEmpty(criteria.getName())) {
 			return getItemName(item.getType());
 		}
 		NAME_CACHE.put(item, cached);

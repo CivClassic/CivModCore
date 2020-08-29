@@ -3,13 +3,16 @@ package vg.civcraft.mc.civmodcore;
 import com.google.common.base.Strings;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import vg.civcraft.mc.civmodcore.api.MaterialAPI;
+import vg.civcraft.mc.civmodcore.custom.items.CustomItem;
 
 /**
  * This is a config parsing class intended to make handling configs a little easier, and automatically parse commonly
@@ -90,6 +93,16 @@ public class CoreConfigManager {
 	// ------------------------------------------------------------ //
 	// Predefined parsing utilities
 	// ------------------------------------------------------------ //
+
+	protected final List<CustomItem> parseCustomItems(ConfigurationSection config, String key) {
+		if (config == null || Strings.isNullOrEmpty(key) || !config.isList(key)) {
+			return null;
+		}
+		return Objects.requireNonNull(config.getList(key)).stream()
+				.filter(entry -> entry instanceof CustomItem)
+				.map(entry -> (CustomItem) entry)
+				.collect(Collectors.toCollection(ArrayList::new));
+	}
 
 	/**
 	 * Attempts to retrieve a list of materials from a config section.

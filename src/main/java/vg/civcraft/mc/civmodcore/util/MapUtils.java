@@ -1,5 +1,6 @@
 package vg.civcraft.mc.civmodcore.util;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import org.bukkit.Material;
@@ -69,6 +70,13 @@ public final class MapUtils {
 	// ------------------------------------------------------------
 	// Parsers
 	// ------------------------------------------------------------
+
+	public static List<?> parseList(Object value) {
+		if (value instanceof List) {
+			return (List<?>) value;
+		}
+		return null;
+	}
 
 	public static Material parseMaterial(Object value) {
 		if (value instanceof Material) {

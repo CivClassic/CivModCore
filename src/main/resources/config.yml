@@ -13,3 +13,13 @@
 #  connection_timeout: 10000
 #  idle_timeout: 600000
 #  max_lifetime: 7200000
+
+customItems:
+  - ==: "vg.civcraft.mc.civmodcore.custom.items.CustomItem"
+    # Key must be all lower case, contain a ":", not contain spaces
+    key: "civmodcore:example_custom_item"
+    name: "§bCustom Name"
+    extra:
+      - ==: "vg.civcraft.mc.civmodcore.custom.items.NBTCriteria"
+      - ==: "vg.civcraft.mc.civmodcore.custom.items.MaterialCriteria"
+        material: "DIAMOND_SWORD"

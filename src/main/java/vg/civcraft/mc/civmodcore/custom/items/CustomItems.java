@@ -11,16 +11,13 @@ import org.slf4j.LoggerFactory;
 import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.util.NullCoalescing;
 
-/**
- *
- */
 public final class CustomItems {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CustomItems.class.getSimpleName());
 
-	private static final Map<NamespacedKey, ItemCriteria> CUSTOM_ITEMS = new HashMap<>();
+	private static final Map<NamespacedKey, CustomItem> CUSTOM_ITEMS = new HashMap<>();
 
-	public static ItemCriteria register(ItemCriteria criteria) {
+	public static CustomItem register(CustomItem criteria) {
 		if (criteria == null) {
 			throw new IllegalArgumentException("Cannot register a non-existent custom item criteria.");
 		}
@@ -45,14 +42,14 @@ public final class CustomItems {
 		CUSTOM_ITEMS.clear();
 	}
 
-	public static ItemCriteria findCriteria(NamespacedKey key) {
+	public static CustomItem findCriteria(NamespacedKey key) {
 		if (key == null) {
 			return null;
 		}
 		return CUSTOM_ITEMS.get(key);
 	}
 
-	public static ItemCriteria findMatch(ItemStack item) {
+	public static CustomItem findMatch(ItemStack item) {
 		if (item == null) {
 			return null;
 		}
@@ -66,8 +63,8 @@ public final class CustomItems {
 		if (Strings.isNullOrEmpty(displayName)) {
 			return false;
 		}
-		ItemCriteria criteria = findMatch(item);
-		if (criteria == null) {
+		CustomItem criteria = findMatch(item);
+		if (criteria == null || Strings.isNullOrEmpty(criteria.getName())) {
 			return false;
 		}
 		String customName = "" + ChatColor.RESET + criteria.getName();
@@ -77,7 +74,7 @@ public final class CustomItems {
 		return true;
 	}
 
-	public static boolean matchesCustomItem(ItemCriteria criteria, ItemStack target) {
+	public static boolean matchesCustomItem(CustomItem criteria, ItemStack target) {
 		if (criteria == null || target == null) {
 			return false;
 		}

@@ -13,19 +13,8 @@ public class NBTCriteria extends ItemCriteria {
 
 	private static final String CUSTOM_ITEM_NBT = "CustomItem";
 
-	public NBTCriteria(Map<String, Object> data) {
-		super(data);
-	}
-
-	public NBTCriteria(NamespacedKey key, String name) {
-		super(key, name);
-	}
-
 	@Override
-	public boolean matches(ItemStack item) {
-		if (item == null) {
-			return false;
-		}
+	public boolean matches(final CustomItem custom, final ItemStack item) {
 		NBTCompound nbt = NBTCompound.fromItem(item);
 		if (!Validation.checkValidity(nbt) || nbt.isEmpty()) {
 			return false;
@@ -35,21 +24,21 @@ public class NBTCriteria extends ItemCriteria {
 			return false;
 		}
 		NamespacedKey key = NamespaceAPI.fromString(raw);
-		if (!NullCoalescing.equalsNotNull(key, this.key)) {
+		if (!NullCoalescing.equalsNotNull(key, custom.getKey())) {
 			return false;
 		}
 		return true;
 	}
 
 	@Override
-	public ItemStack applyToItem(ItemStack item) {
-		return NBTCompound.processItem(super.applyToItem(item), nbt -> {
-			nbt.setString(CUSTOM_ITEM_NBT, this.key.toString());
+	public ItemStack applyToItem(final CustomItem custom, final ItemStack item) {
+		return NBTCompound.processItem(item, nbt -> {
+			nbt.setString(CUSTOM_ITEM_NBT, NamespaceAPI.getString(custom.getKey()));
 		});
 	}
 
-	public static NBTCriteria deserialize(Map<String, Object> data) {
-		return new NBTCriteria(data);
+	public static NBTCriteria deserialize(final Map<String, Object> data) {
+		return new NBTCriteria();
 	}
 
 }

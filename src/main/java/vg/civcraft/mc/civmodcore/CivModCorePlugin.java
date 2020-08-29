@@ -9,7 +9,10 @@ import vg.civcraft.mc.civmodcore.api.ItemNames;
 import vg.civcraft.mc.civmodcore.api.PotionNames;
 import vg.civcraft.mc.civmodcore.chatDialog.ChatListener;
 import vg.civcraft.mc.civmodcore.command.AikarCommandManager;
+import vg.civcraft.mc.civmodcore.custom.items.CustomItem;
 import vg.civcraft.mc.civmodcore.custom.items.CustomItems;
+import vg.civcraft.mc.civmodcore.custom.items.MaterialCriteria;
+import vg.civcraft.mc.civmodcore.custom.items.NBTCriteria;
 import vg.civcraft.mc.civmodcore.dao.ManagedDatasource;
 import vg.civcraft.mc.civmodcore.events.CustomEventMapper;
 import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventoryListener;
@@ -44,6 +47,9 @@ public final class CivModCorePlugin extends ACivMod {
 		instance = this;
 		this.useNewCommandHandler = true;
 		ConfigurationSerialization.registerClass(ManagedDatasource.class);
+		ConfigurationSerialization.registerClass(CustomItem.class);
+		ConfigurationSerialization.registerClass(MaterialCriteria.class);
+		ConfigurationSerialization.registerClass(NBTCriteria.class);
 		// Save default resources
 		saveDefaultResource("enchantments.csv");
 		saveDefaultResource("materials.csv");
@@ -112,6 +118,9 @@ public final class CivModCorePlugin extends ACivMod {
 		}
 		PlayerSettingAPI.saveAll();
 		ConfigurationSerialization.unregisterClass(ManagedDatasource.class);
+		ConfigurationSerialization.unregisterClass(CustomItem.class);
+		ConfigurationSerialization.unregisterClass(MaterialCriteria.class);
+		ConfigurationSerialization.unregisterClass(NBTCriteria.class);
 		NBTSerialization.clearAllRegistrations();
 		NullCoalescing.exists(this.manager, AikarCommandManager::reset);
 		super.onDisable();
