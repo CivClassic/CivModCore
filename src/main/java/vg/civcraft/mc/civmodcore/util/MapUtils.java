@@ -2,6 +2,8 @@ package vg.civcraft.mc.civmodcore.util;
 
 import java.util.Map;
 import java.util.function.Function;
+import org.bukkit.Material;
+import vg.civcraft.mc.civmodcore.api.MaterialAPI;
 
 /**
  * Class of Map utilities.
@@ -62,6 +64,20 @@ public final class MapUtils {
 			}
 		}
 		return fallback;
+	}
+
+	// ------------------------------------------------------------
+	// Parsers
+	// ------------------------------------------------------------
+
+	public static Material parseMaterial(Object value) {
+		if (value instanceof Material) {
+			return (Material) value;
+		}
+		if (value instanceof String) {
+			return MaterialAPI.getMaterial((String) value);
+		}
+		return null;
 	}
 
 }
