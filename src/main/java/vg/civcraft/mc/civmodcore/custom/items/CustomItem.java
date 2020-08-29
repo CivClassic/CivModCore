@@ -35,9 +35,6 @@ public class CustomItem implements ConfigurationSerializable {
 		if (key == null) {
 			throw new IllegalArgumentException("Cannot create custom item criteria with a null key.");
 		}
-		if (Strings.isNullOrEmpty(name)) {
-			throw new IllegalArgumentException("Cannot create custom item criteria with an invalid name.");
-		}
 		this.key = key;
 		this.name = name;
 		this.extra = Iteration.collect(ArrayList::new, extra);

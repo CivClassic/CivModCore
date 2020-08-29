@@ -1,6 +1,7 @@
 package vg.civcraft.mc.civmodcore.util;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -59,12 +60,18 @@ public class TextUtil {
 	}
 
 	public static String parseColorAmp(String string) {
+		if (Strings.isNullOrEmpty(string)) {
+			return string;
+		}
 		string = string.replace("&&", "&");
 		string = string.replaceAll("&([a-zA-Z0-9])", "§$1");
 		return string;
 	}
 
 	public static String parseColorAcc(String string) {
+		if (Strings.isNullOrEmpty(string)) {
+			return string;
+		}
 		return string.
 				replace("`0", ChatColor.BLACK.toString()).
 				replace("`1", ChatColor.DARK_BLUE.toString()).
@@ -101,6 +108,9 @@ public class TextUtil {
 	}
 
 	public static String parseColorTags(String string) {
+		if (Strings.isNullOrEmpty(string)) {
+			return string;
+		}
 		return string.
 				replace("<black>", ChatColor.BLACK.toString()).
 				replace("<dblue>", ChatColor.DARK_BLUE.toString()).
