@@ -334,13 +334,10 @@ public class NBTCompound implements Cloneable, Validation {
 	 */
 	public UUID getUUID(String key) {
 		Preconditions.checkArgument(!Strings.isNullOrEmpty(key));
-		if (!this.tag.hasKeyOfType(key + UUID_MOST_SUFFIX, 4)) {
+		if (!this.tag.hasUUID(key)) {
 			return null;
 		}
-		if (!this.tag.hasKeyOfType(key + UUID_LEAST_SUFFIX, 4)) {
-			return null;
-		}
-		return this.tag.a(key);
+		return this.tag.getUUID(key);
 	}
 
 	/**
@@ -355,7 +352,7 @@ public class NBTCompound implements Cloneable, Validation {
 			removeUUID(key);
 		}
 		else {
-			this.tag.a(key, value);
+			this.tag.setUUID(key, value);
 		}
 	}
 
@@ -367,6 +364,7 @@ public class NBTCompound implements Cloneable, Validation {
 	 */
 	public void removeUUID(String key) {
 		Preconditions.checkArgument(!Strings.isNullOrEmpty(key));
+		this.tag.remove(key);
 		this.tag.remove(key + UUID_MOST_SUFFIX);
 		this.tag.remove(key + UUID_LEAST_SUFFIX);
 	}
