@@ -282,11 +282,11 @@ public final class Iteration {
 	 *
 	 * @param list The list to remove the last element from.
 	 */
-	public static void removeLastElement(List<?> list) {
+	public static <T> T removeLastElement(List<T> list) {
 		if (isNullOrEmpty(list)) {
-			return;
+			return null;
 		}
-		list.remove(list.size() - 1);
+		return list.remove(list.size() - 1);
 	}
 
 }
