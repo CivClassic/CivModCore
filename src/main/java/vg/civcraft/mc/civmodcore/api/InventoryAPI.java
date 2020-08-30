@@ -320,6 +320,11 @@ public final class InventoryAPI {
 		}
 
 		@Override
+		public HashMap<Integer, ItemStack> removeItemAnySlot(ItemStack... items) throws IllegalArgumentException {
+			return this.inventory.removeItemAnySlot(items);
+		}
+
+		@Override
 		public ItemStack[] getContents() {
 			return this.inventory.getContents();
 		}
@@ -422,6 +427,11 @@ public final class InventoryAPI {
 		@Override
 		public InventoryHolder getHolder() {
 			return this.inventory.getHolder();
+		}
+
+		@Override
+		public InventoryHolder getHolder(boolean useSnapshot) {
+			return this.inventory.getHolder(useSnapshot);
 		}
 
 		@Nonnull

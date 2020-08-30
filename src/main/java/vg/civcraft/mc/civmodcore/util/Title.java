@@ -1,18 +1,13 @@
 package vg.civcraft.mc.civmodcore.util;
 
-import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import net.minecraft.server.v1_16_R1.IChatBaseComponent;
-import net.minecraft.server.v1_16_R1.PacketPlayOutTitle;
-import net.minecraft.server.v1_16_R1.PlayerConnection;
-
 /**
- * @deprecated Use Player.sendTitle instead
- *
+ * @deprecated Use {@link Player#sendTitle(com.destroystokyo.paper.Title)} instead.
  */
 @Deprecated
 public class Title {
+
 	private String title;
 	private String subtitle;
 	private int fadeIn;
@@ -116,19 +111,10 @@ public class Title {
 	/**
 	 * Sends the title to the given player, according to the configuration in this instance
 	 * 
-	 * @param p
-	 *            Player to send the title to
+	 * @param player Player to send the title to
 	 */
-	public void sendTitle(Player p) {
-		PlayerConnection connection = ((CraftPlayer) p).getHandle().playerConnection;
-		PacketPlayOutTitle packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TIMES, null, fadeIn,
-				stay, fadeOut);
-		connection.sendPacket(packet);
-		IChatBaseComponent sub = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + subtitle + "\"}");
-		packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, sub);
-		connection.sendPacket(packet);
-		IChatBaseComponent main = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + title + "\"}");
-		packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, main);
-		connection.sendPacket(packet);
+	public void sendTitle(Player player) {
+		player.sendTitle(this.title, this.subtitle, this.fadeIn, this.stay, this.fadeOut);
 	}
+
 }
