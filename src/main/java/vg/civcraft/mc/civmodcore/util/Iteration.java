@@ -1,7 +1,6 @@
 package vg.civcraft.mc.civmodcore.util;
 
-import org.apache.commons.lang.ArrayUtils;
-
+import java.util.List;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -10,6 +9,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import org.apache.commons.lang.ArrayUtils;
 
 public final class Iteration {
 
@@ -275,6 +275,18 @@ public final class Iteration {
 	@SuppressWarnings("unchecked")
 	public static <T> T[] concat(final T[] former, final T... latter) {
 		return (T[]) ArrayUtils.addAll(former, latter);
+	}
+
+	/**
+	 * Removes the element at the end of the given list.
+	 *
+	 * @param list The list to remove the last element from.
+	 */
+	public static void removeLastElement(List<?> list) {
+		if (isNullOrEmpty(list)) {
+			return;
+		}
+		list.remove(list.size() - 1);
 	}
 
 }
