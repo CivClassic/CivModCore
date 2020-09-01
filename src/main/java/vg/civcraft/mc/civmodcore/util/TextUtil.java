@@ -5,6 +5,7 @@ import com.google.common.base.Strings;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -357,6 +358,22 @@ public class TextUtil {
 			return false;
 		}
 		return container.toLowerCase().startsWith(contained.toLowerCase());
+	}
+
+	/**
+	 * <p>Determines whether a given base component is null or empty.</p>
+	 *
+	 * <p>This is determined by converting the component into plain text, so a non-null component filled with
+	 * nothing but colour codes and hover text will likely return true.</p>
+	 *
+	 * @param component The component to test if null or empty.
+	 * @return Returns true if the component is null or has no visible content.
+	 */
+	public static boolean isNullOrEmpty(BaseComponent component) {
+		if (component == null) {
+			return true;
+		}
+		return Strings.isNullOrEmpty(component.toPlainText());
 	}
 
 }
