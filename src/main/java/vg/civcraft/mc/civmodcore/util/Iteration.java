@@ -19,18 +19,11 @@ public final class Iteration {
 	}
 
 	/**
-	 * <p>Determines whether an array is null or empty.</p>
-	 *
-	 * <p>Note: This will not check the elements within the array. It only checks if the array itself exists and has
-	 * elements. If for example the array has 100 null elements, this function would still return true.</p>
-	 *
-	 * @param <T> The type of the array.
-	 * @param array The array to check.
-	 * @return Returns true if the array exists and at least one item.
+	 * @deprecated Use {@link ArrayUtils#isEmpty(Object[])} instead.
 	 */
-	@SafeVarargs
-	public static <T> boolean isNullOrEmpty(T... array) {
-		return array == null || array.length < 1;
+	@Deprecated
+	public static <T> boolean isNullOrEmpty(T[] array) {
+		return ArrayUtils.isEmpty(array);
 	}
 
 	/**
