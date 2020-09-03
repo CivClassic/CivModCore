@@ -335,10 +335,10 @@ public class NBTCompound implements Cloneable, Validation {
 	 */
 	public UUID getUUID(String key) {
 		Preconditions.checkArgument(!Strings.isNullOrEmpty(key));
-		if (!this.tag.hasUUID(key)) {
+		if (!this.tag.b(key)) {
 			return null;
 		}
-		return this.tag.getUUID(key);
+		return this.tag.a(key);
 	}
 
 	/**
@@ -353,7 +353,7 @@ public class NBTCompound implements Cloneable, Validation {
 			removeUUID(key);
 		}
 		else {
-			this.tag.setUUID(key, value);
+			this.tag.a(key, value);
 		}
 	}
 
