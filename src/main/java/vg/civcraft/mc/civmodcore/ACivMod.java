@@ -24,7 +24,7 @@ import vg.civcraft.mc.civmodcore.serialization.NBTSerializable;
 import vg.civcraft.mc.civmodcore.serialization.NBTSerialization;
 import vg.civcraft.mc.civmodcore.util.Iteration;
 
-public abstract class ACivMod extends JavaPlugin implements Closeable {
+public abstract class ACivMod extends JavaPlugin {
 
 	private final List<Class<? extends NBTSerializable>> serializableClasses = Lists.newArrayList();
 
@@ -67,15 +67,6 @@ public abstract class ACivMod extends JavaPlugin implements Closeable {
 		Bukkit.getMessenger().unregisterIncomingPluginChannel(this);
 		Bukkit.getMessenger().unregisterOutgoingPluginChannel(this);
 		Bukkit.getScheduler().cancelTasks(this);
-	}
-
-	// Effectively an .onUnload()
-	@Override
-	public void close() {
-		if (this.handle != null) {
-			this.handle.reset();
-			this.handle = null;
-		}
 	}
 
 	/**
