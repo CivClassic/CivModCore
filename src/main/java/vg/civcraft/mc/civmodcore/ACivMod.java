@@ -1,7 +1,6 @@
 package vg.civcraft.mc.civmodcore;
 
 import com.google.common.collect.Lists;
-import java.io.Closeable;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
