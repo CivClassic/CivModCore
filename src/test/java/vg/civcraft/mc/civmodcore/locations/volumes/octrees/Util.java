@@ -4,7 +4,10 @@ import vg.civcraft.mc.civmodcore.locations.volumes.IIntVolumeBBox;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import static java.lang.Integer.max;
 import static org.junit.Assert.assertTrue;
 
 public class Util {
@@ -100,9 +103,61 @@ public class Util {
 			}
 
 			@Override
+			public int hashCode() {
+				return Objects.hash(minx, miny, minz, maxx, maxy, maxz);
+			}
+
+			@Override
 			public String toString() {
 				return "[(" + minx + ", " + miny + ", " + minz + ")-(" + maxx + ", " + maxy + ", " + maxz + ")]";
 			}
 		};
+	}
+
+	public static List<IIntVolumeBBox> newRandomCubes(int BOUND, int count) {
+		Random rand = getRandom();
+
+		return IntStream.range(0, count).mapToObj(i -> {
+			int x = rand.nextInt(BOUND - 1);
+			int y = rand.nextInt(BOUND - 1);
+			int z = rand.nextInt(BOUND - 1);
+			return newCube(x, y, z, rand.nextInt((BOUND - 1) - max(max(x, y), z)) + 1);
+		}).collect(Collectors.toList());
+	}
+
+	public static List<IIntVolumeBBox> cloneCube(IIntVolumeBBox newCube, int count) {
+		return IntStream.range(0, count).mapToObj(i ->
+				new IIntVolumeBBox() {
+					@Override
+					public int getMinX() {
+						return newCube.getMinX();
+					}
+
+					@Override
+					public int getMinY() {
+						return newCube.getMinY();
+					}
+
+					@Override
+					public int getMinZ() {
+						return newCube.getMinZ();
+					}
+
+					@Override
+					public int getMaxX() {
+						return newCube.getMaxX();
+					}
+
+					@Override
+					public int getMaxY() {
+						return newCube.getMaxY();
+					}
+
+					@Override
+					public int getMaxZ() {
+						return newCube.getMaxZ();
+					}
+				}
+		).collect(Collectors.toList());
 	}
 }

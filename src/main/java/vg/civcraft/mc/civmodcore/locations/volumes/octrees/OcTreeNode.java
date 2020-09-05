@@ -3,7 +3,10 @@ package vg.civcraft.mc.civmodcore.locations.volumes.octrees;
 import vg.civcraft.mc.civmodcore.locations.volumes.IIntVolumeBBox;
 import vg.civcraft.mc.civmodcore.locations.volumes.IntVolumeBBox;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * @author psygate
@@ -117,6 +120,45 @@ final class OcTreeNode<T extends IIntVolumeBBox> extends IntVolumeBBox {
 		return "OcTreeNode{" +
 				super.toString()
 				+ "}";
+	}
+
+	public boolean remove(IIntVolumeBBox box) {
+		return values.remove(box);
+	}
+
+	public int size() {
+		return values.size();
+	}
+
+	public int subTreeSize() {
+		int acc = values.size();
+
+		for (OcTreeNode<T> child : children) {
+			acc += child.subTreeSize();
+		}
+
+		return acc;
+	}
+
+	public void rebuildRecursively() {
+		for (OcTreeNode<T> child : children) {
+			child.rebuildRecursively();
+		}
+
+		if (subTreeSize() <= splitSize) {
+			for (OcTreeNode<T> child : children) {
+				NodeIterator<T> nodes = new NodeIterator<>(child);
+				while (nodes.hasNext()) {
+					values.addAll(nodes.next().values());
+				}
+			}
+
+			deleteAllChildren();
+		}
+	}
+
+	private void deleteAllChildren() {
+		children.clear();
 	}
 }
 

@@ -15,18 +15,29 @@ final class ValueIterator<T extends IIntVolumeBBox> implements Iterator<T> {
 		valueIterator = nodeIterator.next().values().iterator();
 	}
 
+	private void prepareNextValue() {
+		while (!valueIterator.hasNext() && nodeIterator.hasNext()) {
+			valueIterator = nodeIterator.next().values().iterator();
+		}
+	}
+
 	@Override
 	public boolean hasNext() {
-		return valueIterator.hasNext() || nodeIterator.hasNext();
+		prepareNextValue();
+		return valueIterator.hasNext();
+	}
+
+	@Override
+	public void remove() {
+		valueIterator.remove();
 	}
 
 	@Override
 	public T next() {
+		prepareNextValue();
+
 		if (valueIterator.hasNext()) {
 			return valueIterator.next();
-		} else if (nodeIterator.hasNext()) {
-			valueIterator = nodeIterator.next().values().iterator();
-			return next();
 		}
 
 		throw new NoSuchElementException("No next value in iterator.");

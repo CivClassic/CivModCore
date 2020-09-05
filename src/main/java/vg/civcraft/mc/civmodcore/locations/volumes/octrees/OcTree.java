@@ -2,10 +2,8 @@ package vg.civcraft.mc.civmodcore.locations.volumes.octrees;
 
 import vg.civcraft.mc.civmodcore.locations.volumes.IIntVolumeBBox;
 
-import java.util.LinkedList;
-import java.util.Objects;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -13,7 +11,7 @@ import java.util.stream.StreamSupport;
 /**
  * @author psygate
  */
-public final class OcTree<T extends IIntVolumeBBox> {
+public final class OcTree<T extends IIntVolumeBBox> implements Collection<T> {
 	private IIntVolumeBBox area;
 	private OcTreeNode<T> root;
 	private final int splitSize;
@@ -26,13 +24,14 @@ public final class OcTree<T extends IIntVolumeBBox> {
 		this.splitSize = splitSize;
 	}
 
-	public void add(T value) {
-		if (!addNoThrow(value)) {
+	public void addThrowing(T value) {
+		if (!add(value)) {
 			throw new IllegalArgumentException("Object " + value + " not contained in OcTree area.");
 		}
 	}
 
-	public boolean addNoThrow(T value) {
+	@Override
+	public boolean add(T value) {
 		Objects.requireNonNull(value);
 
 		if (!IIntVolumeBBox.contains(root, value)) {
@@ -70,6 +69,21 @@ public final class OcTree<T extends IIntVolumeBBox> {
 	public void clear() {
 		root = new OcTreeNode<>(area, splitSize);
 		size = 0;
+	}
+
+	@Override
+	public Spliterator<T> spliterator() {
+		return null;
+	}
+
+	@Override
+	public Stream<T> stream() {
+		return null;
+	}
+
+	@Override
+	public Stream<T> parallelStream() {
+		return null;
 	}
 
 	//test method to assert that the counted size is the real size. very costly to run.
@@ -167,5 +181,128 @@ public final class OcTree<T extends IIntVolumeBBox> {
 
 	public boolean isEmpty() {
 		return size == 0;
+	}
+
+	@Override
+	public boolean contains(Object o) {
+		if (o instanceof IIntVolumeBBox) {
+			IIntVolumeBBox box = (IIntVolumeBBox) o;
+			PredicateValueIterator<T> it = new PredicateValueIterator<>(
+					root,
+					value -> value.equals(box),
+					node -> node.contains(box)
+			);
+
+			return it.hasNext();
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public Iterator<T> iterator() {
+		return new ValueIterator<>(root);
+	}
+
+	@Override
+	public void forEach(Consumer<? super T> action) {
+		stream().forEach(action);
+	}
+
+	@Override
+	public Object[] toArray() {
+		Object[] out = new Object[size()];
+		Iterator<T> it = iterator();
+
+		for (int i = 0; i < size(); i++) {
+			out[i] = it.next();
+		}
+
+		return out;
+	}
+
+	@Override
+	public <T1> T1[] toArray(T1[] a) {
+		final T1[] arr;
+		if (a.length < size()) {
+			arr = Arrays.copyOf(a, size());
+		} else {
+			arr = a;
+		}
+
+		Iterator<T> it = iterator();
+
+		for (int i = 0; i < size(); i++) {
+			arr[i] = (T1) it.next();
+		}
+
+		return arr;
+	}
+
+	@Override
+	public boolean remove(Object o) {
+		if (o instanceof IIntVolumeBBox) {
+			IIntVolumeBBox box = (IIntVolumeBBox) o;
+			if (removeInternal(box)) {
+				rebuildTree();
+				size--;
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private boolean removeInternal(IIntVolumeBBox box) {
+		PredicateNodeIterator<T> nodeIterator = new PredicateNodeIterator<>(root, node -> node.contains(box));
+
+		while (nodeIterator.hasNext()) {
+			OcTreeNode<T> node = nodeIterator.next();
+			if (node.remove(box)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private void rebuildTree() {
+		root.rebuildRecursively();
+	}
+
+	@Override
+	public boolean containsAll(Collection<?> c) {
+		return c.stream().allMatch(this::contains);
+	}
+
+	@Override
+	public boolean addAll(Collection<? extends T> c) {
+		return c.stream().allMatch(this::add);
+	}
+
+	@Override
+	public boolean removeAll(Collection<?> c) {
+		return removeIf(c::contains);
+	}
+
+	@Override
+	public boolean removeIf(Predicate<? super T> filter) {
+		boolean mod = false;
+		ValueIterator<T> it = new ValueIterator<>(root);
+		while (it.hasNext()) {
+			if (filter.test(it.next())) {
+				it.remove();
+				mod = true;
+			}
+		}
+
+		if (mod) rebuildTree();
+
+		return mod;
+	}
+
+	@Override
+	public boolean retainAll(Collection<?> c) {
+		return removeIf(value -> !c.contains(value));
 	}
 }
