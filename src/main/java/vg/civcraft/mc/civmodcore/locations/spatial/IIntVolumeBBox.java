@@ -1,4 +1,4 @@
-package vg.civcraft.mc.civmodcore.locations.volumes;
+package vg.civcraft.mc.civmodcore.locations.spatial;
 
 /**
  * @author psygate
@@ -111,16 +111,51 @@ public interface IIntVolumeBBox {
 	}
 
 	/**
+	 * True if the bounding volume contains the point represented by the x,y,z coordinates.
+	 *
+	 * @param box Volume
+	 * @param x   Point X Coordinate
+	 * @param y   Point Y Coordinate
+	 * @param z   Point Z Coordinate
+	 * @return True if the box contains the point.
+	 */
+	static boolean contains(IIntVolumeBBox box, int x, int y, int z) {
+		return box.getMinX() <= x && box.getMaxX() >= x &&
+				box.getMinY() <= y && box.getMaxY() >= y &&
+				box.getMinZ() <= z && box.getMaxZ() >= z
+				;
+	}
+
+	/**
+	 * True if the bounding volume contains the point represented by the x,y,z coordinates.
+	 *
+	 * @param box   Volume
+	 * @param point Point to check
+	 * @return True if the box contains the point.
+	 */
+	static boolean contains(IIntVolumeBBox box, IIntPoint3D point) {
+		return contains(box, point.getX(), point.getY(), point.getZ());
+	}
+
+	/**
 	 * True if the bounding box contains the point.
+	 *
 	 * @param x X coordinate of the point.
 	 * @param y Y Coordinate of the point.
 	 * @param z Z Coordinate of the point.
 	 * @return True if the bounding box contains the point.
 	 */
 	default boolean contains(int x, int y, int z) {
-		return getMinX() <= x && getMaxX() >= x &&
-				getMinY() <= y && getMaxY() >= y &&
-				getMinZ() <= z && getMaxZ() >= z
-				;
+		return contains(this, x, y, z);
+	}
+
+	/**
+	 * True if the bounding box contains the point.
+	 *
+	 * @param point Point to check.
+	 * @return True if the bounding box contains the point.
+	 */
+	default boolean contains(IIntPoint3D point) {
+		return contains(this, point.getX(), point.getY(), point.getZ());
 	}
 }
