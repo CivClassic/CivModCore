@@ -1,16 +1,16 @@
-package vg.civcraft.mc.civmodcore.locations.volumes.octrees;
+package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
-import vg.civcraft.mc.civmodcore.locations.volumes.IIntVolumeBBox;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-final class ValueIterator<T extends IIntVolumeBBox> implements Iterator<T> {
-	private NodeIterator<T> nodeIterator;
-	private Iterator<T> valueIterator;
+final class ValueIterator<NodeType extends BaseOcTreeNode<NodeType, ValueType>, ValueType extends IIntVolumeBBox> implements Iterator<ValueType> {
+	private NodeIterator<NodeType, ValueType> nodeIterator;
+	private Iterator<ValueType> valueIterator;
 
-	public ValueIterator(OcTreeNode<T> root) {
+	public ValueIterator(NodeType root) {
 		nodeIterator = new NodeIterator<>(Objects.requireNonNull(root));
 		valueIterator = nodeIterator.next().values().iterator();
 	}
@@ -33,7 +33,7 @@ final class ValueIterator<T extends IIntVolumeBBox> implements Iterator<T> {
 	}
 
 	@Override
-	public T next() {
+	public ValueType next() {
 		prepareNextValue();
 
 		if (valueIterator.hasNext()) {

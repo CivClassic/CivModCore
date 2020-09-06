@@ -1,7 +1,7 @@
-package vg.civcraft.mc.civmodcore.locations.volumes.octrees;
+package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
 import org.junit.Test;
-import vg.civcraft.mc.civmodcore.locations.volumes.IIntVolumeBBox;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -14,7 +14,7 @@ public class ValueIteratorTest {
 	@Test
 	public void emptyTreeTest() {
 		OcTree<IIntVolumeBBox> empty = new OcTree<>(newBox(0, 0, 0, 100, 100, 100), 32);
-		ValueIterator<IIntVolumeBBox> it = new ValueIterator<>(empty.getRoot());
+		ValueIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new ValueIterator<>(empty.getRoot());
 		assertFalse(it.hasNext());
 	}
 
@@ -34,7 +34,7 @@ public class ValueIteratorTest {
 			leftSet.add(box);
 		}
 
-		ValueIterator<IIntVolumeBBox> it = new ValueIterator<>(tree.getRoot());
+		ValueIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new ValueIterator<>(tree.getRoot());
 		assertTrue(it.hasNext());
 
 		Set<IIntVolumeBBox> rightSet = toSet(it);
@@ -67,7 +67,7 @@ public class ValueIteratorTest {
 			leftSet.add(box);
 		}
 
-		ValueIterator<IIntVolumeBBox> it = new ValueIterator<>(tree.getRoot());
+		ValueIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new ValueIterator<>(tree.getRoot());
 		assertTrue(it.hasNext());
 
 		Set<IIntVolumeBBox> rightSet = toSet(it);
@@ -84,7 +84,7 @@ public class ValueIteratorTest {
 		);
 	}
 
-	private <T extends IIntVolumeBBox> Set<T> toSet(ValueIterator<T> it) {
+	private <NodeType extends BaseOcTreeNode<NodeType, T>, T extends IIntVolumeBBox> Set<T> toSet(ValueIterator<NodeType, T> it) {
 		Set<T> set = new HashSet<>();
 
 		while (it.hasNext()) {

@@ -1,6 +1,6 @@
-package vg.civcraft.mc.civmodcore.locations.volumes.octrees;
+package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
-import vg.civcraft.mc.civmodcore.locations.volumes.IIntVolumeBBox;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -32,13 +32,13 @@ public class Util {
 	}
 
 
-	public static Set<OcTreeNode<IIntVolumeBBox>> getNodeSet(OcTree<IIntVolumeBBox> tree) {
-		Set<OcTreeNode<IIntVolumeBBox>> nodeSet = new HashSet<>();
-		LinkedList<OcTreeNode<IIntVolumeBBox>> stack = new LinkedList<>();
+	public static Set<VolumeOcTreeNode<IIntVolumeBBox>> getNodeSet(OcTree<IIntVolumeBBox> tree) {
+		Set<VolumeOcTreeNode<IIntVolumeBBox>> nodeSet = new HashSet<>();
+		LinkedList<VolumeOcTreeNode<IIntVolumeBBox>> stack = new LinkedList<>();
 		stack.add(tree.getRoot());
 
 		while (!stack.isEmpty()) {
-			OcTreeNode<IIntVolumeBBox> node = stack.pop();
+			VolumeOcTreeNode<IIntVolumeBBox> node = stack.pop();
 			nodeSet.add(node);
 			if (node.hasChildren()) {
 				stack.addAll(node.getChildren());

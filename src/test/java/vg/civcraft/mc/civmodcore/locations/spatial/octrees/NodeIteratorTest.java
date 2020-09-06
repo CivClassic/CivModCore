@@ -1,7 +1,8 @@
-package vg.civcraft.mc.civmodcore.locations.volumes.octrees;
+package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
 import org.junit.Test;
-import vg.civcraft.mc.civmodcore.locations.volumes.IIntVolumeBBox;
+import vg.civcraft.mc.civmodcore.locations.spatial.octrees.VolumeOcTreeNode;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
 
 import java.util.Random;
 import java.util.Set;
@@ -10,13 +11,13 @@ import java.util.Spliterators;
 import java.util.stream.StreamSupport;
 
 import static org.junit.Assert.*;
-import static vg.civcraft.mc.civmodcore.locations.volumes.octrees.Util.*;
+import static vg.civcraft.mc.civmodcore.locations.spatial.octrees.Util.*;
 
 public class NodeIteratorTest {
 	@Test
 	public void testEmptyTree() {
 		OcTree<IIntVolumeBBox> box = new OcTree<>(newCube(0, 0, 0, 100), 4);
-		NodeIterator<IIntVolumeBBox> it = new NodeIterator<>(box.getRoot());
+		NodeIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new NodeIterator<>(box.getRoot());
 
 		assertTrue(it.hasNext());
 		assertNotNull(it.next());
@@ -34,7 +35,7 @@ public class NodeIteratorTest {
 			}
 		}
 
-		NodeIterator<IIntVolumeBBox> it = new NodeIterator<>(box.getRoot());
+		NodeIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new NodeIterator<>(box.getRoot());
 
 		assertTrue(it.hasNext());
 		assertNotNull(it.next());
@@ -55,7 +56,7 @@ public class NodeIteratorTest {
 			}
 		}
 
-		NodeIterator<IIntVolumeBBox> it = new NodeIterator<>(box.getRoot());
+		NodeIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new NodeIterator<>(box.getRoot());
 
 		assertTrue(it.hasNext());
 		assertNotNull(it.next());
@@ -74,8 +75,9 @@ public class NodeIteratorTest {
 			int offset = rand.nextInt(BOUNDS - 2);
 			tree.add(newCube(offset, offset, offset, rand.nextInt(BOUNDS - offset - 2) + 1));
 		}
-		NodeIterator<IIntVolumeBBox> it = new NodeIterator<>(tree.getRoot());
-		Set<OcTreeNode<IIntVolumeBBox>> itset = toSet(it);
+		NodeIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new NodeIterator<>(tree.getRoot());
+
+		Set<VolumeOcTreeNode<IIntVolumeBBox>> itset = toSet(it);
 
 		assertEquals(
 				"Set difference:" +

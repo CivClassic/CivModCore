@@ -1,14 +1,14 @@
-package vg.civcraft.mc.civmodcore.locations.volumes.octrees;
+package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
 import org.junit.Test;
-import vg.civcraft.mc.civmodcore.locations.volumes.IIntVolumeBBox;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.*;
-import static vg.civcraft.mc.civmodcore.locations.volumes.octrees.Util.newCube;
+import static vg.civcraft.mc.civmodcore.locations.spatial.octrees.Util.newCube;
 
 public class OcTreeTest {
 	@Test

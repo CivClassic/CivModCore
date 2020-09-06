@@ -1,7 +1,7 @@
-package vg.civcraft.mc.civmodcore.locations.volumes.octrees;
+package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
 import org.junit.Test;
-import vg.civcraft.mc.civmodcore.locations.volumes.IIntVolumeBBox;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -11,13 +11,13 @@ import java.util.stream.Collectors;
 import static java.lang.Integer.max;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static vg.civcraft.mc.civmodcore.locations.volumes.octrees.Util.*;
+import static vg.civcraft.mc.civmodcore.locations.spatial.octrees.Util.*;
 
 public class PredicateValueIteratorTest {
 	@Test
 	public void emptyTest() {
 		OcTree<IIntVolumeBBox> tree = new OcTree<>(newCube(0, 0, 0, 100), 32);
-		PredicateValueIterator<IIntVolumeBBox> it = new PredicateValueIterator<>(tree.getRoot(), PREDICATE_TRUE);
+		PredicateValueIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateValueIterator<>(tree.getRoot(), PREDICATE_TRUE);
 		assertFalse(it.hasNext());
 	}
 
@@ -33,7 +33,7 @@ public class PredicateValueIteratorTest {
 			IIntVolumeBBox box = newCube(x, y, z, rand.nextInt((BOUND - 1) - max(max(x, y), z)) + 1);
 		}
 
-		PredicateValueIterator<IIntVolumeBBox> it = new PredicateValueIterator<>(tree.getRoot(), PREDICATE_TRUE);
+		PredicateValueIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateValueIterator<>(tree.getRoot(), PREDICATE_TRUE);
 		assertFalse(it.hasNext());
 	}
 
@@ -54,7 +54,7 @@ public class PredicateValueIteratorTest {
 			leftSet.add(box);
 		}
 
-		PredicateValueIterator<IIntVolumeBBox> it = new PredicateValueIterator<>(tree.getRoot(), PREDICATE_TRUE);
+		PredicateValueIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateValueIterator<>(tree.getRoot(), PREDICATE_TRUE);
 
 		Set<IIntVolumeBBox> rightSet = toSet(it);
 
@@ -93,7 +93,7 @@ public class PredicateValueIteratorTest {
 			IIntVolumeBBox selectionBox = newCube(x, y, z, rand.nextInt((BOUND - 2) - max(max(x, y), z)) + 1);
 
 			Set<IIntVolumeBBox> leftSet = valueSet.stream().filter(selectionBox::contains).collect(Collectors.toSet());
-			PredicateValueIterator<IIntVolumeBBox> it = new PredicateValueIterator<>(tree.getRoot(), selectionBox::contains, selectionBox::intersects);
+			PredicateValueIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateValueIterator<>(tree.getRoot(), selectionBox::contains, selectionBox::intersects);
 
 			Set<IIntVolumeBBox> rightSet = toSet(it);
 

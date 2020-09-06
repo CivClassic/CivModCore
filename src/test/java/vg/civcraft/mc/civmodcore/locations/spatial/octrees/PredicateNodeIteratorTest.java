@@ -1,7 +1,7 @@
-package vg.civcraft.mc.civmodcore.locations.volumes.octrees;
+package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
 import org.junit.Test;
-import vg.civcraft.mc.civmodcore.locations.volumes.IIntVolumeBBox;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -10,7 +10,7 @@ import java.util.stream.StreamSupport;
 
 import static java.lang.Integer.max;
 import static org.junit.Assert.*;
-import static vg.civcraft.mc.civmodcore.locations.volumes.octrees.Util.*;
+import static vg.civcraft.mc.civmodcore.locations.spatial.octrees.Util.*;
 
 public class PredicateNodeIteratorTest {
 	private final static Predicate<IIntVolumeBBox> PREDICATE_TRUE = value -> true;
@@ -18,7 +18,7 @@ public class PredicateNodeIteratorTest {
 	@Test
 	public void testEmptyTree() {
 		OcTree<IIntVolumeBBox> box = new OcTree<>(newCube(0, 0, 0, 100), 4);
-		PredicateNodeIterator<IIntVolumeBBox> it = new PredicateNodeIterator<>(box.getRoot(), PREDICATE_TRUE);
+		PredicateNodeIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateNodeIterator<>(box.getRoot(), PREDICATE_TRUE);
 
 		assertTrue(it.hasNext());
 		assertNotNull(it.next());
@@ -36,7 +36,7 @@ public class PredicateNodeIteratorTest {
 			}
 		}
 
-		NodeIterator<IIntVolumeBBox> it = new NodeIterator<>(box.getRoot());
+		NodeIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new NodeIterator<>(box.getRoot());
 
 		assertTrue(it.hasNext());
 		assertNotNull(it.next());
@@ -57,7 +57,7 @@ public class PredicateNodeIteratorTest {
 			}
 		}
 
-		PredicateNodeIterator<IIntVolumeBBox> it = new PredicateNodeIterator<>(box.getRoot(), PREDICATE_TRUE);
+		PredicateNodeIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateNodeIterator<>(box.getRoot(), PREDICATE_TRUE);
 
 		assertTrue(it.hasNext());
 		assertNotNull(it.next());
@@ -85,10 +85,10 @@ public class PredicateNodeIteratorTest {
 		final IIntVolumeBBox SELECTION_CUBE = newCube(50, 50, 50, BOUND - 50);
 		Predicate<IIntVolumeBBox> pred = value -> SELECTION_CUBE.contains(value);
 
-		Set<OcTreeNode<IIntVolumeBBox>> nodeSet = getNodeSet(tree).parallelStream().filter(pred).collect(Collectors.toSet());
+		Set<VolumeOcTreeNode<IIntVolumeBBox>> nodeSet = getNodeSet(tree).parallelStream().filter(pred).collect(Collectors.toSet());
 
-		Set<OcTreeNode<IIntVolumeBBox>> iteratorNodeSet = new HashSet<>();
-		PredicateNodeIterator<IIntVolumeBBox> it = new PredicateNodeIterator<>(tree.getRoot(), pred);
+		Set<VolumeOcTreeNode<IIntVolumeBBox>> iteratorNodeSet = new HashSet<>();
+		PredicateNodeIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateNodeIterator<>(tree.getRoot(), pred);
 		while (it.hasNext()) {
 			iteratorNodeSet.add(it.next());
 		}
@@ -121,10 +121,10 @@ public class PredicateNodeIteratorTest {
 		final IIntVolumeBBox SELECTION_CUBE = newCube(25, 25, 25, 10);
 		Predicate<IIntVolumeBBox> pred = value -> SELECTION_CUBE.contains(value);
 
-		Set<OcTreeNode<IIntVolumeBBox>> nodeSet = getNodeSet(tree).parallelStream().filter(pred).collect(Collectors.toSet());
+		Set<VolumeOcTreeNode<IIntVolumeBBox>> nodeSet = getNodeSet(tree).parallelStream().filter(pred).collect(Collectors.toSet());
 
-		Set<OcTreeNode<IIntVolumeBBox>> iteratorNodeSet = new HashSet<>();
-		PredicateNodeIterator<IIntVolumeBBox> it = new PredicateNodeIterator<>(tree.getRoot(), pred);
+		Set<VolumeOcTreeNode<IIntVolumeBBox>> iteratorNodeSet = new HashSet<>();
+		PredicateNodeIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateNodeIterator<>(tree.getRoot(), pred);
 		while (it.hasNext()) {
 			iteratorNodeSet.add(it.next());
 		}
@@ -157,10 +157,10 @@ public class PredicateNodeIteratorTest {
 		final IIntVolumeBBox SELECTION_CUBE = newCube(25, 25, 25, 10);
 		Predicate<IIntVolumeBBox> pred = value -> SELECTION_CUBE.intersects(value);
 
-		Set<OcTreeNode<IIntVolumeBBox>> nodeSet = getNodeSet(tree).parallelStream().filter(pred).collect(Collectors.toSet());
+		Set<VolumeOcTreeNode<IIntVolumeBBox>> nodeSet = getNodeSet(tree).parallelStream().filter(pred).collect(Collectors.toSet());
 
-		Set<OcTreeNode<IIntVolumeBBox>> iteratorNodeSet = new HashSet<>();
-		PredicateNodeIterator<IIntVolumeBBox> it = new PredicateNodeIterator<>(tree.getRoot(), pred);
+		Set<VolumeOcTreeNode<IIntVolumeBBox>> iteratorNodeSet = new HashSet<>();
+		PredicateNodeIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateNodeIterator<>(tree.getRoot(), pred);
 		while (it.hasNext()) {
 			iteratorNodeSet.add(it.next());
 		}
@@ -190,9 +190,9 @@ public class PredicateNodeIteratorTest {
 
 		assertEquals(1000, tree.countSize());
 
-		Set<OcTreeNode<IIntVolumeBBox>> nodeSet = getNodeSet(tree);
-		Set<OcTreeNode<IIntVolumeBBox>> iteratorNodeSet = new HashSet<>();
-		PredicateNodeIterator<IIntVolumeBBox> it = new PredicateNodeIterator<>(tree.getRoot(), PREDICATE_TRUE);
+		Set<VolumeOcTreeNode<IIntVolumeBBox>> nodeSet = getNodeSet(tree);
+		Set<VolumeOcTreeNode<IIntVolumeBBox>> iteratorNodeSet = new HashSet<>();
+		PredicateNodeIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateNodeIterator<>(tree.getRoot(), PREDICATE_TRUE);
 		while (it.hasNext()) {
 			iteratorNodeSet.add(it.next());
 		}
@@ -200,13 +200,13 @@ public class PredicateNodeIteratorTest {
 		assertEquals(nodeSet, iteratorNodeSet);
 	}
 
-	private static Set<OcTreeNode<IIntVolumeBBox>> getNodeSet(OcTree<IIntVolumeBBox> tree) {
-		Set<OcTreeNode<IIntVolumeBBox>> nodeSet = new HashSet<>();
-		LinkedList<OcTreeNode<IIntVolumeBBox>> stack = new LinkedList<>();
+	private static Set<VolumeOcTreeNode<IIntVolumeBBox>> getNodeSet(OcTree<IIntVolumeBBox> tree) {
+		Set<VolumeOcTreeNode<IIntVolumeBBox>> nodeSet = new HashSet<>();
+		LinkedList<VolumeOcTreeNode<IIntVolumeBBox>> stack = new LinkedList<>();
 		stack.add(tree.getRoot());
 
 		while (!stack.isEmpty()) {
-			OcTreeNode<IIntVolumeBBox> node = stack.pop();
+			VolumeOcTreeNode<IIntVolumeBBox> node = stack.pop();
 			nodeSet.add(node);
 			if (node.hasChildren()) {
 				stack.addAll(node.getChildren());
@@ -237,9 +237,9 @@ public class PredicateNodeIteratorTest {
 			IIntVolumeBBox box = newCube(x, y, z, rand.nextInt(BOUND - 2 - max(max(x, y), z)) + 1);
 
 			Predicate<IIntVolumeBBox> pred = box::intersects;
-			Set<OcTreeNode<IIntVolumeBBox>> nodeSet = getNodeSet(tree).stream().filter(pred).collect(Collectors.toSet());
-			PredicateNodeIterator<IIntVolumeBBox> it = new PredicateNodeIterator<>(tree.getRoot(), pred);
-			Set<OcTreeNode<IIntVolumeBBox>> iteratorNodeSet = toSet(it);
+			Set<VolumeOcTreeNode<IIntVolumeBBox>> nodeSet = getNodeSet(tree).stream().filter(pred).collect(Collectors.toSet());
+			PredicateNodeIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateNodeIterator<>(tree.getRoot(), pred);
+			Set<VolumeOcTreeNode<IIntVolumeBBox>> iteratorNodeSet = toSet(it);
 
 			assertEquals(nodeSet, iteratorNodeSet);
 		}

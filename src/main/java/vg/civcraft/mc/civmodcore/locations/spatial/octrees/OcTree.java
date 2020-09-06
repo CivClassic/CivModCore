@@ -1,6 +1,6 @@
-package vg.civcraft.mc.civmodcore.locations.volumes.octrees;
+package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
-import vg.civcraft.mc.civmodcore.locations.volumes.IIntVolumeBBox;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -11,33 +11,33 @@ import java.util.stream.StreamSupport;
 /**
  * @author psygate
  */
-public final class OcTree<T extends IIntVolumeBBox> implements Collection<T> {
+public final class OcTree<ValueType extends IIntVolumeBBox> implements Collection<ValueType> {
 	private IIntVolumeBBox area;
-	private OcTreeNode<T> root;
+	private VolumeOcTreeNode<ValueType> root;
 	private final int splitSize;
 	private int size = 0;
 
 	public OcTree(IIntVolumeBBox area, int splitSize) {
 		assert splitSize > 1;
 		this.area = area;
-		root = new OcTreeNode<>(area, splitSize);
+		root = new VolumeOcTreeNode<>(area, splitSize);
 		this.splitSize = splitSize;
 	}
 
-	public void addThrowing(T value) {
+	public void addThrowing(ValueType value) {
 		if (!add(value)) {
 			throw new IllegalArgumentException("Object " + value + " not contained in OcTree area.");
 		}
 	}
 
 	@Override
-	public boolean add(T value) {
+	public boolean add(ValueType value) {
 		Objects.requireNonNull(value);
 
 		if (!IIntVolumeBBox.contains(root, value)) {
 			return false;
 		} else {
-			OcTreeNode<T> insertionNode = selectNodeContainingBBox(value);
+			VolumeOcTreeNode<ValueType> insertionNode = selectNodeContainingBBox(value);
 			insertionNode.addValue(value);
 			insertionNode.splitIfNecessary();
 			size++;
@@ -45,14 +45,14 @@ public final class OcTree<T extends IIntVolumeBBox> implements Collection<T> {
 		}
 	}
 
-	private OcTreeNode<T> selectNodeContainingBBox(T value) {
+	private VolumeOcTreeNode<ValueType> selectNodeContainingBBox(ValueType value) {
 		assert IIntVolumeBBox.contains(area, value);
 
-		PredicateNodeIterator<T> it = new PredicateNodeIterator<>(root, node -> IIntVolumeBBox.contains(node, value));
-		OcTreeNode<T> selected = root;
+		PredicateNodeIterator<VolumeOcTreeNode<ValueType>, ValueType> it = new PredicateNodeIterator<>(root, node -> IIntVolumeBBox.contains(node, value));
+		VolumeOcTreeNode<ValueType> selected = root;
 
 		while (it.hasNext()) {
-			OcTreeNode<T> next = it.next();
+			VolumeOcTreeNode<ValueType> next = it.next();
 
 			if (IIntVolumeBBox.contains(next, value)) {
 				selected = next;
@@ -67,29 +67,29 @@ public final class OcTree<T extends IIntVolumeBBox> implements Collection<T> {
 	}
 
 	public void clear() {
-		root = new OcTreeNode<>(area, splitSize);
+		root = new VolumeOcTreeNode<>(area, splitSize);
 		size = 0;
 	}
 
 	@Override
-	public Spliterator<T> spliterator() {
+	public Spliterator<ValueType> spliterator() {
 		return null;
 	}
 
 	@Override
-	public Stream<T> stream() {
+	public Stream<ValueType> stream() {
 		return null;
 	}
 
 	@Override
-	public Stream<T> parallelStream() {
+	public Stream<ValueType> parallelStream() {
 		return null;
 	}
 
 	//test method to assert that the counted size is the real size. very costly to run.
 	int countSize() {
 		int size = 0;
-		NodeIterator<T> nodeIt = new NodeIterator<>(root);
+		NodeIterator<VolumeOcTreeNode<ValueType>, ValueType> nodeIt = new NodeIterator<>(root);
 		while (nodeIt.hasNext()) {
 			size += nodeIt.next().values().size();
 		}
@@ -99,11 +99,11 @@ public final class OcTree<T extends IIntVolumeBBox> implements Collection<T> {
 
 	int countNodes() {
 		int size = 0;
-		LinkedList<OcTreeNode<T>> stack = new LinkedList<>();
+		LinkedList<VolumeOcTreeNode<ValueType>> stack = new LinkedList<>();
 		stack.add(root);
 
 		while (!stack.isEmpty()) {
-			OcTreeNode<T> node = stack.pop();
+			VolumeOcTreeNode<ValueType> node = stack.pop();
 			if (node.hasChildren()) {
 				stack.addAll(node.getChildren());
 			}
@@ -113,7 +113,7 @@ public final class OcTree<T extends IIntVolumeBBox> implements Collection<T> {
 		return size;
 	}
 
-	OcTreeNode<T> getRoot() {
+	VolumeOcTreeNode<ValueType> getRoot() {
 		return root;
 	}
 
@@ -128,7 +128,7 @@ public final class OcTree<T extends IIntVolumeBBox> implements Collection<T> {
 	 * @param parallel If the stream evaluation should happen in parallel.
 	 * @return A stream containing all values in the tree, that are contained within the provided volume.
 	 */
-	public Stream<T> selectAllInVolume(IIntVolumeBBox box, boolean parallel) {
+	public Stream<ValueType> selectAllInVolume(IIntVolumeBBox box, boolean parallel) {
 		return selectByPredicate(box::contains, box::intersects, parallel);
 	}
 
@@ -139,7 +139,7 @@ public final class OcTree<T extends IIntVolumeBBox> implements Collection<T> {
 	 * @param parallel If the stream evaluation should happen in parallel.
 	 * @return A stream containing all values in the tree, that are intersecting with the provided volume.
 	 */
-	public Stream<T> selectAllIntersectingVolume(IIntVolumeBBox box, boolean parallel) {
+	public Stream<ValueType> selectAllIntersectingVolume(IIntVolumeBBox box, boolean parallel) {
 		return selectByPredicate(box::intersects, box::intersects, parallel);
 	}
 
@@ -152,7 +152,7 @@ public final class OcTree<T extends IIntVolumeBBox> implements Collection<T> {
 	 * @param parallel If the stream evaluation should happen in parallel.
 	 * @return A stream containing all values in the tree, that contain the given point.
 	 */
-	public Stream<T> selectAllContainingPoint(int x, int y, int z, boolean parallel) {
+	public Stream<ValueType> selectAllContainingPoint(int x, int y, int z, boolean parallel) {
 		return selectByPredicate(box -> box.contains(x, y, z), box -> box.contains(x, y, z), parallel);
 	}
 
@@ -167,7 +167,7 @@ public final class OcTree<T extends IIntVolumeBBox> implements Collection<T> {
 	 * @return A stream containing all values for which the valueSelectionPredicate is true, and which are in a tree node,
 	 * for which the nodeSelectionPredicate is true.
 	 */
-	public Stream<T> selectByPredicate(Predicate<IIntVolumeBBox> nodeSelectionPredicate, Predicate<IIntVolumeBBox> valueSelectionPredicate, boolean parallel) {
+	public Stream<ValueType> selectByPredicate(Predicate<IIntVolumeBBox> nodeSelectionPredicate, Predicate<IIntVolumeBBox> valueSelectionPredicate, boolean parallel) {
 		return StreamSupport.stream(
 				Spliterators.spliteratorUnknownSize(
 						new PredicateValueIterator<>(
@@ -187,7 +187,7 @@ public final class OcTree<T extends IIntVolumeBBox> implements Collection<T> {
 	public boolean contains(Object o) {
 		if (o instanceof IIntVolumeBBox) {
 			IIntVolumeBBox box = (IIntVolumeBBox) o;
-			PredicateValueIterator<T> it = new PredicateValueIterator<>(
+			PredicateValueIterator<VolumeOcTreeNode<ValueType>, ValueType> it = new PredicateValueIterator<>(
 					root,
 					value -> value.equals(box),
 					node -> node.contains(box)
@@ -200,19 +200,19 @@ public final class OcTree<T extends IIntVolumeBBox> implements Collection<T> {
 	}
 
 	@Override
-	public Iterator<T> iterator() {
+	public Iterator<ValueType> iterator() {
 		return new ValueIterator<>(root);
 	}
 
 	@Override
-	public void forEach(Consumer<? super T> action) {
+	public void forEach(Consumer<? super ValueType> action) {
 		stream().forEach(action);
 	}
 
 	@Override
 	public Object[] toArray() {
 		Object[] out = new Object[size()];
-		Iterator<T> it = iterator();
+		Iterator<ValueType> it = iterator();
 
 		for (int i = 0; i < size(); i++) {
 			out[i] = it.next();
@@ -230,7 +230,7 @@ public final class OcTree<T extends IIntVolumeBBox> implements Collection<T> {
 			arr = a;
 		}
 
-		Iterator<T> it = iterator();
+		Iterator<ValueType> it = iterator();
 
 		for (int i = 0; i < size(); i++) {
 			arr[i] = (T1) it.next();
@@ -254,10 +254,10 @@ public final class OcTree<T extends IIntVolumeBBox> implements Collection<T> {
 	}
 
 	private boolean removeInternal(IIntVolumeBBox box) {
-		PredicateNodeIterator<T> nodeIterator = new PredicateNodeIterator<>(root, node -> node.contains(box));
+		PredicateNodeIterator<VolumeOcTreeNode<ValueType>, ValueType> nodeIterator = new PredicateNodeIterator<>(root, node -> node.contains(box));
 
 		while (nodeIterator.hasNext()) {
-			OcTreeNode<T> node = nodeIterator.next();
+			VolumeOcTreeNode<ValueType> node = nodeIterator.next();
 			if (node.remove(box)) {
 				return true;
 			}
@@ -276,7 +276,7 @@ public final class OcTree<T extends IIntVolumeBBox> implements Collection<T> {
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends T> c) {
+	public boolean addAll(Collection<? extends ValueType> c) {
 		return c.stream().allMatch(this::add);
 	}
 
@@ -286,9 +286,9 @@ public final class OcTree<T extends IIntVolumeBBox> implements Collection<T> {
 	}
 
 	@Override
-	public boolean removeIf(Predicate<? super T> filter) {
+	public boolean removeIf(Predicate<? super ValueType> filter) {
 		boolean mod = false;
-		ValueIterator<T> it = new ValueIterator<>(root);
+		ValueIterator<VolumeOcTreeNode<ValueType>, ValueType> it = new ValueIterator<>(root);
 		while (it.hasNext()) {
 			if (filter.test(it.next())) {
 				it.remove();

@@ -1,6 +1,6 @@
-package vg.civcraft.mc.civmodcore.locations.volumes.octrees;
+package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
-import vg.civcraft.mc.civmodcore.locations.volumes.IIntVolumeBBox;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
 
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -9,19 +9,19 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-final class PredicateNodeSpliterator<T extends IIntVolumeBBox> implements Spliterator<OcTreeNode<T>> {
+final class PredicateNodeSpliterator<T extends IIntVolumeBBox> implements Spliterator<VolumeOcTreeNode<T>> {
 	private final Predicate<IIntVolumeBBox> predicate;
-	private final LinkedList<OcTreeNode<T>> nodeStack = new LinkedList<>();
+	private final LinkedList<VolumeOcTreeNode<T>> nodeStack = new LinkedList<>();
 
-	public PredicateNodeSpliterator(OcTreeNode<T> root, Predicate<IIntVolumeBBox> predicate) {
+	public PredicateNodeSpliterator(VolumeOcTreeNode<T> root, Predicate<IIntVolumeBBox> predicate) {
 		addNode(root);
 		this.predicate = Objects.requireNonNull(predicate);
 	}
 
 	@Override
-	public boolean tryAdvance(Consumer<? super OcTreeNode<T>> action) {
+	public boolean tryAdvance(Consumer<? super VolumeOcTreeNode<T>> action) {
 		if (!nodeStack.isEmpty()) {
-			OcTreeNode<T> node = pushChildrenOntoStack(nodeStack.removeFirst());
+			VolumeOcTreeNode<T> node = pushChildrenOntoStack(nodeStack.removeFirst());
 
 			action.accept(node);
 
@@ -31,13 +31,13 @@ final class PredicateNodeSpliterator<T extends IIntVolumeBBox> implements Splite
 		}
 	}
 
-	private void addNode(OcTreeNode<T> node) {
+	private void addNode(VolumeOcTreeNode<T> node) {
 		if (predicate.test(node)) {
 			nodeStack.add(Objects.requireNonNull(node));
 		}
 	}
 
-	private OcTreeNode<T> pushChildrenOntoStack(OcTreeNode<T> node) {
+	private VolumeOcTreeNode<T> pushChildrenOntoStack(VolumeOcTreeNode<T> node) {
 		if (node.hasChildren()) {
 			node.getChildren().forEach(this::addNode);
 		}
@@ -46,15 +46,15 @@ final class PredicateNodeSpliterator<T extends IIntVolumeBBox> implements Splite
 	}
 
 	@Override
-	public void forEachRemaining(Consumer<? super OcTreeNode<T>> action) {
+	public void forEachRemaining(Consumer<? super VolumeOcTreeNode<T>> action) {
 		while (!nodeStack.isEmpty()) {
-			OcTreeNode<T> node = pushChildrenOntoStack(nodeStack.removeFirst());
+			VolumeOcTreeNode<T> node = pushChildrenOntoStack(nodeStack.removeFirst());
 			action.accept(node);
 		}
 	}
 
 	@Override
-	public Spliterator<OcTreeNode<T>> trySplit() {
+	public Spliterator<VolumeOcTreeNode<T>> trySplit() {
 		if (!nodeStack.isEmpty()) {
 			return new PredicateNodeSpliterator<>(nodeStack.removeFirst(), predicate);
 		} else {
@@ -83,7 +83,7 @@ final class PredicateNodeSpliterator<T extends IIntVolumeBBox> implements Splite
 	}
 
 	@Override
-	public Comparator<? super OcTreeNode<T>> getComparator() {
+	public Comparator<? super VolumeOcTreeNode<T>> getComparator() {
 		throw new IllegalStateException();
 	}
 }

@@ -1,4 +1,4 @@
-package vg.civcraft.mc.civmodcore.locations.volumes;
+package vg.civcraft.mc.civmodcore.locations.spatial;
 
 import junit.framework.TestCase;
 
