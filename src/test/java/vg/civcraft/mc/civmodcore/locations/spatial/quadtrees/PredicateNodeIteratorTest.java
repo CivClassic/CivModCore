@@ -1,7 +1,7 @@
-package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
+package vg.civcraft.mc.civmodcore.locations.spatial.quadtrees;
 
 import org.junit.Test;
-import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox3D;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox2D;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -10,15 +10,14 @@ import java.util.stream.StreamSupport;
 
 import static java.lang.Integer.max;
 import static org.junit.Assert.*;
-import static vg.civcraft.mc.civmodcore.locations.spatial.octrees.Util.*;
+import static vg.civcraft.mc.civmodcore.locations.spatial.quadtrees.Util.*;
 
 public class PredicateNodeIteratorTest {
-	private final static Predicate<IIntBBox3D> PREDICATE_TRUE = value -> true;
 
 	@Test
 	public void testEmptyTree() {
-		OcTree<IIntBBox3D> box = new OcTree<>(newCube(0, 0, 0, 100), 4);
-		PredicateNodeIterator<VolumeOcTreeNode<IIntBBox3D>, IIntBBox3D> it = new PredicateNodeIterator<>(box.getRoot(), PREDICATE_TRUE);
+		QuadTree<IIntBBox2D> box = new QuadTree<>(newCube(0, 0, 100), 4);
+		PredicateNodeIterator<AreaQuadTreeNode<IIntBBox2D>, IIntBBox2D> it = new PredicateNodeIterator<>(box.getRoot(), truePredicate());
 
 		assertTrue(it.hasNext());
 		assertNotNull(it.next());
@@ -26,42 +25,38 @@ public class PredicateNodeIteratorTest {
 
 	@Test
 	public void testSimpleTree() {
-		OcTree<IIntBBox3D> box = new OcTree<>(newCube(0, 0, 0, 100), 4);
+		QuadTree<IIntBBox2D> box = new QuadTree<>(newCube(0, 0, 100), 4);
 
 		for (int x = 0; x < 10; x++) {
 			for (int y = 0; y < 10; y++) {
-				for (int z = 0; z < 10; z++) {
-					box.add(newCube(x, y, z, 1));
-				}
+				box.add(newCube(x, y, 1));
 			}
 		}
 
-		NodeIterator<VolumeOcTreeNode<IIntBBox3D>, IIntBBox3D> it = new NodeIterator<>(box.getRoot());
+		NodeIterator<AreaQuadTreeNode<IIntBBox2D>, IIntBBox2D> it = new NodeIterator<>(box.getRoot());
 
 		assertTrue(it.hasNext());
 		assertNotNull(it.next());
-		long count = StreamSupport.stream(Spliterators.spliteratorUnknownSize(new PredicateNodeIterator<>(box.getRoot(), PREDICATE_TRUE), Spliterator.IMMUTABLE), false).count();
+		long count = StreamSupport.stream(Spliterators.spliteratorUnknownSize(new PredicateNodeIterator<>(box.getRoot(), truePredicate()), Spliterator.IMMUTABLE), false).count();
 
 		assertEquals(box.countNodes(), count);
 	}
 
 	@Test
 	public void testSimpleTree2() {
-		OcTree<IIntBBox3D> box = new OcTree<>(newCube(0, 0, 0, 100), 32);
+		QuadTree<IIntBBox2D> box = new QuadTree<>(newCube(0, 0, 100), 32);
 
 		for (int x = 0; x < 10; x++) {
 			for (int y = 0; y < 10; y++) {
-				for (int z = 0; z < 10; z++) {
-					box.add(newCube(x, y, z, 1));
-				}
+				box.add(newCube(x, y, 1));
 			}
 		}
 
-		PredicateNodeIterator<VolumeOcTreeNode<IIntBBox3D>, IIntBBox3D> it = new PredicateNodeIterator<>(box.getRoot(), PREDICATE_TRUE);
+		PredicateNodeIterator<AreaQuadTreeNode<IIntBBox2D>, IIntBBox2D> it = new PredicateNodeIterator<>(box.getRoot(), truePredicate());
 
 		assertTrue(it.hasNext());
 		assertNotNull(it.next());
-		long count = StreamSupport.stream(Spliterators.spliteratorUnknownSize(new PredicateNodeIterator<>(box.getRoot(), PREDICATE_TRUE), Spliterator.IMMUTABLE), false).count();
+		long count = StreamSupport.stream(Spliterators.spliteratorUnknownSize(new PredicateNodeIterator<>(box.getRoot(), truePredicate()), Spliterator.IMMUTABLE), false).count();
 
 		assertEquals(box.countNodes(), count);
 	}
@@ -69,26 +64,26 @@ public class PredicateNodeIteratorTest {
 	@Test
 	public void predicateTest() {
 		final int BOUND = 100;
-		OcTree<IIntBBox3D> tree = new OcTree<>(newCube(0, 0, 0, BOUND), 32);
+		QuadTree<IIntBBox2D> tree = new QuadTree<>(newCube(0, 0, BOUND), 32);
 
 		Random rand = getRandom();
 		for (int i = 0; i < 1000; i++) {
 			int x = rand.nextInt(BOUND - 1);
 			int y = rand.nextInt(BOUND - 1);
 			int z = rand.nextInt(BOUND - 1);
-			IIntBBox3D box = newCube(x, y, z, rand.nextInt((BOUND - 1) - max(max(x, y), z)) + 1);
+			IIntBBox2D box = newCube(x, y, rand.nextInt((BOUND - 1) - max(x, y)) + 1);
 			tree.add(box);
 		}
 
 		assertEquals(1000, tree.countSize());
 
-		final IIntBBox3D SELECTION_CUBE = newCube(50, 50, 50, BOUND - 50);
-		Predicate<IIntBBox3D> pred = value -> SELECTION_CUBE.contains(value);
+		final IIntBBox2D SELECTION_CUBE = newCube(50, 50, BOUND - 50);
+		Predicate<IIntBBox2D> pred = value -> SELECTION_CUBE.contains(value);
 
-		Set<VolumeOcTreeNode<IIntBBox3D>> nodeSet = getNodeSet(tree).parallelStream().filter(pred).collect(Collectors.toSet());
+		Set<AreaQuadTreeNode<IIntBBox2D>> nodeSet = getNodeSet(tree).parallelStream().filter(pred).collect(Collectors.toSet());
 
-		Set<VolumeOcTreeNode<IIntBBox3D>> iteratorNodeSet = new HashSet<>();
-		PredicateNodeIterator<VolumeOcTreeNode<IIntBBox3D>, IIntBBox3D> it = new PredicateNodeIterator<>(tree.getRoot(), pred);
+		Set<AreaQuadTreeNode<IIntBBox2D>> iteratorNodeSet = new HashSet<>();
+		PredicateNodeIterator<AreaQuadTreeNode<IIntBBox2D>, IIntBBox2D> it = new PredicateNodeIterator<>(tree.getRoot(), pred);
 		while (it.hasNext()) {
 			iteratorNodeSet.add(it.next());
 		}
@@ -105,26 +100,26 @@ public class PredicateNodeIteratorTest {
 	@Test
 	public void predicateTest2() {
 		final int BOUND = 100;
-		OcTree<IIntBBox3D> tree = new OcTree<>(newCube(0, 0, 0, BOUND), 32);
+		QuadTree<IIntBBox2D> tree = new QuadTree<>(newCube(0, 0, BOUND), 32);
 
 		Random rand = getRandom();
 		for (int i = 0; i < 1000; i++) {
 			int x = rand.nextInt(BOUND - 1);
 			int y = rand.nextInt(BOUND - 1);
 			int z = rand.nextInt(BOUND - 1);
-			IIntBBox3D box = newCube(x, y, z, rand.nextInt((BOUND - 1) - max(max(x, y), z)) + 1);
+			IIntBBox2D box = newCube(x, y, rand.nextInt((BOUND - 1) - max(x, y)) + 1);
 			tree.add(box);
 		}
 
 		assertEquals(1000, tree.countSize());
 
-		final IIntBBox3D SELECTION_CUBE = newCube(25, 25, 25, 10);
-		Predicate<IIntBBox3D> pred = value -> SELECTION_CUBE.contains(value);
+		final IIntBBox2D SELECTION_CUBE = newCube(25, 25, 10);
+		Predicate<IIntBBox2D> pred = value -> SELECTION_CUBE.contains(value);
 
-		Set<VolumeOcTreeNode<IIntBBox3D>> nodeSet = getNodeSet(tree).parallelStream().filter(pred).collect(Collectors.toSet());
+		Set<AreaQuadTreeNode<IIntBBox2D>> nodeSet = getNodeSet(tree).parallelStream().filter(pred).collect(Collectors.toSet());
 
-		Set<VolumeOcTreeNode<IIntBBox3D>> iteratorNodeSet = new HashSet<>();
-		PredicateNodeIterator<VolumeOcTreeNode<IIntBBox3D>, IIntBBox3D> it = new PredicateNodeIterator<>(tree.getRoot(), pred);
+		Set<AreaQuadTreeNode<IIntBBox2D>> iteratorNodeSet = new HashSet<>();
+		PredicateNodeIterator<AreaQuadTreeNode<IIntBBox2D>, IIntBBox2D> it = new PredicateNodeIterator<>(tree.getRoot(), pred);
 		while (it.hasNext()) {
 			iteratorNodeSet.add(it.next());
 		}
@@ -141,26 +136,26 @@ public class PredicateNodeIteratorTest {
 	@Test
 	public void predicateTest3() {
 		final int BOUND = 100;
-		OcTree<IIntBBox3D> tree = new OcTree<>(newCube(0, 0, 0, BOUND), 32);
+		QuadTree<IIntBBox2D> tree = new QuadTree<>(newCube(0, 0, BOUND), 32);
 
 		Random rand = getRandom();
 		for (int i = 0; i < 1000; i++) {
 			int x = rand.nextInt(BOUND - 1);
 			int y = rand.nextInt(BOUND - 1);
 			int z = rand.nextInt(BOUND - 1);
-			IIntBBox3D box = newCube(x, y, z, rand.nextInt((BOUND - 1) - max(max(x, y), z)) + 1);
+			IIntBBox2D box = newCube(x, y, rand.nextInt((BOUND - 1) - max(x, y)) + 1);
 			tree.add(box);
 		}
 
 		assertEquals(1000, tree.countSize());
 
-		final IIntBBox3D SELECTION_CUBE = newCube(25, 25, 25, 10);
-		Predicate<IIntBBox3D> pred = value -> SELECTION_CUBE.intersects(value);
+		final IIntBBox2D SELECTION_CUBE = newCube(25, 25, 10);
+		Predicate<IIntBBox2D> pred = value -> SELECTION_CUBE.intersects(value);
 
-		Set<VolumeOcTreeNode<IIntBBox3D>> nodeSet = getNodeSet(tree).parallelStream().filter(pred).collect(Collectors.toSet());
+		Set<AreaQuadTreeNode<IIntBBox2D>> nodeSet = getNodeSet(tree).parallelStream().filter(pred).collect(Collectors.toSet());
 
-		Set<VolumeOcTreeNode<IIntBBox3D>> iteratorNodeSet = new HashSet<>();
-		PredicateNodeIterator<VolumeOcTreeNode<IIntBBox3D>, IIntBBox3D> it = new PredicateNodeIterator<>(tree.getRoot(), pred);
+		Set<AreaQuadTreeNode<IIntBBox2D>> iteratorNodeSet = new HashSet<>();
+		PredicateNodeIterator<AreaQuadTreeNode<IIntBBox2D>, IIntBBox2D> it = new PredicateNodeIterator<>(tree.getRoot(), pred);
 		while (it.hasNext()) {
 			iteratorNodeSet.add(it.next());
 		}
@@ -177,22 +172,22 @@ public class PredicateNodeIteratorTest {
 	@Test
 	public void predicateTrueTest() {
 		final int BOUND = 100;
-		OcTree<IIntBBox3D> tree = new OcTree<>(newCube(0, 0, 0, BOUND), 32);
+		QuadTree<IIntBBox2D> tree = new QuadTree<>(newCube(0, 0, BOUND), 32);
 
 		Random rand = getRandom();
 		for (int i = 0; i < 1000; i++) {
 			int x = rand.nextInt(BOUND - 1);
 			int y = rand.nextInt(BOUND - 1);
 			int z = rand.nextInt(BOUND - 1);
-			IIntBBox3D box = newCube(x, y, z, rand.nextInt((BOUND - 1) - max(max(x, y), z)) + 1);
+			IIntBBox2D box = newCube(x, y, rand.nextInt((BOUND - 1) - max(x, y)) + 1);
 			tree.add(box);
 		}
 
 		assertEquals(1000, tree.countSize());
 
-		Set<VolumeOcTreeNode<IIntBBox3D>> nodeSet = getNodeSet(tree);
-		Set<VolumeOcTreeNode<IIntBBox3D>> iteratorNodeSet = new HashSet<>();
-		PredicateNodeIterator<VolumeOcTreeNode<IIntBBox3D>, IIntBBox3D> it = new PredicateNodeIterator<>(tree.getRoot(), PREDICATE_TRUE);
+		Set<AreaQuadTreeNode<IIntBBox2D>> nodeSet = getNodeSet(tree);
+		Set<AreaQuadTreeNode<IIntBBox2D>> iteratorNodeSet = new HashSet<>();
+		PredicateNodeIterator<AreaQuadTreeNode<IIntBBox2D>, IIntBBox2D> it = new PredicateNodeIterator<>(tree.getRoot(), truePredicate());
 		while (it.hasNext()) {
 			iteratorNodeSet.add(it.next());
 		}
@@ -200,13 +195,13 @@ public class PredicateNodeIteratorTest {
 		assertEquals(nodeSet, iteratorNodeSet);
 	}
 
-	private static Set<VolumeOcTreeNode<IIntBBox3D>> getNodeSet(OcTree<IIntBBox3D> tree) {
-		Set<VolumeOcTreeNode<IIntBBox3D>> nodeSet = new HashSet<>();
-		LinkedList<VolumeOcTreeNode<IIntBBox3D>> stack = new LinkedList<>();
+	private static Set<AreaQuadTreeNode<IIntBBox2D>> getNodeSet(QuadTree<IIntBBox2D> tree) {
+		Set<AreaQuadTreeNode<IIntBBox2D>> nodeSet = new HashSet<>();
+		LinkedList<AreaQuadTreeNode<IIntBBox2D>> stack = new LinkedList<>();
 		stack.add(tree.getRoot());
 
 		while (!stack.isEmpty()) {
-			VolumeOcTreeNode<IIntBBox3D> node = stack.pop();
+			AreaQuadTreeNode<IIntBBox2D> node = stack.pop();
 			nodeSet.add(node);
 			if (node.hasChildren()) {
 				stack.addAll(node.getChildren());
@@ -219,14 +214,14 @@ public class PredicateNodeIteratorTest {
 	@Test
 	public void predicateTestRandomIntersectWithNode() {
 		final int BOUND = 100;
-		OcTree<IIntBBox3D> tree = new OcTree<>(newCube(0, 0, 0, BOUND), 32);
+		QuadTree<IIntBBox2D> tree = new QuadTree<>(newCube(0, 0, BOUND), 32);
 
 		Random rand = getRandom();
 		for (int i = 0; i < 1000; i++) {
 			int x = rand.nextInt(BOUND - 1);
 			int y = rand.nextInt(BOUND - 1);
 			int z = rand.nextInt(BOUND - 1);
-			IIntBBox3D box = newCube(x, y, z, rand.nextInt((BOUND - 1) - max(max(x, y), z)) + 1);
+			IIntBBox2D box = newCube(x, y, rand.nextInt((BOUND - 1) - max(x, y)) + 1);
 			tree.add(box);
 		}
 
@@ -234,12 +229,12 @@ public class PredicateNodeIteratorTest {
 
 		for (int i = 0; i < 100; i++) {
 			int x = rand.nextInt(BOUND - 2), y = rand.nextInt(BOUND - 2), z = rand.nextInt(BOUND - 2);
-			IIntBBox3D box = newCube(x, y, z, rand.nextInt(BOUND - 2 - max(max(x, y), z)) + 1);
+			IIntBBox2D box = newCube(x, y, rand.nextInt(BOUND - 2 - max(max(x, y), z)) + 1);
 
-			Predicate<IIntBBox3D> pred = box::intersects;
-			Set<VolumeOcTreeNode<IIntBBox3D>> nodeSet = getNodeSet(tree).stream().filter(pred).collect(Collectors.toSet());
-			PredicateNodeIterator<VolumeOcTreeNode<IIntBBox3D>, IIntBBox3D> it = new PredicateNodeIterator<>(tree.getRoot(), pred);
-			Set<VolumeOcTreeNode<IIntBBox3D>> iteratorNodeSet = toSet(it);
+			Predicate<IIntBBox2D> pred = box::intersects;
+			Set<AreaQuadTreeNode<IIntBBox2D>> nodeSet = getNodeSet(tree).stream().filter(pred).collect(Collectors.toSet());
+			PredicateNodeIterator<AreaQuadTreeNode<IIntBBox2D>, IIntBBox2D> it = new PredicateNodeIterator<>(tree.getRoot(), pred);
+			Set<AreaQuadTreeNode<IIntBBox2D>> iteratorNodeSet = toSet(it);
 
 			assertEquals(nodeSet, iteratorNodeSet);
 		}

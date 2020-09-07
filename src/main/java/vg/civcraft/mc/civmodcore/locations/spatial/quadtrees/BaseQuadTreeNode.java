@@ -117,12 +117,6 @@ abstract class BaseQuadTreeNode<NodeType extends BaseQuadTreeNode<NodeType, Valu
 		addChild(createNewNode(getHalfPointX(), getMinY(), getMaxX(), getHalfPointY(), splitSize, (NodeType) this));
 		addChild(createNewNode(getMinX(), getMinY(), getHalfPointX(), getHalfPointY(), splitSize, (NodeType) this));
 		addChild(createNewNode(getHalfPointX(), getMinY(), getMaxX(), getHalfPointY(), splitSize, (NodeType) this));
-
-		//Upper 4 cubes
-		addChild(createNewNode(getMinX(), getHalfPointY(), getHalfPointX(), getMaxY(), splitSize, (NodeType) this));
-		addChild(createNewNode(getHalfPointX(), getHalfPointY(), getMaxX(), getMaxY(), splitSize, (NodeType) this));
-		addChild(createNewNode(getMinX(), getHalfPointY(), getHalfPointX(), getMaxY(), splitSize, (NodeType) this));
-		addChild(createNewNode(getHalfPointX(), getHalfPointY(), getMaxX(), getMaxY(), splitSize, (NodeType) this));
 	}
 
 

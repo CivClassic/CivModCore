@@ -9,34 +9,34 @@ import static vg.civcraft.mc.civmodcore.locations.spatial.octrees.Util.newPoint;
 public class IntPoint3DTest {
 	@Test
 	public void testEquals() {
-		assertTrue(IIntPoint2D.equals(newPoint(0, 0, 0), newPoint(0, 0, 0)));
-		assertTrue(IIntPoint2D.equals(newPoint(1, 0, 0), newPoint(1, 0, 0)));
-		assertTrue(IIntPoint2D.equals(newPoint(1, 1, 0), newPoint(1, 1, 0)));
-		assertTrue(IIntPoint2D.equals(newPoint(1, 1, 1), newPoint(1, 1, 1)));
+		assertTrue(IIntPoint3D.equals(newPoint(0, 0, 0), newPoint(0, 0, 0)));
+		assertTrue(IIntPoint3D.equals(newPoint(1, 0, 0), newPoint(1, 0, 0)));
+		assertTrue(IIntPoint3D.equals(newPoint(1, 1, 0), newPoint(1, 1, 0)));
+		assertTrue(IIntPoint3D.equals(newPoint(1, 1, 1), newPoint(1, 1, 1)));
 
-		assertFalse(IIntPoint2D.equals(newPoint(0, 0, 0), newPoint(0, 0, 1)));
-		assertFalse(IIntPoint2D.equals(newPoint(0, 0, 0), newPoint(0, 1, 0)));
-		assertFalse(IIntPoint2D.equals(newPoint(0, 0, 0), newPoint(1, 0, 0)));
+		assertFalse(IIntPoint3D.equals(newPoint(0, 0, 0), newPoint(0, 0, 1)));
+		assertFalse(IIntPoint3D.equals(newPoint(0, 0, 0), newPoint(0, 1, 0)));
+		assertFalse(IIntPoint3D.equals(newPoint(0, 0, 0), newPoint(1, 0, 0)));
 	}
 
 	@Test
 	public void testDistance() {
-		assertEquals(0, IIntPoint2D.distSqr(newPoint(0, 0, 0), newPoint(0, 0, 0)));
+		assertEquals(0, IIntPoint3D.distSqr(newPoint(0, 0, 0), newPoint(0, 0, 0)));
 
-		assertEquals(1, IIntPoint2D.distSqr(newPoint(0, 0, 0), newPoint(1, 0, 0)));
-		assertEquals(1, IIntPoint2D.distSqr(newPoint(0, 0, 0), newPoint(0, 1, 0)));
-		assertEquals(1, IIntPoint2D.distSqr(newPoint(0, 0, 0), newPoint(0, 0, 1)));
+		assertEquals(1, IIntPoint3D.distSqr(newPoint(0, 0, 0), newPoint(1, 0, 0)));
+		assertEquals(1, IIntPoint3D.distSqr(newPoint(0, 0, 0), newPoint(0, 1, 0)));
+		assertEquals(1, IIntPoint3D.distSqr(newPoint(0, 0, 0), newPoint(0, 0, 1)));
 
-		assertEquals(2, IIntPoint2D.distSqr(newPoint(0, 0, 0), newPoint(1, 1, 0)));
-		assertEquals(2, IIntPoint2D.distSqr(newPoint(0, 0, 0), newPoint(0, 1, 1)));
-		assertEquals(2, IIntPoint2D.distSqr(newPoint(0, 0, 0), newPoint(1, 0, 1)));
+		assertEquals(2, IIntPoint3D.distSqr(newPoint(0, 0, 0), newPoint(1, 1, 0)));
+		assertEquals(2, IIntPoint3D.distSqr(newPoint(0, 0, 0), newPoint(0, 1, 1)));
+		assertEquals(2, IIntPoint3D.distSqr(newPoint(0, 0, 0), newPoint(1, 0, 1)));
 
-		assertEquals(3, IIntPoint2D.distSqr(newPoint(0, 0, 0), newPoint(1, 1, 1)));
+		assertEquals(3, IIntPoint3D.distSqr(newPoint(0, 0, 0), newPoint(1, 1, 1)));
 	}
 
 	@Test
 	public void testContainsInVolume() {
-		IIntBBox2D box = newCube(0, 0, 0, 100);
+		IIntBBox3D box = newCube(0, 0, 0, 100);
 
 		assertTrue(box.contains(newPoint(0, 0, 0)));
 		assertTrue(box.contains(newPoint(100, 100, 100)));

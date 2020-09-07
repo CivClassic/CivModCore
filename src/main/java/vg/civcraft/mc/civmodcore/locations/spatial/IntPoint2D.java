@@ -8,7 +8,7 @@ import java.util.Objects;
 public class IntPoint2D implements IIntPoint2D {
 	private final int x, y;
 
-	public IntPoint2D(IntPoint2D point) {
+	public IntPoint2D(IIntPoint2D point) {
 		this(point.getX(), point.getY());
 	}
 

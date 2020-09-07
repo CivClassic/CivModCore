@@ -2,22 +2,21 @@ package vg.civcraft.mc.civmodcore.locations.spatial.quadtrees;
 
 import org.junit.Test;
 import vg.civcraft.mc.civmodcore.locations.spatial.IIntPoint2D;
-import vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.*;
-import static vg.civcraft.mc.civmodcore.locations.spatial.octrees.Util.*;
+import static vg.civcraft.mc.civmodcore.locations.spatial.quadtrees.Util.*;
 
-public class PointOcTreeTest {
+public class PointQuadTreeTest {
 	@Test
 	public void testAdd() {
-		vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<IIntPoint2D> tree = new vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<>(newCube(0, 0, 0, 100), 32);
+		PointQuadTree<IIntPoint2D> tree = new PointQuadTree<>(newCube(0, 0, 100), 32);
 		assertTrue(tree.isEmpty());
 
-		tree.add(newPoint(1, 1, 1));
+		tree.add(newPoint(1, 1));
 		assertFalse(tree.isEmpty());
 
 		assertEquals(1, tree.size());
@@ -26,10 +25,10 @@ public class PointOcTreeTest {
 
 	@Test
 	public void testAdd2() {
-		vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<IIntPoint2D> tree = new vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<>(newCube(0, 0, 0, 100), 32);
+		PointQuadTree<IIntPoint2D> tree = new PointQuadTree<>(newCube(0, 0, 100), 32);
 		assertTrue(tree.isEmpty());
 
-		tree.add(newPoint(99, 99, 99));
+		tree.add(newPoint(99, 99));
 		assertFalse(tree.isEmpty());
 
 		assertEquals(1, tree.size());
@@ -38,47 +37,47 @@ public class PointOcTreeTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testAddThrows() {
-		vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<IIntPoint2D> tree = new vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<>(newCube(0, 0, 0, 100), 32);
+		PointQuadTree<IIntPoint2D> tree = new PointQuadTree<>(newCube(0, 0, 100), 32);
 		assertTrue(tree.isEmpty());
 
-		tree.addThrowing(newPoint(-1, -1, -1));
+		tree.addThrowing(newPoint(-1, -1));
 		fail("Previous statement is supposed to throw an exception.");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testAddThrows2() {
-		vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<IIntPoint2D> tree = new vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<>(newCube(0, 0, 0, 100), 32);
+		PointQuadTree<IIntPoint2D> tree = new PointQuadTree<>(newCube(0, 0, 100), 32);
 		assertTrue(tree.isEmpty());
 
-		tree.addThrowing(newPoint(-1, -1, -1));
+		tree.addThrowing(newPoint(-1, -1));
 		fail("Previous statement is supposed to throw an exception.");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testAddThrows3() {
-		vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<IIntPoint2D> tree = new vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<>(newCube(0, 0, 0, 100), 32);
+		PointQuadTree<IIntPoint2D> tree = new PointQuadTree<>(newCube(0, 0, 100), 32);
 		assertTrue(tree.isEmpty());
 
-		tree.addThrowing(newPoint(-1, -1, -1));
+		tree.addThrowing(newPoint(-1, -1));
 		fail("Previous statement is supposed to throw an exception.");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testAddThrows4() {
-		vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<IIntPoint2D> tree = new vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<>(newCube(0, 0, 0, 100), 32);
+		PointQuadTree<IIntPoint2D> tree = new PointQuadTree<>(newCube(0, 0, 100), 32);
 		assertTrue(tree.isEmpty());
 
-		tree.addThrowing(newPoint(-1, -1, -1));
+		tree.addThrowing(newPoint(-1, -1));
 		fail("Previous statement is supposed to throw an exception.");
 	}
 
 	////////////////////////////////////////////////////////////////////////
 	@Test
 	public void testAddNoThrow() {
-		vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<IIntPoint2D> tree = new vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<>(newCube(0, 0, 0, 100), 32);
+		PointQuadTree<IIntPoint2D> tree = new PointQuadTree<>(newCube(0, 0, 100), 32);
 		assertTrue(tree.isEmpty());
 
-		assertTrue(tree.add(newPoint(1, 1, 1)));
+		assertTrue(tree.add(newPoint(1, 1)));
 		assertFalse(tree.isEmpty());
 
 		assertEquals(1, tree.size());
@@ -87,10 +86,10 @@ public class PointOcTreeTest {
 
 	@Test
 	public void testAddNoThrow2() {
-		vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<IIntPoint2D> tree = new vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<>(newCube(0, 0, 0, 100), 32);
+		PointQuadTree<IIntPoint2D> tree = new PointQuadTree<>(newCube(0, 0, 100), 32);
 		assertTrue(tree.isEmpty());
 
-		assertTrue(tree.add(newPoint(99, 99, 99)));
+		assertTrue(tree.add(newPoint(99, 99)));
 		assertFalse(tree.isEmpty());
 
 		assertEquals(1, tree.size());
@@ -99,10 +98,10 @@ public class PointOcTreeTest {
 
 	@Test
 	public void testAddNoThrow3() {
-		vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<IIntPoint2D> tree = new vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<>(newCube(0, 0, 0, 100), 32);
+		PointQuadTree<IIntPoint2D> tree = new PointQuadTree<>(newCube(0, 0, 100), 32);
 		assertTrue(tree.isEmpty());
 
-		assertFalse(tree.add(newPoint(-1, -1, -1)));
+		assertFalse(tree.add(newPoint(-1, -1)));
 		assertTrue(tree.isEmpty());
 
 		assertEquals(0, tree.size());
@@ -111,10 +110,10 @@ public class PointOcTreeTest {
 
 	@Test
 	public void testAddNoThrow4() {
-		vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<IIntPoint2D> tree = new vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<>(newCube(0, 0, 0, 100), 32);
+		PointQuadTree<IIntPoint2D> tree = new PointQuadTree<>(newCube(0, 0, 100), 32);
 		assertTrue(tree.isEmpty());
 
-		assertFalse(tree.add(newPoint(-1, -1, -1)));
+		assertFalse(tree.add(newPoint(-1, -1)));
 		assertTrue(tree.isEmpty());
 
 		assertEquals(0, tree.size());
@@ -123,10 +122,10 @@ public class PointOcTreeTest {
 
 	@Test
 	public void testAddNoThrow5() {
-		vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<IIntPoint2D> tree = new vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<>(newCube(0, 0, 0, 100), 32);
+		PointQuadTree<IIntPoint2D> tree = new PointQuadTree<>(newCube(0, 0, 100), 32);
 		assertTrue(tree.isEmpty());
 
-		assertFalse(tree.add(newPoint(-1, -1, -1)));
+		assertFalse(tree.add(newPoint(-1, -1)));
 		assertTrue(tree.isEmpty());
 
 		assertEquals(0, tree.size());
@@ -135,10 +134,10 @@ public class PointOcTreeTest {
 
 	@Test
 	public void testAddNoThrow6() {
-		vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<IIntPoint2D> tree = new vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<>(newCube(0, 0, 0, 100), 32);
+		PointQuadTree<IIntPoint2D> tree = new PointQuadTree<>(newCube(0, 0, 100), 32);
 		assertTrue(tree.isEmpty());
 
-		assertFalse(tree.add(newPoint(-1, -1, -1)));
+		assertFalse(tree.add(newPoint(-1, -1)));
 		assertTrue(tree.isEmpty());
 
 		assertEquals(0, tree.size());
@@ -147,7 +146,7 @@ public class PointOcTreeTest {
 
 	@Test
 	public void testRemove() {
-		vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<IIntPoint2D> tree = new vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<>(newCube(0, 0, 0, 1000), 8);
+		PointQuadTree<IIntPoint2D> tree = new PointQuadTree<>(newCube(0, 0, 1000), 8);
 		Set<IIntPoint2D> values = new HashSet<>(newRandomPoints(1000, 100));
 
 		for (IIntPoint2D box : values) {
@@ -155,7 +154,7 @@ public class PointOcTreeTest {
 		}
 
 		assertEquals(values.size(), tree.size());
-		assertEquals(65, tree.countNodes());
+		assertEquals(13, tree.countNodes());
 
 		int size = tree.size();
 		for (IIntPoint2D box : values) {
@@ -172,15 +171,15 @@ public class PointOcTreeTest {
 
 	@Test
 	public void testRemoveSame() {
-		vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<IIntPoint2D> tree = new vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<>(newCube(0, 0, 0, 1000), 8);
-		Set<IIntPoint2D> values = new HashSet<>(clonePoint(newPoint(0, 0, 0), 100));
+		PointQuadTree<IIntPoint2D> tree = new PointQuadTree<>(newCube(0, 0, 1000), 8);
+		Set<IIntPoint2D> values = new HashSet<>(clonePoint(newPoint(0, 0), 100));
 
 		for (IIntPoint2D box : values) {
 			assertTrue(tree.add(box));
 		}
 
 		assertEquals(values.size(), tree.size());
-		assertEquals(73, tree.countNodes());
+		assertEquals(37, tree.countNodes());
 
 		int size = tree.size();
 		for (IIntPoint2D box : values) {
@@ -197,11 +196,11 @@ public class PointOcTreeTest {
 
 	@Test
 	public void testRemoveAll() {
-		vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<IIntPoint2D> tree = new vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<>(newCube(0, 0, 0, 1000), 8);
+		PointQuadTree<IIntPoint2D> tree = new PointQuadTree<>(newCube(0, 0, 1000), 8);
 		Set<IIntPoint2D> values = new HashSet<>(newRandomPoints(1000, 100));
 
 		assertTrue(tree.addAll(Collections.unmodifiableCollection(values)));
-		assertEquals(65, tree.countNodes());
+		assertEquals(17, tree.countNodes());
 		assertEquals(values.size(), tree.size());
 
 		int size = tree.size();
@@ -214,12 +213,12 @@ public class PointOcTreeTest {
 
 	@Test
 	public void testRemoveAllSame() {
-		vg.civcraft.mc.civmodcore.locations.spatial.octrees.PointOcTree<IIntPoint2D> tree = new PointOcTree<>(newCube(0, 0, 0, 1000), 8);
-		Set<IIntPoint2D> values = new HashSet<>(clonePoint(Util.newPoint(0, 0, 0), 100));
+		PointQuadTree<IIntPoint2D> tree = new PointQuadTree<>(newCube(0, 0, 1000), 8);
+		Set<IIntPoint2D> values = new HashSet<>(clonePoint(Util.newPoint(0, 0), 100));
 
 
 		assertTrue(tree.addAll(Collections.unmodifiableCollection(values)));
-		assertEquals(73, tree.countNodes());
+		assertEquals(37, tree.countNodes());
 		assertEquals(values.size(), tree.size());
 
 		assertTrue(tree.removeAll(Collections.unmodifiableCollection(values)));

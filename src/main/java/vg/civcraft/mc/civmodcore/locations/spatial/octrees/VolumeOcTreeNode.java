@@ -24,19 +24,19 @@ SOFTWARE.
 
 package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
-import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox2D;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox3D;
 
 import java.util.Optional;
 
 /**
  * @author psygate
  */
-final class VolumeOcTreeNode<T extends IIntBBox2D> extends BaseOcTreeNode<VolumeOcTreeNode<T>, T> {
-	VolumeOcTreeNode(IIntBBox2D bbox, int splitSize) {
+final class VolumeOcTreeNode<T extends IIntBBox3D> extends BaseOcTreeNode<VolumeOcTreeNode<T>, T> {
+	VolumeOcTreeNode(IIntBBox3D bbox, int splitSize) {
 		super(bbox, splitSize);
 	}
 
-	VolumeOcTreeNode(IIntBBox2D bbox, int splitSize, VolumeOcTreeNode parent) {
+	VolumeOcTreeNode(IIntBBox3D bbox, int splitSize, VolumeOcTreeNode parent) {
 		super(bbox, splitSize, parent);
 	}
 
@@ -54,7 +54,7 @@ final class VolumeOcTreeNode<T extends IIntBBox2D> extends BaseOcTreeNode<Volume
 		assert childrenSize() > 0;
 		for (int i = 0; i < childrenSize(); i++) {
 			VolumeOcTreeNode<T> child = getChild(i);
-			if (IIntBBox2D.contains(child, value)) {
+			if (IIntBBox3D.contains(child, value)) {
 				return child;
 			}
 		}

@@ -24,6 +24,7 @@ SOFTWARE.
 
 package vg.civcraft.mc.civmodcore.locations.spatial.quadtrees;
 
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox2D;
 import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox3D;
 
 import java.util.Comparator;
@@ -33,11 +34,11 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-final class PredicateNodeSpliterator<T extends IIntBBox3D> implements Spliterator<AreaQuadTreeNode<T>> {
-	private final Predicate<IIntBBox3D> predicate;
+final class PredicateNodeSpliterator<T extends IIntBBox2D> implements Spliterator<AreaQuadTreeNode<T>> {
+	private final Predicate<IIntBBox2D> predicate;
 	private final LinkedList<AreaQuadTreeNode<T>> nodeStack = new LinkedList<>();
 
-	public PredicateNodeSpliterator(AreaQuadTreeNode<T> root, Predicate<IIntBBox3D> predicate) {
+	public PredicateNodeSpliterator(AreaQuadTreeNode<T> root, Predicate<IIntBBox2D> predicate) {
 		addNode(root);
 		this.predicate = Objects.requireNonNull(predicate);
 	}

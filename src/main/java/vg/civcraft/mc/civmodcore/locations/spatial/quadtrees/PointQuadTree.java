@@ -34,13 +34,13 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public final class PointOcTree<ValueType extends IIntBBox2D> implements Collection<ValueType> {
+public final class PointQuadTree<ValueType extends IIntPoint2D> implements Collection<ValueType> {
 	private IIntBBox2D area;
 	private PointQuadTreeNode<ValueType> root;
 	private final int splitSize;
 	private int size = 0;
 
-	public PointOcTree(IIntBBox2D area, int splitSize) {
+	public PointQuadTree(IIntBBox2D area, int splitSize) {
 		assert splitSize > 1;
 		this.area = area;
 		root = new PointQuadTreeNode<>(area, splitSize);

@@ -25,13 +25,14 @@ SOFTWARE.
 package vg.civcraft.mc.civmodcore.locations.spatial.quadtrees;
 
 import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox2D;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntPoint2D;
 
 import java.util.Optional;
 
 /**
  * @author psygate
  */
-final class PointQuadTreeNode<T extends IIntBBox2D> extends BaseQuadTreeNode<PointQuadTreeNode<T>, T> {
+final class PointQuadTreeNode<T extends IIntPoint2D> extends BaseQuadTreeNode<PointQuadTreeNode<T>, T> {
 	PointQuadTreeNode(IIntBBox2D bbox, int splitSize) {
 		super(bbox, splitSize);
 	}

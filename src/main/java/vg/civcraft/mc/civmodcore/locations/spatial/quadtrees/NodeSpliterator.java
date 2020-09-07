@@ -24,6 +24,7 @@ SOFTWARE.
 
 package vg.civcraft.mc.civmodcore.locations.spatial.quadtrees;
 
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox2D;
 import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox3D;
 
 import java.util.Comparator;
@@ -32,7 +33,7 @@ import java.util.Objects;
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
-final class NodeSpliterator<T extends IIntBBox3D> implements Spliterator<AreaQuadTreeNode<T>> {
+final class NodeSpliterator<T extends IIntBBox2D> implements Spliterator<AreaQuadTreeNode<T>> {
 	private final LinkedList<AreaQuadTreeNode<T>> nodeStack = new LinkedList<>();
 
 	public NodeSpliterator(AreaQuadTreeNode<T> root) {

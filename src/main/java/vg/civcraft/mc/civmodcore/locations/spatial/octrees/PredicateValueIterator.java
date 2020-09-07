@@ -25,6 +25,7 @@ SOFTWARE.
 package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
 import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox2D;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox3D;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -38,9 +39,9 @@ final class PredicateValueIterator<NodeType extends BaseOcTreeNode<NodeType, Val
 	private PredicateNodeIterator<NodeType, ValueType> nodeIterator;
 	private Iterator<ValueType> valueIterator = Collections.emptyIterator();
 	private final Predicate<ValueType> valuePredicate;
-	private final Predicate<IIntBBox2D> nodePredicate;
+	private final Predicate<IIntBBox3D> nodePredicate;
 
-	public PredicateValueIterator(NodeType root, Predicate<ValueType> valuePredicate, Predicate<IIntBBox2D> nodePredicate) {
+	public PredicateValueIterator(NodeType root, Predicate<ValueType> valuePredicate, Predicate<IIntBBox3D> nodePredicate) {
 		this.valuePredicate = Objects.requireNonNull(valuePredicate);
 		this.nodePredicate = Objects.requireNonNull(nodePredicate);
 		nodeIterator = new PredicateNodeIterator<>(Objects.requireNonNull(root), Objects.requireNonNull(nodePredicate));
