@@ -10,21 +10,17 @@ import java.util.function.Predicate;
 /**
  * @author psygate
  */
-final class PredicateValueIterator<NodeType extends BaseOcTreeNode<NodeType, ValueType>, ValueType extends IIntVolumeBBox> implements Iterator<ValueType> {
+final class PredicateValueIterator<NodeType extends BaseOcTreeNode<NodeType, ValueType>, ValueType> implements Iterator<ValueType> {
 	private PredicateNodeIterator<NodeType, ValueType> nodeIterator;
 	private Iterator<ValueType> valueIterator = Collections.emptyIterator();
-	private final Predicate<IIntVolumeBBox> valuePredicate;
+	private final Predicate<ValueType> valuePredicate;
 	private final Predicate<IIntVolumeBBox> nodePredicate;
 
-	public PredicateValueIterator(NodeType root, Predicate<IIntVolumeBBox> valuePredicate, Predicate<IIntVolumeBBox> nodePredicate) {
+	public PredicateValueIterator(NodeType root, Predicate<ValueType> valuePredicate, Predicate<IIntVolumeBBox> nodePredicate) {
 		this.valuePredicate = Objects.requireNonNull(valuePredicate);
 		this.nodePredicate = Objects.requireNonNull(nodePredicate);
 		nodeIterator = new PredicateNodeIterator<>(Objects.requireNonNull(root), Objects.requireNonNull(nodePredicate));
 		setupValueIterator();
-	}
-
-	public PredicateValueIterator(NodeType root, Predicate<IIntVolumeBBox> predicate) {
-		this(root, predicate, predicate);
 	}
 
 	private void setupValueIterator() {

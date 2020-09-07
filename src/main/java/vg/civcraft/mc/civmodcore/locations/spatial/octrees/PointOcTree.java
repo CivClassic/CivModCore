@@ -1,5 +1,6 @@
 package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntPoint3D;
 import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
 
 import java.util.*;
@@ -8,19 +9,16 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-/**
- * @author psygate
- */
-public final class OcTree<ValueType extends IIntVolumeBBox> implements Collection<ValueType> {
+public final class PointOcTree<ValueType extends IIntPoint3D> implements Collection<ValueType> {
 	private IIntVolumeBBox area;
-	private VolumeOcTreeNode<ValueType> root;
+	private PointOcTreeNode<ValueType> root;
 	private final int splitSize;
 	private int size = 0;
 
-	public OcTree(IIntVolumeBBox area, int splitSize) {
+	public PointOcTree(IIntVolumeBBox area, int splitSize) {
 		assert splitSize > 1;
 		this.area = area;
-		root = new VolumeOcTreeNode<>(area, splitSize);
+		root = new PointOcTreeNode<>(area, splitSize);
 		this.splitSize = splitSize;
 	}
 
@@ -37,7 +35,7 @@ public final class OcTree<ValueType extends IIntVolumeBBox> implements Collectio
 		if (!IIntVolumeBBox.contains(root, value)) {
 			return false;
 		} else {
-			VolumeOcTreeNode<ValueType> insertionNode = selectNodeContainingBBox(value);
+			PointOcTreeNode<ValueType> insertionNode = selectNodeContainingBBox(value);
 			insertionNode.addValue(value);
 			insertionNode.splitIfNecessary();
 			size++;
@@ -45,14 +43,14 @@ public final class OcTree<ValueType extends IIntVolumeBBox> implements Collectio
 		}
 	}
 
-	private VolumeOcTreeNode<ValueType> selectNodeContainingBBox(ValueType value) {
+	private PointOcTreeNode<ValueType> selectNodeContainingBBox(ValueType value) {
 		assert IIntVolumeBBox.contains(area, value);
 
-		PredicateNodeIterator<VolumeOcTreeNode<ValueType>, ValueType> it = new PredicateNodeIterator<>(root, node -> IIntVolumeBBox.contains(node, value));
-		VolumeOcTreeNode<ValueType> selected = root;
+		PredicateNodeIterator<PointOcTreeNode<ValueType>, ValueType> it = new PredicateNodeIterator<>(root, node -> IIntVolumeBBox.contains(node, value));
+		PointOcTreeNode<ValueType> selected = root;
 
 		while (it.hasNext()) {
-			VolumeOcTreeNode<ValueType> next = it.next();
+			PointOcTreeNode<ValueType> next = it.next();
 
 			if (IIntVolumeBBox.contains(next, value)) {
 				selected = next;
@@ -67,7 +65,7 @@ public final class OcTree<ValueType extends IIntVolumeBBox> implements Collectio
 	}
 
 	public void clear() {
-		root = new VolumeOcTreeNode<>(area, splitSize);
+		root = new PointOcTreeNode<>(area, splitSize);
 		size = 0;
 	}
 
@@ -89,7 +87,7 @@ public final class OcTree<ValueType extends IIntVolumeBBox> implements Collectio
 	//test method to assert that the counted size is the real size. very costly to run.
 	int countSize() {
 		int size = 0;
-		NodeIterator<VolumeOcTreeNode<ValueType>, ValueType> nodeIt = new NodeIterator<>(root);
+		NodeIterator<PointOcTreeNode<ValueType>, ValueType> nodeIt = new NodeIterator<>(root);
 		while (nodeIt.hasNext()) {
 			size += nodeIt.next().values().size();
 		}
@@ -99,11 +97,11 @@ public final class OcTree<ValueType extends IIntVolumeBBox> implements Collectio
 
 	int countNodes() {
 		int size = 0;
-		LinkedList<VolumeOcTreeNode<ValueType>> stack = new LinkedList<>();
+		LinkedList<PointOcTreeNode<ValueType>> stack = new LinkedList<>();
 		stack.add(root);
 
 		while (!stack.isEmpty()) {
-			VolumeOcTreeNode<ValueType> node = stack.pop();
+			PointOcTreeNode<ValueType> node = stack.pop();
 			if (node.hasChildren()) {
 				stack.addAll(node.getChildren());
 			}
@@ -113,7 +111,7 @@ public final class OcTree<ValueType extends IIntVolumeBBox> implements Collectio
 		return size;
 	}
 
-	VolumeOcTreeNode<ValueType> getRoot() {
+	PointOcTreeNode<ValueType> getRoot() {
 		return root;
 	}
 
@@ -129,31 +127,7 @@ public final class OcTree<ValueType extends IIntVolumeBBox> implements Collectio
 	 * @return A stream containing all values in the tree, that are contained within the provided volume.
 	 */
 	public Stream<ValueType> selectAllInVolume(IIntVolumeBBox box, boolean parallel) {
-		return selectByPredicate(box::contains, box::intersects, parallel);
-	}
-
-	/**
-	 * Selects all values intersecting with the provided volume box.
-	 *
-	 * @param box      Volume with which the values should intersect.
-	 * @param parallel If the stream evaluation should happen in parallel.
-	 * @return A stream containing all values in the tree, that are intersecting with the provided volume.
-	 */
-	public Stream<ValueType> selectAllIntersectingVolume(IIntVolumeBBox box, boolean parallel) {
-		return selectByPredicate(box::intersects, box::intersects, parallel);
-	}
-
-	/**
-	 * Selects all values that contain the given point.
-	 *
-	 * @param x        X-Coordinate of the point.
-	 * @param y        Y-Coordinate of the point.
-	 * @param z        Z-Coordinate of the point.
-	 * @param parallel If the stream evaluation should happen in parallel.
-	 * @return A stream containing all values in the tree, that contain the given point.
-	 */
-	public Stream<ValueType> selectAllContainingPoint(int x, int y, int z, boolean parallel) {
-		return selectByPredicate(box -> box.contains(x, y, z), box -> box.contains(x, y, z), parallel);
+		return selectByPredicate(box::intersects, box::contains, parallel);
 	}
 
 	/**
@@ -187,7 +161,7 @@ public final class OcTree<ValueType extends IIntVolumeBBox> implements Collectio
 	public boolean contains(Object o) {
 		if (o instanceof IIntVolumeBBox) {
 			IIntVolumeBBox box = (IIntVolumeBBox) o;
-			PredicateValueIterator<VolumeOcTreeNode<ValueType>, ValueType> it = new PredicateValueIterator<>(
+			PredicateValueIterator<PointOcTreeNode<ValueType>, ValueType> it = new PredicateValueIterator<>(
 					root,
 					value -> value.equals(box),
 					node -> node.contains(box)
@@ -254,10 +228,10 @@ public final class OcTree<ValueType extends IIntVolumeBBox> implements Collectio
 	}
 
 	private boolean removeInternal(IIntVolumeBBox box) {
-		PredicateNodeIterator<VolumeOcTreeNode<ValueType>, ValueType> nodeIterator = new PredicateNodeIterator<>(root, node -> node.contains(box));
+		PredicateNodeIterator<PointOcTreeNode<ValueType>, ValueType> nodeIterator = new PredicateNodeIterator<>(root, node -> node.contains(box));
 
 		while (nodeIterator.hasNext()) {
-			VolumeOcTreeNode<ValueType> node = nodeIterator.next();
+			PointOcTreeNode<ValueType> node = nodeIterator.next();
 			if (node.remove(box)) {
 				return true;
 			}
@@ -288,7 +262,7 @@ public final class OcTree<ValueType extends IIntVolumeBBox> implements Collectio
 	@Override
 	public boolean removeIf(Predicate<? super ValueType> filter) {
 		boolean mod = false;
-		ValueIterator<VolumeOcTreeNode<ValueType>, ValueType> it = new ValueIterator<>(root);
+		ValueIterator<PointOcTreeNode<ValueType>, ValueType> it = new ValueIterator<>(root);
 		while (it.hasNext()) {
 			if (filter.test(it.next())) {
 				it.remove();

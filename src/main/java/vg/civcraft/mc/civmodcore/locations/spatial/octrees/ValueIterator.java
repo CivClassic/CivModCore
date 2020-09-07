@@ -1,12 +1,10 @@
 package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
-import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-final class ValueIterator<NodeType extends BaseOcTreeNode<NodeType, ValueType>, ValueType extends IIntVolumeBBox> implements Iterator<ValueType> {
+final class ValueIterator<NodeType extends BaseOcTreeNode<NodeType, ValueType>, ValueType> implements Iterator<ValueType> {
 	private NodeIterator<NodeType, ValueType> nodeIterator;
 	private Iterator<ValueType> valueIterator;
 

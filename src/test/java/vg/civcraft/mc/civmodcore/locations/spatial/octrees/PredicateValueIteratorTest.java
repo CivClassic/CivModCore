@@ -6,6 +6,7 @@ import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static java.lang.Integer.max;
@@ -14,10 +15,14 @@ import static org.junit.Assert.assertFalse;
 import static vg.civcraft.mc.civmodcore.locations.spatial.octrees.Util.*;
 
 public class PredicateValueIteratorTest {
+	private static Predicate<IIntVolumeBBox> truePredicate() {
+		return iIntVolumeBBox -> true;
+	}
+
 	@Test
 	public void emptyTest() {
 		OcTree<IIntVolumeBBox> tree = new OcTree<>(newCube(0, 0, 0, 100), 32);
-		PredicateValueIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateValueIterator<>(tree.getRoot(), PREDICATE_TRUE);
+		PredicateValueIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateValueIterator<>(tree.getRoot(), truePredicate(), truePredicate());
 		assertFalse(it.hasNext());
 	}
 
@@ -33,7 +38,7 @@ public class PredicateValueIteratorTest {
 			IIntVolumeBBox box = newCube(x, y, z, rand.nextInt((BOUND - 1) - max(max(x, y), z)) + 1);
 		}
 
-		PredicateValueIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateValueIterator<>(tree.getRoot(), PREDICATE_TRUE);
+		PredicateValueIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateValueIterator<>(tree.getRoot(), truePredicate(), truePredicate());
 		assertFalse(it.hasNext());
 	}
 
@@ -54,7 +59,7 @@ public class PredicateValueIteratorTest {
 			leftSet.add(box);
 		}
 
-		PredicateValueIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateValueIterator<>(tree.getRoot(), PREDICATE_TRUE);
+		PredicateValueIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateValueIterator<>(tree.getRoot(), PREDICATE_TRUE, PREDICATE_TRUE);
 
 		Set<IIntVolumeBBox> rightSet = toSet(it);
 
