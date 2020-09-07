@@ -1,6 +1,6 @@
 package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
-import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox2D;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -11,13 +11,13 @@ import java.util.stream.StreamSupport;
 /**
  * @author psygate
  */
-public final class OcTree<ValueType extends IIntVolumeBBox> implements Collection<ValueType> {
-	private IIntVolumeBBox area;
+public final class OcTree<ValueType extends IIntBBox2D> implements Collection<ValueType> {
+	private IIntBBox2D area;
 	private VolumeOcTreeNode<ValueType> root;
 	private final int splitSize;
 	private int size = 0;
 
-	public OcTree(IIntVolumeBBox area, int splitSize) {
+	public OcTree(IIntBBox2D area, int splitSize) {
 		assert splitSize > 1;
 		this.area = area;
 		root = new VolumeOcTreeNode<>(area, splitSize);
@@ -34,7 +34,7 @@ public final class OcTree<ValueType extends IIntVolumeBBox> implements Collectio
 	public boolean add(ValueType value) {
 		Objects.requireNonNull(value);
 
-		if (!IIntVolumeBBox.contains(root, value)) {
+		if (!IIntBBox2D.contains(root, value)) {
 			return false;
 		} else {
 			VolumeOcTreeNode<ValueType> insertionNode = selectNodeContainingBBox(value);
@@ -46,15 +46,15 @@ public final class OcTree<ValueType extends IIntVolumeBBox> implements Collectio
 	}
 
 	private VolumeOcTreeNode<ValueType> selectNodeContainingBBox(ValueType value) {
-		assert IIntVolumeBBox.contains(area, value);
+		assert IIntBBox2D.contains(area, value);
 
-		PredicateNodeIterator<VolumeOcTreeNode<ValueType>, ValueType> it = new PredicateNodeIterator<>(root, node -> IIntVolumeBBox.contains(node, value));
+		PredicateNodeIterator<VolumeOcTreeNode<ValueType>, ValueType> it = new PredicateNodeIterator<>(root, node -> IIntBBox2D.contains(node, value));
 		VolumeOcTreeNode<ValueType> selected = root;
 
 		while (it.hasNext()) {
 			VolumeOcTreeNode<ValueType> next = it.next();
 
-			if (IIntVolumeBBox.contains(next, value)) {
+			if (IIntBBox2D.contains(next, value)) {
 				selected = next;
 			}
 		}
@@ -128,7 +128,7 @@ public final class OcTree<ValueType extends IIntVolumeBBox> implements Collectio
 	 * @param parallel If the stream evaluation should happen in parallel.
 	 * @return A stream containing all values in the tree, that are contained within the provided volume.
 	 */
-	public Stream<ValueType> selectAllInVolume(IIntVolumeBBox box, boolean parallel) {
+	public Stream<ValueType> selectAllInVolume(IIntBBox2D box, boolean parallel) {
 		return selectByPredicate(box::contains, box::intersects, parallel);
 	}
 
@@ -139,7 +139,7 @@ public final class OcTree<ValueType extends IIntVolumeBBox> implements Collectio
 	 * @param parallel If the stream evaluation should happen in parallel.
 	 * @return A stream containing all values in the tree, that are intersecting with the provided volume.
 	 */
-	public Stream<ValueType> selectAllIntersectingVolume(IIntVolumeBBox box, boolean parallel) {
+	public Stream<ValueType> selectAllIntersectingVolume(IIntBBox2D box, boolean parallel) {
 		return selectByPredicate(box::intersects, box::intersects, parallel);
 	}
 
@@ -167,7 +167,7 @@ public final class OcTree<ValueType extends IIntVolumeBBox> implements Collectio
 	 * @return A stream containing all values for which the valueSelectionPredicate is true, and which are in a tree node,
 	 * for which the nodeSelectionPredicate is true.
 	 */
-	public Stream<ValueType> selectByPredicate(Predicate<IIntVolumeBBox> nodeSelectionPredicate, Predicate<ValueType> valueSelectionPredicate, boolean parallel) {
+	public Stream<ValueType> selectByPredicate(Predicate<IIntBBox2D> nodeSelectionPredicate, Predicate<ValueType> valueSelectionPredicate, boolean parallel) {
 		return StreamSupport.stream(
 				Spliterators.spliteratorUnknownSize(
 						new PredicateValueIterator<>(
@@ -185,8 +185,8 @@ public final class OcTree<ValueType extends IIntVolumeBBox> implements Collectio
 
 	@Override
 	public boolean contains(Object o) {
-		if (o instanceof IIntVolumeBBox) {
-			IIntVolumeBBox box = (IIntVolumeBBox) o;
+		if (o instanceof IIntBBox2D) {
+			IIntBBox2D box = (IIntBBox2D) o;
 			PredicateValueIterator<VolumeOcTreeNode<ValueType>, ValueType> it = new PredicateValueIterator<>(
 					root,
 					value -> value.equals(box),
@@ -241,8 +241,8 @@ public final class OcTree<ValueType extends IIntVolumeBBox> implements Collectio
 
 	@Override
 	public boolean remove(Object o) {
-		if (o instanceof IIntVolumeBBox) {
-			IIntVolumeBBox box = (IIntVolumeBBox) o;
+		if (o instanceof IIntBBox2D) {
+			IIntBBox2D box = (IIntBBox2D) o;
 			if (removeInternal(box)) {
 				rebuildTree();
 				size--;
@@ -253,7 +253,7 @@ public final class OcTree<ValueType extends IIntVolumeBBox> implements Collectio
 		return false;
 	}
 
-	private boolean removeInternal(IIntVolumeBBox box) {
+	private boolean removeInternal(IIntBBox2D box) {
 		PredicateNodeIterator<VolumeOcTreeNode<ValueType>, ValueType> nodeIterator = new PredicateNodeIterator<>(root, node -> node.contains(box));
 
 		while (nodeIterator.hasNext()) {

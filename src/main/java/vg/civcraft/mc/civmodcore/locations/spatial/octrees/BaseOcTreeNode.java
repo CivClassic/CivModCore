@@ -1,14 +1,14 @@
 package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
-import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
-import vg.civcraft.mc.civmodcore.locations.spatial.IntVolumeBBox;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox2D;
+import vg.civcraft.mc.civmodcore.locations.spatial.IntBox3D;
 
 import java.util.*;
 
 /**
  * @author psygate
  */
-abstract class BaseOcTreeNode<NodeType extends BaseOcTreeNode<NodeType, ValueType>, ValueType> extends IntVolumeBBox {
+abstract class BaseOcTreeNode<NodeType extends BaseOcTreeNode<NodeType, ValueType>, ValueType> extends IntBox3D {
 	public final static int CHILDREN_SIZE = 8;
 
 	//	private final OcTree parentTree;
@@ -17,11 +17,11 @@ abstract class BaseOcTreeNode<NodeType extends BaseOcTreeNode<NodeType, ValueTyp
 	private List<ValueType> values = new LinkedList<>();
 	private int splitSize;
 
-	BaseOcTreeNode(IIntVolumeBBox bbox, int splitSize) {
+	BaseOcTreeNode(IIntBBox2D bbox, int splitSize) {
 		this(bbox.getMinX(), bbox.getMinY(), bbox.getMinZ(), bbox.getMaxX(), bbox.getMaxY(), bbox.getMaxZ(), splitSize, null);
 	}
 
-	BaseOcTreeNode(IIntVolumeBBox bbox, int splitSize, NodeType parent) {
+	BaseOcTreeNode(IIntBBox2D bbox, int splitSize, NodeType parent) {
 		this(bbox.getMinX(), bbox.getMinY(), bbox.getMinZ(), bbox.getMaxX(), bbox.getMaxY(), bbox.getMaxZ(), splitSize, parent);
 	}
 

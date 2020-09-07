@@ -1,7 +1,7 @@
 package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
-import vg.civcraft.mc.civmodcore.locations.spatial.IIntPoint3D;
-import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntPoint2D;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox2D;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -9,13 +9,13 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public final class PointOcTree<ValueType extends IIntPoint3D> implements Collection<ValueType> {
-	private IIntVolumeBBox area;
+public final class PointOcTree<ValueType extends IIntPoint2D> implements Collection<ValueType> {
+	private IIntBBox2D area;
 	private PointOcTreeNode<ValueType> root;
 	private final int splitSize;
 	private int size = 0;
 
-	public PointOcTree(IIntVolumeBBox area, int splitSize) {
+	public PointOcTree(IIntBBox2D area, int splitSize) {
 		assert splitSize > 1;
 		this.area = area;
 		root = new PointOcTreeNode<>(area, splitSize);
@@ -32,7 +32,7 @@ public final class PointOcTree<ValueType extends IIntPoint3D> implements Collect
 	public boolean add(ValueType value) {
 		Objects.requireNonNull(value);
 
-		if (!IIntVolumeBBox.contains(root, value)) {
+		if (!IIntBBox2D.contains(root, value)) {
 			return false;
 		} else {
 			PointOcTreeNode<ValueType> insertionNode = selectNodeContainingBBox(value);
@@ -44,15 +44,15 @@ public final class PointOcTree<ValueType extends IIntPoint3D> implements Collect
 	}
 
 	private PointOcTreeNode<ValueType> selectNodeContainingBBox(ValueType value) {
-		assert IIntVolumeBBox.contains(area, value);
+		assert IIntBBox2D.contains(area, value);
 
-		PredicateNodeIterator<PointOcTreeNode<ValueType>, ValueType> it = new PredicateNodeIterator<>(root, node -> IIntVolumeBBox.contains(node, value));
+		PredicateNodeIterator<PointOcTreeNode<ValueType>, ValueType> it = new PredicateNodeIterator<>(root, node -> IIntBBox2D.contains(node, value));
 		PointOcTreeNode<ValueType> selected = root;
 
 		while (it.hasNext()) {
 			PointOcTreeNode<ValueType> next = it.next();
 
-			if (IIntVolumeBBox.contains(next, value)) {
+			if (IIntBBox2D.contains(next, value)) {
 				selected = next;
 			}
 		}
@@ -126,7 +126,7 @@ public final class PointOcTree<ValueType extends IIntPoint3D> implements Collect
 	 * @param parallel If the stream evaluation should happen in parallel.
 	 * @return A stream containing all values in the tree, that are contained within the provided volume.
 	 */
-	public Stream<ValueType> selectAllInVolume(IIntVolumeBBox box, boolean parallel) {
+	public Stream<ValueType> selectAllInVolume(IIntBBox2D box, boolean parallel) {
 		return selectByPredicate(box::intersects, box::contains, parallel);
 	}
 
@@ -141,7 +141,7 @@ public final class PointOcTree<ValueType extends IIntPoint3D> implements Collect
 	 * @return A stream containing all values for which the valueSelectionPredicate is true, and which are in a tree node,
 	 * for which the nodeSelectionPredicate is true.
 	 */
-	public Stream<ValueType> selectByPredicate(Predicate<IIntVolumeBBox> nodeSelectionPredicate, Predicate<ValueType> valueSelectionPredicate, boolean parallel) {
+	public Stream<ValueType> selectByPredicate(Predicate<IIntBBox2D> nodeSelectionPredicate, Predicate<ValueType> valueSelectionPredicate, boolean parallel) {
 		return StreamSupport.stream(
 				Spliterators.spliteratorUnknownSize(
 						new PredicateValueIterator<>(
@@ -159,8 +159,8 @@ public final class PointOcTree<ValueType extends IIntPoint3D> implements Collect
 
 	@Override
 	public boolean contains(Object o) {
-		if (o instanceof IIntVolumeBBox) {
-			IIntVolumeBBox box = (IIntVolumeBBox) o;
+		if (o instanceof IIntBBox2D) {
+			IIntBBox2D box = (IIntBBox2D) o;
 			PredicateValueIterator<PointOcTreeNode<ValueType>, ValueType> it = new PredicateValueIterator<>(
 					root,
 					value -> value.equals(box),
@@ -215,8 +215,8 @@ public final class PointOcTree<ValueType extends IIntPoint3D> implements Collect
 
 	@Override
 	public boolean remove(Object o) {
-		if (o instanceof IIntPoint3D) {
-			IIntPoint3D box = (IIntPoint3D) o;
+		if (o instanceof IIntPoint2D) {
+			IIntPoint2D box = (IIntPoint2D) o;
 			if (removeInternal(box)) {
 				rebuildTree();
 				size--;
@@ -227,7 +227,7 @@ public final class PointOcTree<ValueType extends IIntPoint3D> implements Collect
 		return false;
 	}
 
-	private boolean removeInternal(IIntPoint3D box) {
+	private boolean removeInternal(IIntPoint2D box) {
 		PredicateNodeIterator<PointOcTreeNode<ValueType>, ValueType> nodeIterator = new PredicateNodeIterator<>(root, node -> node.contains(box));
 
 		while (nodeIterator.hasNext()) {

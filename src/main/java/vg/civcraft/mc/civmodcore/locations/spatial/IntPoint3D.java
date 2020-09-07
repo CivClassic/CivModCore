@@ -5,10 +5,10 @@ import java.util.Objects;
 /**
  * @author psygate
  */
-public class IntPoint3D implements IIntPoint3D {
+public class IntPoint3D implements IIntPoint2D {
 	private final int x, y, z;
 
-	public IntPoint3D(IntPoint3D point) {
+	public IntPoint3D(IntPoint2D point) {
 		this(point.getX(), point.getY(), point.getZ());
 	}
 
@@ -37,7 +37,7 @@ public class IntPoint3D implements IIntPoint3D {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		IntPoint3D intPoint = (IntPoint3D) o;
+		IntPoint2D intPoint = (IntPoint2D) o;
 		return x == intPoint.x &&
 				y == intPoint.y &&
 				z == intPoint.z;

@@ -1,19 +1,18 @@
 package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
-import jdk.nashorn.internal.runtime.regexp.joni.constants.NodeType;
-import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox2D;
 
 import java.util.Optional;
 
 /**
  * @author psygate
  */
-final class VolumeOcTreeNode<T extends IIntVolumeBBox> extends BaseOcTreeNode<VolumeOcTreeNode<T>, T> {
-	VolumeOcTreeNode(IIntVolumeBBox bbox, int splitSize) {
+final class VolumeOcTreeNode<T extends IIntBBox2D> extends BaseOcTreeNode<VolumeOcTreeNode<T>, T> {
+	VolumeOcTreeNode(IIntBBox2D bbox, int splitSize) {
 		super(bbox, splitSize);
 	}
 
-	VolumeOcTreeNode(IIntVolumeBBox bbox, int splitSize, VolumeOcTreeNode parent) {
+	VolumeOcTreeNode(IIntBBox2D bbox, int splitSize, VolumeOcTreeNode parent) {
 		super(bbox, splitSize, parent);
 	}
 
@@ -31,7 +30,7 @@ final class VolumeOcTreeNode<T extends IIntVolumeBBox> extends BaseOcTreeNode<Vo
 		assert childrenSize() > 0;
 		for (int i = 0; i < childrenSize(); i++) {
 			VolumeOcTreeNode<T> child = getChild(i);
-			if (IIntVolumeBBox.contains(child, value)) {
+			if (IIntBBox2D.contains(child, value)) {
 				return child;
 			}
 		}

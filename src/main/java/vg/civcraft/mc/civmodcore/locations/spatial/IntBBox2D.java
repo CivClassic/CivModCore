@@ -5,24 +5,21 @@ import java.util.Objects;
 /**
  * @author psygate
  */
-public class IntBBox3D implements IIntBBox3D {
-	private final int minX, minY, minZ, maxX, maxY, maxZ;
+public class IntBBox2D implements IIntBBox2D {
+	private final int minX, minY, maxX, maxY;
 
-	public IntBBox3D(IIntBBox3D bbox) {
-		this(bbox.getMinX(), bbox.getMinY(), bbox.getMinZ(), bbox.getMaxX(), bbox.getMaxY(), bbox.getMaxZ());
+	public IntBBox2D(IIntBBox2D bbox) {
+		this(bbox.getMinX(), bbox.getMinY(), bbox.getMaxX(), bbox.getMaxY());
 	}
 
-	public IntBBox3D(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+	public IntBBox2D(int minX, int minY, int maxX, int maxY) {
 		assert minX < maxX;
 		assert minY < maxY;
-		assert minZ < maxZ;
 
 		this.minX = minX;
 		this.minY = minY;
-		this.minZ = minZ;
 		this.maxX = maxX;
 		this.maxY = maxY;
-		this.maxZ = maxZ;
 	}
 
 	public final int getMinX() {
@@ -33,10 +30,6 @@ public class IntBBox3D implements IIntBBox3D {
 		return minY;
 	}
 
-	public final int getMinZ() {
-		return minZ;
-	}
-
 	public final int getMaxX() {
 		return maxX;
 	}
@@ -45,30 +38,26 @@ public class IntBBox3D implements IIntBBox3D {
 		return maxY;
 	}
 
-	public final int getMaxZ() {
-		return maxZ;
-	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		IntBBox3D that = (IntBBox3D) o;
+		IntBBox2D that = (IntBBox2D) o;
 		return minX == that.minX &&
 				minY == that.minY &&
-				minZ == that.minZ &&
 				maxX == that.maxX &&
-				maxY == that.maxY &&
-				maxZ == that.maxZ;
+				maxY == that.maxY
+				;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(minX, minY, minZ, maxX, maxY, maxZ);
+		return Objects.hash(minX, minY, maxX, maxY);
 	}
 
 	@Override
 	public String toString() {
-		return "(" + minX + ", " + minY + ", " + minZ + ")-(" + maxX + ", " + maxY + ", " + maxZ + ")";
+		return "(" + minX + ", " + minY + ")-(" + maxX + ", " + maxY + ")";
 	}
 }

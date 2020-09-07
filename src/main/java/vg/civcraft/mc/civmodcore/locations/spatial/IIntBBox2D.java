@@ -3,18 +3,16 @@ package vg.civcraft.mc.civmodcore.locations.spatial;
 /**
  * @author psygate
  */
-public interface IIntVolumeBBox {
+public interface IIntBBox2D {
 	int getMinX();
 
 	int getMinY();
 
-	int getMinZ();
 
 	int getMaxX();
 
 	int getMaxY();
 
-	int getMaxZ();
 
 	default int width() {
 		return getMaxX() - getMinX();
@@ -24,9 +22,6 @@ public interface IIntVolumeBBox {
 		return getMaxY() - getMinY();
 	}
 
-	default int depth() {
-		return getMaxZ() - getMinZ();
-	}
 
 	default int getHalfPointX() {
 		return (getMaxX() + getMinX()) / 2;
@@ -36,16 +31,13 @@ public interface IIntVolumeBBox {
 		return (getMaxY() + getMinY()) / 2;
 	}
 
-	default int getHalfPointZ() {
-		return (getMaxZ() + getMinZ()) / 2;
+
+	default boolean contains(IIntBBox2D other) {
+		return IIntBBox2D.contains(this, other);
 	}
 
-	default boolean contains(IIntVolumeBBox other) {
-		return IIntVolumeBBox.contains(this, other);
-	}
-
-	default boolean intersects(IIntVolumeBBox other) {
-		return IIntVolumeBBox.intersects(this, other);
+	default boolean intersects(IIntBBox2D other) {
+		return IIntBBox2D.intersects(this, other);
 	}
 
 	/**
@@ -55,15 +47,13 @@ public interface IIntVolumeBBox {
 	 * @param right Right volume to compare to.
 	 * @return True if the left volume is equal to the right volume.
 	 */
-	static boolean equals(IIntVolumeBBox left, IIntVolumeBBox right) {
+	static boolean equals(IIntBBox2D left, IIntBBox2D right) {
 		return left == right ||
 				(
 						left.getMinX() == right.getMinX() &&
 								left.getMinY() == right.getMinY() &&
-								left.getMinZ() == right.getMinZ() &&
 								left.getMaxX() == right.getMaxX() &&
-								left.getMaxY() == right.getMaxY() &&
-								left.getMaxZ() == right.getMaxZ()
+								left.getMaxY() == right.getMaxY()
 				);
 	}
 
@@ -75,13 +65,11 @@ public interface IIntVolumeBBox {
 	 * @param inner Inner volume.
 	 * @return True if both are equal, or the outer volume completely encloses the inner volume.
 	 */
-	static boolean contains(IIntVolumeBBox outer, IIntVolumeBBox inner) {
+	static boolean contains(IIntBBox2D outer, IIntBBox2D inner) {
 		return outer.getMinX() <= inner.getMinX() &&
 				outer.getMinY() <= inner.getMinY() &&
-				outer.getMinZ() <= inner.getMinZ() &&
 				outer.getMaxX() >= inner.getMaxX() &&
-				outer.getMaxY() >= inner.getMaxY() &&
-				outer.getMaxZ() >= inner.getMaxZ()
+				outer.getMaxY() >= inner.getMaxY()
 				;
 	}
 
@@ -92,21 +80,20 @@ public interface IIntVolumeBBox {
 	 * @param right Right bounding volume to check.
 	 * @return True if the volumes intersect.
 	 */
-	static boolean intersects(IIntVolumeBBox left, IIntVolumeBBox right) {
+	static boolean intersects(IIntBBox2D left, IIntBBox2D right) {
 		return left.getMaxX() >= right.getMinX() && right.getMaxX() >= left.getMinX() &&
-				left.getMaxY() >= right.getMinY() && right.getMaxY() >= left.getMinY() &&
-				left.getMaxZ() >= right.getMinZ() && right.getMaxZ() >= left.getMinZ()
+				left.getMaxY() >= right.getMinY() && right.getMaxY() >= left.getMinY()
 				;
 
 	}
 
 	/**
-	 * Inverse of contains, see {@link #contains(IIntVolumeBBox)}
+	 * Inverse of contains, see {@link #contains(IIntBBox2D)}
 	 *
 	 * @param iIntVolumeBBox
 	 * @return
 	 */
-	default boolean notContains(IIntVolumeBBox iIntVolumeBBox) {
+	default boolean notContains(IIntBBox2D iIntVolumeBBox) {
 		return !contains(iIntVolumeBBox);
 	}
 
@@ -116,13 +103,11 @@ public interface IIntVolumeBBox {
 	 * @param box Volume
 	 * @param x   Point X Coordinate
 	 * @param y   Point Y Coordinate
-	 * @param z   Point Z Coordinate
 	 * @return True if the box contains the point.
 	 */
-	static boolean contains(IIntVolumeBBox box, int x, int y, int z) {
+	static boolean contains(IIntBBox2D box, int x, int y) {
 		return box.getMinX() <= x && box.getMaxX() >= x &&
-				box.getMinY() <= y && box.getMaxY() >= y &&
-				box.getMinZ() <= z && box.getMaxZ() >= z
+				box.getMinY() <= y && box.getMaxY() >= y
 				;
 	}
 
@@ -133,8 +118,8 @@ public interface IIntVolumeBBox {
 	 * @param point Point to check
 	 * @return True if the box contains the point.
 	 */
-	static boolean contains(IIntVolumeBBox box, IIntPoint3D point) {
-		return contains(box, point.getX(), point.getY(), point.getZ());
+	static boolean contains(IIntBBox2D box, IIntPoint2D point) {
+		return contains(box, point.getX(), point.getY());
 	}
 
 	/**
@@ -142,11 +127,10 @@ public interface IIntVolumeBBox {
 	 *
 	 * @param x X coordinate of the point.
 	 * @param y Y Coordinate of the point.
-	 * @param z Z Coordinate of the point.
 	 * @return True if the bounding box contains the point.
 	 */
-	default boolean contains(int x, int y, int z) {
-		return contains(this, x, y, z);
+	default boolean contains(int x, int y) {
+		return contains(this, x, y);
 	}
 
 	/**
@@ -155,7 +139,7 @@ public interface IIntVolumeBBox {
 	 * @param point Point to check.
 	 * @return True if the bounding box contains the point.
 	 */
-	default boolean contains(IIntPoint3D point) {
-		return contains(this, point.getX(), point.getY(), point.getZ());
+	default boolean contains(IIntPoint2D point) {
+		return contains(this, point.getX(), point.getY());
 	}
 }

@@ -1,6 +1,6 @@
 package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
-import vg.civcraft.mc.civmodcore.locations.spatial.IIntPoint3D;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntPoint2D;
 import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox3D;
 
 import java.util.*;
@@ -126,9 +126,9 @@ public class Util {
 		}).collect(Collectors.toList());
 	}
 
-	public static List<IIntPoint3D> clonePoint(IIntPoint3D p, int count) {
+	public static List<IIntPoint2D> clonePoint(IIntPoint2D p, int count) {
 		return IntStream.range(0, count).mapToObj(i ->
-				new IIntPoint3D() {
+				new IIntPoint2D() {
 					@Override
 					public int getX() {
 						return p.getX();
@@ -183,8 +183,8 @@ public class Util {
 		).collect(Collectors.toList());
 	}
 
-	public static IIntPoint3D newPoint(int x, int y, int z) {
-		return new IIntPoint3D() {
+	public static IIntPoint2D newPoint(int x, int y, int z) {
+		return new IIntPoint2D() {
 			@Override
 			public int getX() {
 				return x;
@@ -202,7 +202,7 @@ public class Util {
 		};
 	}
 
-	public static List<IIntPoint3D> newRandomPoints(int BOUND, int count) {
+	public static List<IIntPoint2D> newRandomPoints(int BOUND, int count) {
 		Random rand = getRandom();
 
 		return IntStream.range(0, count).mapToObj(i -> newPoint(rand.nextInt(BOUND), rand.nextInt(BOUND), rand.nextInt(BOUND)))

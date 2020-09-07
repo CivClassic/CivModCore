@@ -1,19 +1,19 @@
 package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
-import vg.civcraft.mc.civmodcore.locations.spatial.IIntPoint3D;
-import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntPoint2D;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox2D;
 
 import java.util.Optional;
 
 /**
  * @author psygate
  */
-final class PointOcTreeNode<T extends IIntPoint3D> extends BaseOcTreeNode<PointOcTreeNode<T>, T> {
-	PointOcTreeNode(IIntVolumeBBox bbox, int splitSize) {
+final class PointOcTreeNode<T extends IIntPoint2D> extends BaseOcTreeNode<PointOcTreeNode<T>, T> {
+	PointOcTreeNode(IIntBBox2D bbox, int splitSize) {
 		super(bbox, splitSize);
 	}
 
-	PointOcTreeNode(IIntVolumeBBox bbox, int splitSize, PointOcTreeNode parent) {
+	PointOcTreeNode(IIntBBox2D bbox, int splitSize, PointOcTreeNode parent) {
 		super(bbox, splitSize, parent);
 	}
 
@@ -31,7 +31,7 @@ final class PointOcTreeNode<T extends IIntPoint3D> extends BaseOcTreeNode<PointO
 		assert childrenSize() > 0;
 		for (int i = 0; i < childrenSize(); i++) {
 			PointOcTreeNode<T> child = getChild(i);
-			if (IIntVolumeBBox.contains(child, value)) {
+			if (IIntBBox2D.contains(child, value)) {
 				return child;
 			}
 		}

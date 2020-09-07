@@ -1,7 +1,7 @@
 package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
-import vg.civcraft.mc.civmodcore.locations.spatial.IIntPoint3D;
-import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntPoint2D;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox2D;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -12,8 +12,8 @@ import static java.lang.Integer.max;
 import static org.junit.Assert.assertTrue;
 
 public class Util {
-	public final static Predicate<IIntVolumeBBox> PREDICATE_TRUE = value -> true;
-	public final static Predicate<IIntVolumeBBox> PREDICATE_FALSE = value -> false;
+	public final static Predicate<IIntBBox2D> PREDICATE_TRUE = value -> true;
+	public final static Predicate<IIntBBox2D> PREDICATE_FALSE = value -> false;
 
 	public static <T> Set<T> difference(Set<T> left, Set<T> right) {
 		Set<T> compare = new HashSet<>(left);
@@ -22,7 +22,7 @@ public class Util {
 	}
 
 
-	public static <T extends IIntVolumeBBox> Set<T> toSet(Iterator<T> it) {
+	public static <T extends IIntBBox2D> Set<T> toSet(Iterator<T> it) {
 		Set<T> set = new HashSet<>();
 
 		while (it.hasNext()) {
@@ -33,13 +33,13 @@ public class Util {
 	}
 
 
-	public static Set<VolumeOcTreeNode<IIntVolumeBBox>> getNodeSet(OcTree<IIntVolumeBBox> tree) {
-		Set<VolumeOcTreeNode<IIntVolumeBBox>> nodeSet = new HashSet<>();
-		LinkedList<VolumeOcTreeNode<IIntVolumeBBox>> stack = new LinkedList<>();
+	public static Set<VolumeOcTreeNode<IIntBBox2D>> getNodeSet(OcTree<IIntBBox2D> tree) {
+		Set<VolumeOcTreeNode<IIntBBox2D>> nodeSet = new HashSet<>();
+		LinkedList<VolumeOcTreeNode<IIntBBox2D>> stack = new LinkedList<>();
 		stack.add(tree.getRoot());
 
 		while (!stack.isEmpty()) {
-			VolumeOcTreeNode<IIntVolumeBBox> node = stack.pop();
+			VolumeOcTreeNode<IIntBBox2D> node = stack.pop();
 			nodeSet.add(node);
 			if (node.hasChildren()) {
 				stack.addAll(node.getChildren());
@@ -49,7 +49,7 @@ public class Util {
 		return nodeSet;
 	}
 
-	public static IIntVolumeBBox newCube(int minx, int miny, int minz, int size) {
+	public static IIntBBox2D newCube(int minx, int miny, int minz, int size) {
 		assert size > 0;
 		return newBox(minx, miny, minz, minx + size, miny + size, minz + size);
 	}
@@ -58,12 +58,12 @@ public class Util {
 		return new Random(0x1337733173311337L);
 	}
 
-	public static IIntVolumeBBox newBox(int minx, int miny, int minz, int maxx, int maxy, int maxz) {
+	public static IIntBBox2D newBox(int minx, int miny, int minz, int maxx, int maxy, int maxz) {
 		assertTrue(minx < maxx);
 		assertTrue(miny < maxy);
 		assertTrue(minz < maxz);
 
-		return new IIntVolumeBBox() {
+		return new IIntBBox2D() {
 			@Override
 			public int getMinX() {
 				return minx;
@@ -96,8 +96,8 @@ public class Util {
 
 			@Override
 			public boolean equals(Object obj) {
-				if (obj instanceof IIntVolumeBBox) {
-					return IIntVolumeBBox.equals(this, (IIntVolumeBBox) obj);
+				if (obj instanceof IIntBBox2D) {
+					return IIntBBox2D.equals(this, (IIntBBox2D) obj);
 				} else {
 					return false;
 				}
@@ -115,7 +115,7 @@ public class Util {
 		};
 	}
 
-	public static List<IIntVolumeBBox> newRandomCubes(int BOUND, int count) {
+	public static List<IIntBBox2D> newRandomCubes(int BOUND, int count) {
 		Random rand = getRandom();
 
 		return IntStream.range(0, count).mapToObj(i -> {
@@ -126,9 +126,9 @@ public class Util {
 		}).collect(Collectors.toList());
 	}
 
-	public static List<IIntPoint3D> clonePoint(IIntPoint3D p, int count) {
+	public static List<IIntPoint2D> clonePoint(IIntPoint2D p, int count) {
 		return IntStream.range(0, count).mapToObj(i ->
-				new IIntPoint3D() {
+				new IIntPoint2D() {
 					@Override
 					public int getX() {
 						return p.getX();
@@ -147,9 +147,9 @@ public class Util {
 		).collect(Collectors.toList());
 	}
 
-	public static List<IIntVolumeBBox> cloneCube(IIntVolumeBBox newCube, int count) {
+	public static List<IIntBBox2D> cloneCube(IIntBBox2D newCube, int count) {
 		return IntStream.range(0, count).mapToObj(i ->
-				new IIntVolumeBBox() {
+				new IIntBBox2D() {
 					@Override
 					public int getMinX() {
 						return newCube.getMinX();
@@ -183,8 +183,8 @@ public class Util {
 		).collect(Collectors.toList());
 	}
 
-	public static IIntPoint3D newPoint(int x, int y, int z) {
-		return new IIntPoint3D() {
+	public static IIntPoint2D newPoint(int x, int y, int z) {
+		return new IIntPoint2D() {
 			@Override
 			public int getX() {
 				return x;
@@ -202,7 +202,7 @@ public class Util {
 		};
 	}
 
-	public static List<IIntPoint3D> newRandomPoints(int BOUND, int count) {
+	public static List<IIntPoint2D> newRandomPoints(int BOUND, int count) {
 		Random rand = getRandom();
 
 		return IntStream.range(0, count).mapToObj(i -> newPoint(rand.nextInt(BOUND), rand.nextInt(BOUND), rand.nextInt(BOUND)))

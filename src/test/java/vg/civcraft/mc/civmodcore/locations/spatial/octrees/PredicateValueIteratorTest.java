@@ -1,7 +1,7 @@
 package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
 import org.junit.Test;
-import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox2D;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -15,30 +15,30 @@ import static org.junit.Assert.assertFalse;
 import static vg.civcraft.mc.civmodcore.locations.spatial.octrees.Util.*;
 
 public class PredicateValueIteratorTest {
-	private static Predicate<IIntVolumeBBox> truePredicate() {
+	private static Predicate<IIntBBox2D> truePredicate() {
 		return iIntVolumeBBox -> true;
 	}
 
 	@Test
 	public void emptyTest() {
-		OcTree<IIntVolumeBBox> tree = new OcTree<>(newCube(0, 0, 0, 100), 32);
-		PredicateValueIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateValueIterator<>(tree.getRoot(), truePredicate(), truePredicate());
+		OcTree<IIntBBox2D> tree = new OcTree<>(newCube(0, 0, 0, 100), 32);
+		PredicateValueIterator<VolumeOcTreeNode<IIntBBox2D>, IIntBBox2D> it = new PredicateValueIterator<>(tree.getRoot(), truePredicate(), truePredicate());
 		assertFalse(it.hasNext());
 	}
 
 	@Test
 	public void treeRootOnlyTest() {
 		final int BOUND = 100;
-		OcTree<IIntVolumeBBox> tree = new OcTree<>(newCube(0, 0, 0, BOUND), 32);
+		OcTree<IIntBBox2D> tree = new OcTree<>(newCube(0, 0, 0, BOUND), 32);
 
 		Random rand = getRandom();
-		Set<IIntVolumeBBox> boxset = new HashSet<>();
+		Set<IIntBBox2D> boxset = new HashSet<>();
 		for (int i = 0; i < 100; i++) {
 			int x = BOUND - 2, y = BOUND - 2, z = BOUND - 2;
-			IIntVolumeBBox box = newCube(x, y, z, rand.nextInt((BOUND - 1) - max(max(x, y), z)) + 1);
+			IIntBBox2D box = newCube(x, y, z, rand.nextInt((BOUND - 1) - max(max(x, y), z)) + 1);
 		}
 
-		PredicateValueIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateValueIterator<>(tree.getRoot(), truePredicate(), truePredicate());
+		PredicateValueIterator<VolumeOcTreeNode<IIntBBox2D>, IIntBBox2D> it = new PredicateValueIterator<>(tree.getRoot(), truePredicate(), truePredicate());
 		assertFalse(it.hasNext());
 	}
 
@@ -46,22 +46,22 @@ public class PredicateValueIteratorTest {
 	@Test
 	public void fullTreeTest() {
 		final int BOUND = 100;
-		Set<IIntVolumeBBox> leftSet = new HashSet<>();
-		OcTree<IIntVolumeBBox> tree = new OcTree<>(newCube(0, 0, 0, BOUND), 32);
+		Set<IIntBBox2D> leftSet = new HashSet<>();
+		OcTree<IIntBBox2D> tree = new OcTree<>(newCube(0, 0, 0, BOUND), 32);
 
 		Random rand = getRandom();
 		for (int i = 0; i < 1000; i++) {
 			int x = rand.nextInt(BOUND - 2);
 			int y = rand.nextInt(BOUND - 2);
 			int z = rand.nextInt(BOUND - 2);
-			IIntVolumeBBox box = newCube(x, y, z, rand.nextInt((BOUND - 2) - max(max(x, y), z)) + 1);
+			IIntBBox2D box = newCube(x, y, z, rand.nextInt((BOUND - 2) - max(max(x, y), z)) + 1);
 			tree.add(box);
 			leftSet.add(box);
 		}
 
-		PredicateValueIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateValueIterator<>(tree.getRoot(), PREDICATE_TRUE, PREDICATE_TRUE);
+		PredicateValueIterator<VolumeOcTreeNode<IIntBBox2D>, IIntBBox2D> it = new PredicateValueIterator<>(tree.getRoot(), PREDICATE_TRUE, PREDICATE_TRUE);
 
-		Set<IIntVolumeBBox> rightSet = toSet(it);
+		Set<IIntBBox2D> rightSet = toSet(it);
 
 		assertEquals(leftSet.size(), rightSet.size());
 
@@ -78,15 +78,15 @@ public class PredicateValueIteratorTest {
 	@Test
 	public void fullTreeTest2() {
 		final int BOUND = 100;
-		Set<IIntVolumeBBox> valueSet = new HashSet<>();
-		OcTree<IIntVolumeBBox> tree = new OcTree<>(newCube(0, 0, 0, BOUND), 32);
+		Set<IIntBBox2D> valueSet = new HashSet<>();
+		OcTree<IIntBBox2D> tree = new OcTree<>(newCube(0, 0, 0, BOUND), 32);
 
 		Random rand = getRandom();
 		for (int i = 0; i < 1000; i++) {
 			int x = rand.nextInt(BOUND - 2);
 			int y = rand.nextInt(BOUND - 2);
 			int z = rand.nextInt(BOUND - 2);
-			IIntVolumeBBox box = newCube(x, y, z, rand.nextInt((BOUND - 2) - max(max(x, y), z)) + 1);
+			IIntBBox2D box = newCube(x, y, z, rand.nextInt((BOUND - 2) - max(max(x, y), z)) + 1);
 			tree.add(box);
 			valueSet.add(box);
 		}
@@ -95,12 +95,12 @@ public class PredicateValueIteratorTest {
 			int x = rand.nextInt(BOUND - 2);
 			int y = rand.nextInt(BOUND - 2);
 			int z = rand.nextInt(BOUND - 2);
-			IIntVolumeBBox selectionBox = newCube(x, y, z, rand.nextInt((BOUND - 2) - max(max(x, y), z)) + 1);
+			IIntBBox2D selectionBox = newCube(x, y, z, rand.nextInt((BOUND - 2) - max(max(x, y), z)) + 1);
 
-			Set<IIntVolumeBBox> leftSet = valueSet.stream().filter(selectionBox::contains).collect(Collectors.toSet());
-			PredicateValueIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new PredicateValueIterator<>(tree.getRoot(), selectionBox::contains, selectionBox::intersects);
+			Set<IIntBBox2D> leftSet = valueSet.stream().filter(selectionBox::contains).collect(Collectors.toSet());
+			PredicateValueIterator<VolumeOcTreeNode<IIntBBox2D>, IIntBBox2D> it = new PredicateValueIterator<>(tree.getRoot(), selectionBox::contains, selectionBox::intersects);
 
-			Set<IIntVolumeBBox> rightSet = toSet(it);
+			Set<IIntBBox2D> rightSet = toSet(it);
 
 			assertEquals(
 					"Set difference: (" + leftSet.size() + "/" + rightSet.size() + ")" +

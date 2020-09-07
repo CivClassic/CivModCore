@@ -5,14 +5,14 @@ import java.util.Objects;
 /**
  * @author psygate
  */
-public class IntVolumeBBox implements IIntVolumeBBox {
+public class IntBBox3D implements IIntBBox3D {
 	private final int minX, minY, minZ, maxX, maxY, maxZ;
 
-	public IntVolumeBBox(IIntVolumeBBox bbox) {
+	public IntBBox3D(IIntBBox3D bbox) {
 		this(bbox.getMinX(), bbox.getMinY(), bbox.getMinZ(), bbox.getMaxX(), bbox.getMaxY(), bbox.getMaxZ());
 	}
 
-	public IntVolumeBBox(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+	public IntBBox3D(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
 		assert minX < maxX;
 		assert minY < maxY;
 		assert minZ < maxZ;
@@ -53,7 +53,7 @@ public class IntVolumeBBox implements IIntVolumeBBox {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		IntVolumeBBox that = (IntVolumeBBox) o;
+		IntBBox3D that = (IntBBox3D) o;
 		return minX == that.minX &&
 				minY == that.minY &&
 				minZ == that.minZ &&

@@ -1,6 +1,6 @@
 package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
-import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox2D;
 
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -9,11 +9,11 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-final class PredicateNodeSpliterator<T extends IIntVolumeBBox> implements Spliterator<VolumeOcTreeNode<T>> {
-	private final Predicate<IIntVolumeBBox> predicate;
+final class PredicateNodeSpliterator<T extends IIntBBox2D> implements Spliterator<VolumeOcTreeNode<T>> {
+	private final Predicate<IIntBBox2D> predicate;
 	private final LinkedList<VolumeOcTreeNode<T>> nodeStack = new LinkedList<>();
 
-	public PredicateNodeSpliterator(VolumeOcTreeNode<T> root, Predicate<IIntVolumeBBox> predicate) {
+	public PredicateNodeSpliterator(VolumeOcTreeNode<T> root, Predicate<IIntBBox2D> predicate) {
 		addNode(root);
 		this.predicate = Objects.requireNonNull(predicate);
 	}

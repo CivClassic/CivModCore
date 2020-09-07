@@ -1,6 +1,6 @@
 package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
-import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox2D;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -10,20 +10,20 @@ import java.util.function.Predicate;
 /**
  * @author psygate
  */
-final class PredicateValueSpliterator<NodeType extends BaseOcTreeNode<NodeType, ValueType>, ValueType extends IIntVolumeBBox> implements Iterator<ValueType> {
+final class PredicateValueSpliterator<NodeType extends BaseOcTreeNode<NodeType, ValueType>, ValueType extends IIntBBox2D> implements Iterator<ValueType> {
 	private PredicateNodeIterator<NodeType, ValueType> nodeIterator;
 	private Iterator<ValueType> valueIterator = Collections.emptyIterator();
-	private final Predicate<IIntVolumeBBox> valuePredicate;
-	private final Predicate<IIntVolumeBBox> nodePredicate;
+	private final Predicate<IIntBBox2D> valuePredicate;
+	private final Predicate<IIntBBox2D> nodePredicate;
 
-	public PredicateValueSpliterator(NodeType root, Predicate<IIntVolumeBBox> valuePredicate, Predicate<IIntVolumeBBox> nodePredicate) {
+	public PredicateValueSpliterator(NodeType root, Predicate<IIntBBox2D> valuePredicate, Predicate<IIntBBox2D> nodePredicate) {
 		this.valuePredicate = Objects.requireNonNull(valuePredicate);
 		this.nodePredicate = Objects.requireNonNull(nodePredicate);
 		nodeIterator = new PredicateNodeIterator<>(Objects.requireNonNull(root), Objects.requireNonNull(nodePredicate));
 		setupValueIterator();
 	}
 
-	public PredicateValueSpliterator(NodeType root, Predicate<IIntVolumeBBox> predicate) {
+	public PredicateValueSpliterator(NodeType root, Predicate<IIntBBox2D> predicate) {
 		this(root, predicate, predicate);
 	}
 

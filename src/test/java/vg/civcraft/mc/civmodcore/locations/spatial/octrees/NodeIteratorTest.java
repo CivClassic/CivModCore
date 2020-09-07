@@ -1,8 +1,7 @@
 package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
 import org.junit.Test;
-import vg.civcraft.mc.civmodcore.locations.spatial.octrees.VolumeOcTreeNode;
-import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox2D;
 
 import java.util.Random;
 import java.util.Set;
@@ -16,8 +15,8 @@ import static vg.civcraft.mc.civmodcore.locations.spatial.octrees.Util.*;
 public class NodeIteratorTest {
 	@Test
 	public void testEmptyTree() {
-		OcTree<IIntVolumeBBox> box = new OcTree<>(newCube(0, 0, 0, 100), 4);
-		NodeIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new NodeIterator<>(box.getRoot());
+		OcTree<IIntBBox2D> box = new OcTree<>(newCube(0, 0, 0, 100), 4);
+		NodeIterator<VolumeOcTreeNode<IIntBBox2D>, IIntBBox2D> it = new NodeIterator<>(box.getRoot());
 
 		assertTrue(it.hasNext());
 		assertNotNull(it.next());
@@ -25,7 +24,7 @@ public class NodeIteratorTest {
 
 	@Test
 	public void testSimpleTree() {
-		OcTree<IIntVolumeBBox> box = new OcTree<>(newCube(0, 0, 0, 100), 4);
+		OcTree<IIntBBox2D> box = new OcTree<>(newCube(0, 0, 0, 100), 4);
 
 		for (int x = 0; x < 10; x++) {
 			for (int y = 0; y < 10; y++) {
@@ -35,7 +34,7 @@ public class NodeIteratorTest {
 			}
 		}
 
-		NodeIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new NodeIterator<>(box.getRoot());
+		NodeIterator<VolumeOcTreeNode<IIntBBox2D>, IIntBBox2D> it = new NodeIterator<>(box.getRoot());
 
 		assertTrue(it.hasNext());
 		assertNotNull(it.next());
@@ -46,7 +45,7 @@ public class NodeIteratorTest {
 
 	@Test
 	public void testSimpleTree2() {
-		OcTree<IIntVolumeBBox> box = new OcTree<>(newCube(0, 0, 0, 100), 32);
+		OcTree<IIntBBox2D> box = new OcTree<>(newCube(0, 0, 0, 100), 32);
 
 		for (int x = 0; x < 10; x++) {
 			for (int y = 0; y < 10; y++) {
@@ -56,7 +55,7 @@ public class NodeIteratorTest {
 			}
 		}
 
-		NodeIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new NodeIterator<>(box.getRoot());
+		NodeIterator<VolumeOcTreeNode<IIntBBox2D>, IIntBBox2D> it = new NodeIterator<>(box.getRoot());
 
 		assertTrue(it.hasNext());
 		assertNotNull(it.next());
@@ -68,16 +67,16 @@ public class NodeIteratorTest {
 	@Test
 	public void testSimpleTree3() {
 		final int BOUNDS = 1000;
-		OcTree<IIntVolumeBBox> tree = new OcTree<>(newCube(0, 0, 0, 1000), 32);
+		OcTree<IIntBBox2D> tree = new OcTree<>(newCube(0, 0, 0, 1000), 32);
 
 		Random rand = getRandom();
 		for (int i = 0; i < 1000; i++) {
 			int offset = rand.nextInt(BOUNDS - 2);
 			tree.add(newCube(offset, offset, offset, rand.nextInt(BOUNDS - offset - 2) + 1));
 		}
-		NodeIterator<VolumeOcTreeNode<IIntVolumeBBox>, IIntVolumeBBox> it = new NodeIterator<>(tree.getRoot());
+		NodeIterator<VolumeOcTreeNode<IIntBBox2D>, IIntBBox2D> it = new NodeIterator<>(tree.getRoot());
 
-		Set<VolumeOcTreeNode<IIntVolumeBBox>> itset = toSet(it);
+		Set<VolumeOcTreeNode<IIntBBox2D>> itset = toSet(it);
 
 		assertEquals(
 				"Set difference:" +

@@ -2,7 +2,7 @@ package vg.civcraft.mc.civmodcore.locations.spatial.quadtrees;
 
 import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox2D;
 import vg.civcraft.mc.civmodcore.locations.spatial.IIntBBox3D;
-import vg.civcraft.mc.civmodcore.locations.spatial.IIntPoint3D;
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntPoint2D;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -216,8 +216,8 @@ public final class PointOcTree<ValueType extends IIntBBox2D> implements Collecti
 
 	@Override
 	public boolean remove(Object o) {
-		if (o instanceof IIntPoint3D) {
-			IIntPoint3D box = (IIntPoint3D) o;
+		if (o instanceof IIntPoint2D) {
+			IIntPoint2D box = (IIntPoint2D) o;
 			if (removeInternal(box)) {
 				rebuildTree();
 				size--;
@@ -228,7 +228,7 @@ public final class PointOcTree<ValueType extends IIntBBox2D> implements Collecti
 		return false;
 	}
 
-	private boolean removeInternal(IIntPoint3D box) {
+	private boolean removeInternal(IIntPoint2D box) {
 		PredicateNodeIterator<PointQuadTreeNode<ValueType>, ValueType> nodeIterator = new PredicateNodeIterator<>(root, node -> node.contains(box));
 
 		while (nodeIterator.hasNext()) {
