@@ -1,13 +1,18 @@
 package vg.civcraft.mc.civmodcore.locations.spatial;
 
 import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.Random;
 
 import static java.lang.Integer.max;
+import static org.junit.Assert.*;
+import static vg.civcraft.mc.civmodcore.locations.spatial.octrees.Util.getRandom;
+import static vg.civcraft.mc.civmodcore.locations.spatial.octrees.Util.newBox;
 
-public class IntVolumeBBoxTest extends TestCase {
+public class IntVolumeBBoxTest  {
 
+	@Test
 	public void testTestEquals() {
 		IIntVolumeBBox a = newBox(0, 0, 0, 1, 1, 1);
 		IIntVolumeBBox b = newBox(0, 0, 0, 1, 1, 1);
@@ -51,10 +56,7 @@ public class IntVolumeBBoxTest extends TestCase {
 		}
 	}
 
-	private static Random getRandom() {
-		return new Random(0x1337733173311337L);
-	}
-
+	@Test
 	public void testContains() {
 		assertTrue(IIntVolumeBBox.contains(
 				newBox(0, 0, 0, 4, 4, 4),
@@ -120,6 +122,7 @@ public class IntVolumeBBoxTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testIntersects() {
 		//Scroll past on 6 axis
 		final IIntVolumeBBox left = newBox(-1, -1, -1, 1, 1, 1);
@@ -144,43 +147,5 @@ public class IntVolumeBBoxTest extends TestCase {
 			assertFalse(IIntVolumeBBox.intersects(left, newBox(-1, -4, i, 1, -2, i + 2)));
 			assertFalse(IIntVolumeBBox.intersects(left, newBox(-1, 2, i, 1, 4, i + 2)));
 		}
-	}
-
-	private static IIntVolumeBBox newBox(int minx, int miny, int minz, int maxx, int maxy, int maxz) {
-		assertTrue(minx < maxx);
-		assertTrue(miny < maxy);
-		assertTrue(minz < maxz);
-
-		return new IIntVolumeBBox() {
-			@Override
-			public int getMinX() {
-				return minx;
-			}
-
-			@Override
-			public int getMinY() {
-				return miny;
-			}
-
-			@Override
-			public int getMinZ() {
-				return minz;
-			}
-
-			@Override
-			public int getMaxX() {
-				return maxx;
-			}
-
-			@Override
-			public int getMaxY() {
-				return maxy;
-			}
-
-			@Override
-			public int getMaxZ() {
-				return maxz;
-			}
-		};
 	}
 }
