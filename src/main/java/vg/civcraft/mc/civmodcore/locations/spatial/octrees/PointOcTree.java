@@ -215,8 +215,8 @@ public final class PointOcTree<ValueType extends IIntPoint3D> implements Collect
 
 	@Override
 	public boolean remove(Object o) {
-		if (o instanceof IIntVolumeBBox) {
-			IIntVolumeBBox box = (IIntVolumeBBox) o;
+		if (o instanceof IIntPoint3D) {
+			IIntPoint3D box = (IIntPoint3D) o;
 			if (removeInternal(box)) {
 				rebuildTree();
 				size--;
@@ -227,7 +227,7 @@ public final class PointOcTree<ValueType extends IIntPoint3D> implements Collect
 		return false;
 	}
 
-	private boolean removeInternal(IIntVolumeBBox box) {
+	private boolean removeInternal(IIntPoint3D box) {
 		PredicateNodeIterator<PointOcTreeNode<ValueType>, ValueType> nodeIterator = new PredicateNodeIterator<>(root, node -> node.contains(box));
 
 		while (nodeIterator.hasNext()) {

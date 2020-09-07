@@ -125,7 +125,7 @@ abstract class BaseOcTreeNode<NodeType extends BaseOcTreeNode<NodeType, ValueTyp
 				+ "}";
 	}
 
-	boolean remove(IIntVolumeBBox box) {
+	boolean remove(Object box) {
 		return values.remove(box);
 	}
 

@@ -1,5 +1,6 @@
 package vg.civcraft.mc.civmodcore.locations.spatial.octrees;
 
+import vg.civcraft.mc.civmodcore.locations.spatial.IIntPoint3D;
 import vg.civcraft.mc.civmodcore.locations.spatial.IIntVolumeBBox;
 
 import java.util.*;
@@ -125,6 +126,27 @@ public class Util {
 		}).collect(Collectors.toList());
 	}
 
+	public static List<IIntPoint3D> clonePoint(IIntPoint3D p, int count) {
+		return IntStream.range(0, count).mapToObj(i ->
+				new IIntPoint3D() {
+					@Override
+					public int getX() {
+						return p.getX();
+					}
+
+					@Override
+					public int getY() {
+						return p.getY();
+					}
+
+					@Override
+					public int getZ() {
+						return p.getZ();
+					}
+				}
+		).collect(Collectors.toList());
+	}
+
 	public static List<IIntVolumeBBox> cloneCube(IIntVolumeBBox newCube, int count) {
 		return IntStream.range(0, count).mapToObj(i ->
 				new IIntVolumeBBox() {
@@ -159,5 +181,31 @@ public class Util {
 					}
 				}
 		).collect(Collectors.toList());
+	}
+
+	public static IIntPoint3D newPoint(int x, int y, int z) {
+		return new IIntPoint3D() {
+			@Override
+			public int getX() {
+				return x;
+			}
+
+			@Override
+			public int getY() {
+				return y;
+			}
+
+			@Override
+			public int getZ() {
+				return z;
+			}
+		};
+	}
+
+	public static List<IIntPoint3D> newRandomPoints(int BOUND, int count) {
+		Random rand = getRandom();
+
+		return IntStream.range(0, count).mapToObj(i -> newPoint(rand.nextInt(BOUND), rand.nextInt(BOUND), rand.nextInt(BOUND)))
+				.collect(Collectors.toList());
 	}
 }
