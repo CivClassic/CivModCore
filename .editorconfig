@@ -15,6 +15,7 @@ continuation_indent_size = 8
 [*.java]
 indent_style = tab
 indent_size = 4
+ij_java_use_single_class_imports = true
 
 [*.xml]
 indent_style = tab
