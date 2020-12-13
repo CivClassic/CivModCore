@@ -86,9 +86,6 @@ public final class PotionNames {
 					}
 					// Put the enchantment and name into the system
 					POTION_DETAILS.add(new SearchResult(type, effectType, name));
-					LOGGER.info(String.format("[Config] Potion parsed: %s = %s = %s", type.name(),
-							effectType == null ? "NULL" : effectType.getName(),
-							name));
 					line = reader.readLine();
 				}
 				reader.close();
