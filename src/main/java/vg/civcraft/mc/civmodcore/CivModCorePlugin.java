@@ -13,6 +13,9 @@ import vg.civcraft.mc.civmodcore.dao.ManagedDatasource;
 import vg.civcraft.mc.civmodcore.events.CustomEventMapper;
 import vg.civcraft.mc.civmodcore.inventory.items.EnchantUtils;
 import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
+import vg.civcraft.mc.civmodcore.inventory.items.PotionUtils;
+import vg.civcraft.mc.civmodcore.inventory.items.SpawnEggUtils;
+import vg.civcraft.mc.civmodcore.inventory.items.TreeTypeUtils;
 import vg.civcraft.mc.civmodcore.inventorygui.ClickableInventoryListener;
 import vg.civcraft.mc.civmodcore.inventorygui.paged.PagedGUIManager;
 import vg.civcraft.mc.civmodcore.locations.chunkmeta.GlobalChunkMetaManager;
@@ -89,8 +92,11 @@ public final class CivModCorePlugin extends ACivMod {
 			}
 		};
 		// Load APIs
-		ItemUtils.loadItemNames(this);
 		EnchantUtils.loadEnchantAbbreviations(this);
+		ItemUtils.loadItemNames(this);
+		PotionUtils.getPotionNiceName(null);     // Using these methods to force load their respective classes
+		SpawnEggUtils.getSpawnEgg(null);         //
+		TreeTypeUtils.getMatchingTreeType(null); //
 		BottomLineAPI.init();
 		newCommandHandler.registerCommand(new ConfigSetAnyCommand());
 		newCommandHandler.registerCommand(new ConfigGetAnyCommand());
