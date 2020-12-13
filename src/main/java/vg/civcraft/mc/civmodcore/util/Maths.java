@@ -1,18 +1,17 @@
 package vg.civcraft.mc.civmodcore.util;
 
 /**
- * General math utility class that <i>may</i> exist elsewhere, but I have none the foggiest where. If any of y'all
- * figure out where, feel free to lodge an official complaint
- * <a href="https://github.com/CivClassic/CivModCore/issues/new">here</a>.
+ * @deprecated Use {@link MoreMath} instead.
  */
-public class Maths {
+@Deprecated(forRemoval = true)
+public final class Maths {
 
 	/**
 	 * Limits a value between and including two values.
 	 *
 	 * @param value The value to clamp.
-	 * @param min The minimum value.
-	 * @param max The maximum value.
+	 * @param min   The minimum value.
+	 * @param max   The maximum value.
 	 * @return The clamped value.
 	 */
 	public static int clamp(final int value, final int min, final int max) {
@@ -23,8 +22,8 @@ public class Maths {
 	 * Limits a value between and including two values.
 	 *
 	 * @param value The value to clamp.
-	 * @param min The minimum value.
-	 * @param max The maximum value.
+	 * @param min   The minimum value.
+	 * @param max   The maximum value.
 	 * @return The clamped value.
 	 */
 	public static long clamp(final long value, final long min, final long max) {
@@ -35,8 +34,8 @@ public class Maths {
 	 * Limits a value between and including two values.
 	 *
 	 * @param value The value to clamp.
-	 * @param min The minimum value.
-	 * @param max The maximum value.
+	 * @param min   The minimum value.
+	 * @param max   The maximum value.
 	 * @return The clamped value.
 	 */
 	public static float clamp(final float value, final float min, final float max) {
@@ -47,8 +46,8 @@ public class Maths {
 	 * Limits a value between and including two values.
 	 *
 	 * @param value The value to clamp.
-	 * @param min The minimum value.
-	 * @param max The maximum value.
+	 * @param min   The minimum value.
+	 * @param max   The maximum value.
 	 * @return The clamped value.
 	 */
 	public static double clamp(final double value, final double min, final double max) {
@@ -59,8 +58,8 @@ public class Maths {
 	 * Normalises a value within a min-max range into a range between 0-1.
 	 *
 	 * @param value The value to normalise.
-	 * @param min The min range value.
-	 * @param max The max range value.
+	 * @param min   The min range value.
+	 * @param max   The max range value.
 	 * @return The normalised value.
 	 */
 	public static int norm(final int value, final int min, final int max) {
@@ -71,8 +70,8 @@ public class Maths {
 	 * Normalises a value within a min-max range into a range between 0-1.
 	 *
 	 * @param value The value to normalise.
-	 * @param min The min range value.
-	 * @param max The max range value.
+	 * @param min   The min range value.
+	 * @param max   The max range value.
 	 * @return The normalised value.
 	 */
 	public static long norm(final long value, final long min, final long max) {
@@ -83,8 +82,8 @@ public class Maths {
 	 * Normalises a value within a min-max range into a range between 0-1.
 	 *
 	 * @param value The value to normalise.
-	 * @param min The min range value.
-	 * @param max The max range value.
+	 * @param min   The min range value.
+	 * @param max   The max range value.
 	 * @return The normalised value.
 	 */
 	public static float norm(final float value, final float min, final float max) {
@@ -95,8 +94,8 @@ public class Maths {
 	 * Normalises a value within a min-max range into a range between 0-1.
 	 *
 	 * @param value The value to normalise.
-	 * @param min The range's lower limit.
-	 * @param max The range's upper limit.
+	 * @param min   The range's lower limit.
+	 * @param max   The range's upper limit.
 	 * @return The normalised value.
 	 */
 	public static double norm(final double value, final double min, final double max) {
@@ -107,8 +106,8 @@ public class Maths {
 	 * Applies a normalised value to a range.
 	 *
 	 * @param norm The {@link #norm(int, int, int) normalised} value.
-	 * @param min The range's lower limit.
-	 * @param max The range's upper limit.
+	 * @param min  The range's lower limit.
+	 * @param max  The range's upper limit.
 	 * @return The linearly interpolated value.
 	 */
 	public static int lerp(final int norm, final int min, final int max) {
@@ -119,8 +118,8 @@ public class Maths {
 	 * Applies a normalised value to a range.
 	 *
 	 * @param norm The {@link #norm(long, long, long) normalised} value.
-	 * @param min The range's lower limit.
-	 * @param max The range's upper limit.
+	 * @param min  The range's lower limit.
+	 * @param max  The range's upper limit.
 	 * @return The linearly interpolated value.
 	 */
 	public static long lerp(final long norm, final long min, final long max) {
@@ -131,8 +130,8 @@ public class Maths {
 	 * Applies a normalised value to a range.
 	 *
 	 * @param norm The {@link #norm(float, float, float) normalised} value.
-	 * @param min The range's lower limit.
-	 * @param max The range's upper limit.
+	 * @param min  The range's lower limit.
+	 * @param max  The range's upper limit.
 	 * @return The linearly interpolated value.
 	 */
 	public static float lerp(final float norm, final float min, final float max) {
@@ -143,8 +142,8 @@ public class Maths {
 	 * Applies a normalised value to a range.
 	 *
 	 * @param norm The {@link #norm(double, double, double) normalised} value.
-	 * @param min The range's lower limit.
-	 * @param max The range's upper limit.
+	 * @param min  The range's lower limit.
+	 * @param max  The range's upper limit.
 	 * @return The linearly interpolated value.
 	 */
 	public static double lerp(final double norm, final double min, final double max) {

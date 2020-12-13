@@ -1,7 +1,5 @@
 package vg.civcraft.mc.civmodcore.custom.items;
 
-import static vg.civcraft.mc.civmodcore.util.NullCoalescing.castOrNull;
-
 import com.google.common.base.Strings;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,9 +7,11 @@ import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
-import vg.civcraft.mc.civmodcore.api.ItemAPI;
 import vg.civcraft.mc.civmodcore.api.NamespaceAPI;
+import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
+import vg.civcraft.mc.civmodcore.util.MoreClassUtils;
 
+@Deprecated(forRemoval = true)
 public class ItemCriteria implements ConfigurationSerializable {
 
 	public static final String ID_KEY = "key";
@@ -23,8 +23,8 @@ public class ItemCriteria implements ConfigurationSerializable {
 	protected final String name;
 
 	public ItemCriteria(Map<String, Object> data) {
-		this(NamespaceAPI.fromString(castOrNull(String.class, data.get(ID_KEY))),
-				castOrNull(String.class, data.get(NAME_KEY)));
+		this(NamespaceAPI.fromString(MoreClassUtils.castOrNull(String.class, data.get(ID_KEY))),
+				MoreClassUtils.castOrNull(String.class, data.get(NAME_KEY)));
 	}
 
 	public ItemCriteria(NamespacedKey key, String name) {
@@ -55,7 +55,7 @@ public class ItemCriteria implements ConfigurationSerializable {
 	}
 
 	public ItemStack applyToItem(ItemStack item) {
-		ItemAPI.setDisplayName(item, getDisplayName());
+		ItemUtils.setDisplayName(item, getDisplayName());
 		return item;
 	}
 

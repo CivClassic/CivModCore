@@ -161,7 +161,7 @@ public final class NBTSerialization {
 			return null;
 		}
 		try {
-			NBTSerializable instance = clazz.newInstance();
+			NBTSerializable instance = clazz.getConstructor().newInstance();
 			NBTCompound clone = nbt.clone();
 			clone.remove(NBT_CLASS_PATH_KEY);
 			instance.deserialize(clone);

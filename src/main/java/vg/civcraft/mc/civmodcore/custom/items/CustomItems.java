@@ -8,12 +8,10 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import vg.civcraft.mc.civmodcore.api.ItemAPI;
-import vg.civcraft.mc.civmodcore.util.NullCoalescing;
+import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
+import vg.civcraft.mc.civmodcore.util.NullUtils;
 
-/**
- *
- */
+@Deprecated(forRemoval = true)
 public final class CustomItems {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CustomItems.class.getSimpleName());
@@ -62,7 +60,7 @@ public final class CustomItems {
 	}
 
 	public static boolean hasNameApplied(ItemStack item) {
-		String displayName = ItemAPI.getDisplayName(item);
+		String displayName = ItemUtils.getDisplayName(item);
 		if (Strings.isNullOrEmpty(displayName)) {
 			return false;
 		}
@@ -71,7 +69,7 @@ public final class CustomItems {
 			return false;
 		}
 		String customName = "" + ChatColor.RESET + criteria.getName();
-		if (!NullCoalescing.equalsNotNull(customName, displayName)) {
+		if (!NullUtils.equalsNotNull(customName, displayName)) {
 			return false;
 		}
 		return true;

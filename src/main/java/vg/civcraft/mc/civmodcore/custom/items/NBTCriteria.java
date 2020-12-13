@@ -6,9 +6,10 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import vg.civcraft.mc.civmodcore.api.NamespaceAPI;
 import vg.civcraft.mc.civmodcore.serialization.NBTCompound;
-import vg.civcraft.mc.civmodcore.util.NullCoalescing;
+import vg.civcraft.mc.civmodcore.util.NullUtils;
 import vg.civcraft.mc.civmodcore.util.Validation;
 
+@Deprecated(forRemoval = true)
 public class NBTCriteria extends ItemCriteria {
 
 	private static final String CUSTOM_ITEM_NBT = "CustomItem";
@@ -35,7 +36,7 @@ public class NBTCriteria extends ItemCriteria {
 			return false;
 		}
 		NamespacedKey key = NamespaceAPI.fromString(raw);
-		if (!NullCoalescing.equalsNotNull(key, this.key)) {
+		if (!NullUtils.equalsNotNull(key, this.key)) {
 			return false;
 		}
 		return true;

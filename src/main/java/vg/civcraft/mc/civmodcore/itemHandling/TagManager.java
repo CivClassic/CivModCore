@@ -5,12 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
-
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.MemorySection;
-import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
-import org.bukkit.inventory.ItemStack;
-
 import net.minecraft.server.v1_16_R1.NBTBase;
 import net.minecraft.server.v1_16_R1.NBTTagByte;
 import net.minecraft.server.v1_16_R1.NBTTagByteArray;
@@ -23,7 +17,16 @@ import net.minecraft.server.v1_16_R1.NBTTagList;
 import net.minecraft.server.v1_16_R1.NBTTagLong;
 import net.minecraft.server.v1_16_R1.NBTTagShort;
 import net.minecraft.server.v1_16_R1.NBTTagString;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.MemorySection;
+import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftItemStack;
+import org.bukkit.inventory.ItemStack;
 
+/**
+ * TODO: This class is planned to be retired completely, though discussion still needs to happen about how to
+ *     reimplement {@link #mapToNBT(NBTTagCompound, Map)} and {@link #listToNBT(NBTTagList, List)} methods onto
+ *     {@link vg.civcraft.mc.civmodcore.serialization.NBTCompound}.
+ */
 @Deprecated
 public class TagManager {
 

@@ -1,18 +1,17 @@
 package vg.civcraft.mc.civmodcore.inventorygui;
 
 import java.util.function.Consumer;
-
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import vg.civcraft.mc.civmodcore.api.ItemAPI;
+import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
 
 /**
- * Convience class for lambda support in clickables. Unfortunately java doesn't
+ * Convenience class for lambda support in clickables. Unfortunately java doesn't
  * allow usage of abstract classes as functional interfaces, see also
  * https://stackoverflow.com/questions/24610207/abstract-class-as-functional-interface
  *
+ * Why not just do an anonymous class? o.O
  */
 public class LClickable extends Clickable {
 
@@ -20,13 +19,13 @@ public class LClickable extends Clickable {
 	
 	public LClickable(Material mat, String name, Consumer<Player> clickFunction) {
 		this(mat, clickFunction);
-		ItemAPI.setDisplayName(this.item, name);
+		ItemUtils.setDisplayName(this.item, name);
 	}
 	
 	public LClickable(Material mat, String name, Consumer<Player> clickFunction, String ... lore) {
 		this(mat, name, clickFunction);
 		if (lore.length > 0) {
-			ItemAPI.addLore(this.item, lore);
+			ItemUtils.addLore(this.item, lore);
 		}
 	}
 	

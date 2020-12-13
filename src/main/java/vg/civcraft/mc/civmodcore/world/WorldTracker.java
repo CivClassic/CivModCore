@@ -13,7 +13,7 @@ import org.bukkit.event.world.WorldUnloadEvent;
 /**
  * This tracker should provide an efficient way of only using worlds that are loaded in.
  */
-public class WorldTracker implements Listener {
+public final class WorldTracker implements Listener {
 
 	private static final Map<UUID, World> STORAGE = new HashMap<>();
 

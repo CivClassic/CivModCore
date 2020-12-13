@@ -11,7 +11,7 @@
 
   <groupId>vg.civcraft.mc.civmodcore</groupId>
   <artifactId>CivModCore</artifactId>
-  <version>1.8.0</version>
+  <version>1.8.1</version>
   <name>CivModCore</name>
   <url>https://github.com/Civclassic/CivModCore/</url>
 
@@ -39,6 +39,21 @@
       <groupId>com.zaxxer</groupId>
       <artifactId>HikariCP</artifactId>
       <version>3.4.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.11</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-collections4</artifactId>
+      <version>4.4</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.collections</groupId>
+      <artifactId>google-collections</artifactId>
+      <version>1.0</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -76,7 +91,7 @@
       <url>https://repo.aikar.co/content/groups/aikar/</url>
     </repository>
     <repository>
-      <id>civ-jenkins</id>
+      <id>devoted-jenkins</id>
       <url>https://build.devotedmc.com/plugin/repository/everything/</url>
     </repository>
   </repositories>

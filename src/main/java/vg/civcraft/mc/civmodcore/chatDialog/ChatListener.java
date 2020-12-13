@@ -2,7 +2,6 @@ package vg.civcraft.mc.civmodcore.chatDialog;
 
 import java.util.Collections;
 import java.util.List;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -10,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.TabCompleteEvent;
 
+@Deprecated
 public class ChatListener implements Listener {
 
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)

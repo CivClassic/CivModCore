@@ -1,13 +1,12 @@
 package vg.civcraft.mc.civmodcore.serialization;
 
-import static vg.civcraft.mc.civmodcore.util.NullCoalescing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import net.minecraft.server.v1_16_R1.NBTBase;
 import net.minecraft.server.v1_16_R1.NBTTagCompound;
 import net.minecraft.server.v1_16_R1.NBTTagList;
-import org.apache.commons.lang.reflect.FieldUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import vg.civcraft.mc.civmodcore.util.Validation;
 
 /**
@@ -56,8 +55,9 @@ public class NBTCompoundList<T extends NBTSerializable> extends ArrayList<T> {
 			return wrapper;
 		}
 		getInnerList(list).stream()
-				.map(nbt -> chain(() -> new NBTCompound((NBTTagCompound) nbt)))
-				.map(nbt -> chain(() -> (T) NBTSerialization.deserialize(nbt)))
+				.filter(nbt -> nbt.getTypeId() == NBTType.COMPOUND)
+				.map(nbt -> new NBTCompound((NBTTagCompound) nbt))
+				.map(nbt -> (T) NBTSerialization.deserialize(nbt))
 				.filter(Objects::nonNull)
 				.forEachOrdered(wrapper::add);
 		return wrapper;

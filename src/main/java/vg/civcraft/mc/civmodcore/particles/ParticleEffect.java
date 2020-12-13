@@ -1,23 +1,27 @@
 package vg.civcraft.mc.civmodcore.particles;
 
+import com.google.common.base.Preconditions;
+import java.util.Objects;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.World;
+import vg.civcraft.mc.civmodcore.world.WorldUtils;
 
 public class ParticleEffect {
 
-	private Particle particle;
+	private final Particle particle;
+	private final float offsetX;
+	private final float offsetY;
+	private final float offsetZ;
+	private final float speed;
+	private final int particleCount;
 
-	private float offsetX;
-
-	private float offsetY;
-
-	private float offsetZ;
-
-	private float speed;
-
-	private int particleCount;
-
-	public ParticleEffect(Particle particle, float offsetX, float offsetY, float offsetZ, float speed, int particleCount) {
+	public ParticleEffect(final Particle particle,
+						  final float offsetX,
+						  final float offsetY,
+						  final float offsetZ,
+						  final float speed,
+						  final int particleCount) {
 		this.particle = particle;
 		this.offsetX = offsetX;
 		this.offsetY = offsetY;
@@ -30,42 +34,42 @@ public class ParticleEffect {
 	 * @return the type of particle used in this effect
 	 */
 	public Particle getParticle() {
-		return particle;
+		return this.particle;
 	}
 
 	/**
 	 * @return the amount to be randomly offset by in the X axis
 	 */
 	public float getOffsetX() {
-		return offsetX;
+		return this.offsetX;
 	}
 
 	/**
 	 * @return the amount to be randomly offset by in the Y axis
 	 */
 	public float getOffsetY() {
-		return offsetY;
+		return this.offsetY;
 	}
 
 	/**
 	 * @return the amount to be randomly offset by in the Z axis
 	 */
 	public float getOffsetZ() {
-		return offsetZ;
+		return this.offsetZ;
 	}
 
 	/**
 	 * @return the speed of the particles
 	 */
 	public float getSpeed() {
-		return speed;
+		return this.speed;
 	}
 
 	/**
 	 * @return the amount of particle to display.
 	 */
 	public int getParticleCount() {
-		return particleCount;
+		return this.particleCount;
 	}
 
 	/**
@@ -74,14 +78,18 @@ public class ParticleEffect {
 	 * @param location
 	 *            the location of the reinforcement.
 	 */
-	public void playEffect(Location location) {
-		location.getWorld().spawnParticle(particle, location, particleCount, offsetX, offsetY, offsetZ, speed, null);
+	public void playEffect(final Location location) {
+		Preconditions.checkArgument(WorldUtils.isValidLocation(location));
+		final World world = Objects.requireNonNull(location.getWorld());
+		world.spawnParticle(this.particle, location, this.particleCount,
+				this.offsetX, this.offsetY, this.offsetZ, this.speed, null);
 	}
 
 	@Override
 	public String toString() {
-		return String.format("  type: %s \n   offsetX: %f \n   offsetY: %f \n   offsetZ: %f \n   speed:"
-						+ " " + "%f \n   particleCount: %d", particle, offsetX, offsetY, offsetZ, speed, particleCount);
+		return String.format("ParticleEffect{\n\ttype=%s,\n\toffsetX=%f\n\toffsetY=%f\n\toffsetZ=%f\n\t" +
+				"speed=%f\n\tparticleCount=%d\n}", this.particle, this.offsetX, this.offsetY, this.offsetZ,
+				this.speed, this.particleCount);
 	}
 
 }

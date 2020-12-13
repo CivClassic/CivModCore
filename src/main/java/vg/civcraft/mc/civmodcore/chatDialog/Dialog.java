@@ -1,7 +1,6 @@
 package vg.civcraft.mc.civmodcore.chatDialog;
 
 import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationContext;
@@ -11,6 +10,10 @@ import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * @deprecated Use {@link vg.civcraft.mc.civmodcore.chat.dialog.Dialog} instead.
+ */
+@Deprecated
 public abstract class Dialog {
 
 	protected Player player;

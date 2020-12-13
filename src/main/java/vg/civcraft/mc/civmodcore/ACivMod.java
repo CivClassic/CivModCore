@@ -25,7 +25,6 @@ import vg.civcraft.mc.civmodcore.command.CommandHandler;
 import vg.civcraft.mc.civmodcore.command.StandaloneCommandHandler;
 import vg.civcraft.mc.civmodcore.serialization.NBTSerializable;
 import vg.civcraft.mc.civmodcore.serialization.NBTSerialization;
-import vg.civcraft.mc.civmodcore.util.Iteration;
 
 public abstract class ACivMod extends JavaPlugin {
 
@@ -65,7 +64,8 @@ public abstract class ACivMod extends JavaPlugin {
 			this.newCommandHandler.reset();
 			this.newCommandHandler = null;
 		}
-		Iteration.iterateThenClear(this.serializableClasses, NBTSerialization::unregisterNBTSerializable);
+		this.serializableClasses.forEach(NBTSerialization::unregisterNBTSerializable);
+		this.serializableClasses.clear();
 		HandlerList.unregisterAll(this);
 		Bukkit.getMessenger().unregisterIncomingPluginChannel(this);
 		Bukkit.getMessenger().unregisterOutgoingPluginChannel(this);

@@ -3,10 +3,8 @@ package vg.civcraft.mc.civmodcore.playersettings.gui;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-
 import vg.civcraft.mc.civmodcore.command.CivCommand;
 import vg.civcraft.mc.civmodcore.command.StandaloneCommand;
 import vg.civcraft.mc.civmodcore.playersettings.PlayerSetting;

@@ -7,7 +7,7 @@ import org.apache.commons.lang.NullArgumentException;
  *
  * @deprecated Just use {@link com.google.common.base.Preconditions Preconditions}.
  */
-@Deprecated
+@Deprecated(forRemoval = true)
 public final class Guard {
 
 	@Deprecated

@@ -1,5 +1,13 @@
 package vg.civcraft.mc.civmodcore.itemHandling;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.logging.Logger;
 import net.minecraft.server.v1_16_R1.NBTTagCompound;
 import net.minecraft.server.v1_16_R1.NBTTagList;
 import org.bukkit.Bukkit;
@@ -10,11 +18,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import vg.civcraft.mc.civmodcore.api.ItemAPI;
-
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.logging.Logger;
+import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
 
 /**
  * Allows the storage and comparison of itemstacks while ignoring their maximum
@@ -28,6 +32,9 @@ import java.util.logging.Logger;
  * durability it will count as any given durability. When working with multiple
  * ItemMaps this will only work if all methods are executed on the instance
  * containing items with a durability of -1.
+ *
+ * TODO: The plan for this class is to move it into the "inventory.items" package after a small refactor to bring it
+ *     up to modern standards.
  */
 public class ItemMap {
 
@@ -480,7 +487,7 @@ public class ItemMap {
 		List<ItemStack> items = new ArrayList<>(entrySet.size());
 		for (Entry<ItemStack, Integer> entry : entrySet) {
 			ItemStack is = entry.getKey().clone();
-			ItemAPI.addLore(is, ChatColor.GOLD + "Total item count: " + entry.getValue());
+			ItemUtils.addLore(is, ChatColor.GOLD + "Total item count: " + entry.getValue());
 			if (entry.getValue() > entry.getKey().getType().getMaxStackSize()) {
 				int stacks = entry.getValue() / is.getType().getMaxStackSize();
 				int extra = entry.getValue() % is.getType().getMaxStackSize();
@@ -492,7 +499,7 @@ public class ItemMap {
 					out.append(" and " + extra);
 					out.append(" item" + (extra == 1 ? "" : "s"));
 				}
-				ItemAPI.addLore(is, out.toString());
+				ItemUtils.addLore(is, out.toString());
 			}
 			items.add(is);
 		}
@@ -601,7 +608,7 @@ public class ItemMap {
 	public static ItemStack enrichWithNBT(ItemStack is, int amt, Map<String, Object> map) {
 		log.fine("Received request to enrich " + is.toString());
 		ItemStack copy = is.clone();
-		amt = (amt < 1 ? 1 : amt > is.getMaxStackSize() ? is.getMaxStackSize() : amt);
+		amt = (amt < 1 ? 1 : Math.min(amt, is.getMaxStackSize()));
 		copy.setAmount(amt);
 		net.minecraft.server.v1_16_R1.ItemStack s = CraftItemStack.asNMSCopy(copy);
 		if (s == null) {

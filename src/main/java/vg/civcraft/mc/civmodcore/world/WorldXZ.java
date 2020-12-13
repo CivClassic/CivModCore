@@ -1,10 +1,9 @@
 package vg.civcraft.mc.civmodcore.world;
 
-import com.google.common.base.Objects;
+import java.util.Objects;
 import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.World;
-import vg.civcraft.mc.civmodcore.api.LocationAPI;
 
 public class WorldXZ {
 
@@ -13,11 +12,10 @@ public class WorldXZ {
 	private final int z;
 
 	public WorldXZ(final Location location) {
-		if (!LocationAPI.isValidLocation(location)) {
-			throw new IllegalArgumentException("Location must not be valid!");
+		if (!WorldUtils.isValidLocation(location)) {
+			throw new IllegalArgumentException("Location must be valid!");
 		}
-		final World world = location.getWorld();
-		this.world = world.getUID(); // Do not listen to the highlighter
+		this.world = location.getWorld().getUID(); // Do not listen to the highlighter
 		this.x = location.getBlockX();
 		this.z = location.getBlockZ();
 	}
@@ -61,18 +59,18 @@ public class WorldXZ {
 			return false;
 		}
 		final WorldXZ other = (WorldXZ) object;
-		return Objects.equal(this.world, other.world)
+		return Objects.equals(this.world, other.world)
 				&& this.x == other.x
 				&& this.z == other.z;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(this.world, this.x, this.z);
+		return Objects.hash(this.world, this.x, this.z);
 	}
 
 	public static WorldXZ fromLocation(final Location location) {
-		if (!LocationAPI.isValidLocation(location)) {
+		if (!WorldUtils.isValidLocation(location)) {
 			throw new IllegalArgumentException("Location cannot be null!");
 		}
 		final World world = location.getWorld();
