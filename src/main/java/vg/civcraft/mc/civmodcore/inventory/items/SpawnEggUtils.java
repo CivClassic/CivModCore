@@ -84,11 +84,11 @@ public final class SpawnEggUtils {
 
 	static {
 		// Determine if there's any enchants missing names
-		final Set<EntityType> missing = new HashSet<>();
-		CollectionUtils.addAll(missing, EntityType.values());
-		missing.removeIf(type -> !type.isAlive() || SPAWN_EGGS.containsValue(type));
+		final Set<Material> missing = new HashSet<>();
+		CollectionUtils.addAll(missing, Material.values());
+		missing.removeIf(material -> !material.name().endsWith("_SPAWN_EGG") || SPAWN_EGGS.containsKey(material));
 		if (!missing.isEmpty()) {
-			Bukkit.getLogger().warning("[SpawnEggUtils] The following entity types are missing: " +
+			Bukkit.getLogger().warning("[SpawnEggUtils] The following spawn eggs are missing: " +
 					missing.stream().map(Enum::name).collect(Collectors.joining(",")) + ".");
 		}
 	}
