@@ -60,12 +60,18 @@ public final class TreeTypeUtils {
 			.put(Material.BROWN_MUSHROOM_BLOCK, TreeType.BROWN_MUSHROOM)
 			// Red Mushroom
 			.put(Material.RED_MUSHROOM, TreeType.RED_MUSHROOM)
-			.put(Material.CHORUS_PLANT, TreeType.RED_MUSHROOM)
+			.put(Material.RED_MUSHROOM_BLOCK, TreeType.RED_MUSHROOM)
 			// Chorus Plants
 			.put(Material.CHORUS_FLOWER, TreeType.CHORUS_PLANT)
 			.put(Material.CHORUS_PLANT, TreeType.CHORUS_PLANT)
 			// Cocoa
 			.put(Material.COCOA, TreeType.COCOA_TREE)
+			// Crimson Fungus
+			.put(Material.CRIMSON_FUNGUS, TreeType.CRIMSON_FUNGUS)
+			.put(Material.CRIMSON_STEM, TreeType.CRIMSON_FUNGUS)
+			// Crimson Fungus
+			.put(Material.WARPED_FUNGUS, TreeType.WARPED_FUNGUS)
+			.put(Material.WARPED_STEM, TreeType.CRIMSON_FUNGUS)
 			.build();
 
 	private static final Map<TreeType, Material> SAPLING_MATERIALS = ImmutableMap.<TreeType, Material>builder()
@@ -96,14 +102,21 @@ public final class TreeTypeUtils {
 			.put(TreeType.CHORUS_PLANT, Material.CHORUS_PLANT)
 			// Cocoa
 			.put(TreeType.COCOA_TREE, Material.COCOA)
+			// Crimson Fungus
+			.put(TreeType.CRIMSON_FUNGUS, Material.CRIMSON_FUNGUS)
+			// Crimson Fungus
+			.put(TreeType.WARPED_FUNGUS, Material.WARPED_FUNGUS)
 			.build();
 
 	static {
 		// Determine if there's any tree types missing
 		{
 			final Set<TreeType> missing = new HashSet<>();
+			final Set<TreeType> exclude = Set.of( // Set of TreeTypes that cannot be reverse searched
+					TreeType.BIG_TREE, TreeType.JUNGLE_BUSH, TreeType.SWAMP, TreeType.SMALL_JUNGLE,
+					TreeType.TALL_BIRCH, TreeType.MEGA_REDWOOD, TreeType.TALL_REDWOOD);
 			CollectionUtils.addAll(missing, TreeType.values());
-			missing.removeIf(TREE_MATERIALS::containsValue);
+			missing.removeIf(type -> exclude.contains(type) || TREE_MATERIALS.containsValue(type));
 			if (!missing.isEmpty()) {
 				Bukkit.getLogger().warning("[TreeTypeUtils] The following tree types are missing: " +
 						missing.stream().map(Enum::name).collect(Collectors.joining(",")) + ".");
