@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import org.bukkit.Material;
-import vg.civcraft.mc.civmodcore.api.MaterialAPI;
+import vg.civcraft.mc.civmodcore.inventory.items.MaterialUtils;
 
 
 /**
@@ -79,7 +79,7 @@ public final class MapUtils {
 			return (Material) value;
 		}
 		if (value instanceof String) {
-			return MaterialAPI.getMaterial((String) value);
+			return MaterialUtils.getMaterial((String) value);
 		}
 		return null;
 	}
