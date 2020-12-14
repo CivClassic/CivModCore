@@ -1,5 +1,7 @@
 package vg.civcraft.mc.civmodcore.util;
 
+import javax.annotation.Nonnull;
+
 /**
  * @author Protonull
  */
@@ -64,5 +66,18 @@ public final class NullUtils {
         }
         return false;
     }
+
+    /**
+	 * This is for when you're absolutely sure that the given object isn't null, but for some reason your IDE can't
+	 * tell and is screaming at you to fix the null reference.
+	 *
+	 * @param <T> The type of the given object.
+	 * @param object The object that isn't null.
+	 * @return Returns the object highlighted as non-null.
+	 */
+    @Nonnull
+    public static <T> T isNotNull(final T object) {
+		return object;
+	}
 
 }
