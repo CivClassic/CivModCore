@@ -407,8 +407,11 @@ public final class ItemUtils {
 		if (item == null) {
 			return null;
 		}
-		final short maxDurability = item.getType().getMaxDurability();
-		if (maxDurability <= 0) {
+		final Material material = item.getType();
+		if (isValidItemMaterial(material)) {
+			return null;
+		}
+		if (material.getMaxDurability() <= 0) {
 			return null;
 		}
 		return MoreClassUtils.castOrNull(Damageable.class, item.getItemMeta());
