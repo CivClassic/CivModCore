@@ -189,7 +189,23 @@ public class ChatUtils {
 		if (component == null) {
 			return true;
 		}
-		return Strings.isNullOrEmpty(component.toPlainText());
+		final TextComponent text = fromLegacyText(component.toPlainText());
+		return Strings.isNullOrEmpty(text.toPlainText());
+	}
+
+	/**
+	 * <p>Converts a string containing Minecraft's legacy colour codes into a text component.</p>
+	 *
+	 * <p>Note: This does not work on Civ's colour code equivalents, make sure to parse those before using this.</p>
+	 *
+	 * @param text The legacy text to parse.
+	 * @return Returns a text component of the legacy text.
+	 */
+	public static TextComponent fromLegacyText(final String text) {
+		if (Strings.isNullOrEmpty(text)) {
+			return new TextComponent(text);
+		}
+		return new TextComponent(TextComponent.fromLegacyText(text, ChatColor.RESET));
 	}
 
 	/**
