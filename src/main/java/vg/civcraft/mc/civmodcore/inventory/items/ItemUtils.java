@@ -408,7 +408,7 @@ public final class ItemUtils {
 			return null;
 		}
 		final Material material = item.getType();
-		if (isValidItemMaterial(material)) {
+		if (!isValidItemMaterial(material)) {
 			return null;
 		}
 		if (material.getMaxDurability() <= 0) {
