@@ -2,6 +2,7 @@ package vg.civcraft.mc.civmodcore.util;
 
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -98,5 +99,21 @@ public final class MoreArrayUtils {
         }
         return array[ThreadLocalRandom.current().nextInt(array.length)];
     }
+
+    /**
+	 * Computes elements, allowing them to be changed to something of the same type.
+	 *
+	 * @param <T> The type of element.
+	 * @param array The array to compute the elements of.
+	 * @param mapper The compute function itself.
+	 */
+    public static <T> void computeElements(final T[] array, final Function<T, T> mapper) {
+    	if (ArrayUtils.isEmpty(array) || mapper == null) {
+    		return;
+		}
+    	for (int i = 0, l = array.length; i < l; i++) {
+			array[i] = mapper.apply(array[i]);
+		}
+	}
 
 }
