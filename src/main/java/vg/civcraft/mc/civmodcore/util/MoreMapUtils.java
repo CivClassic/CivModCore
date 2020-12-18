@@ -2,6 +2,7 @@ package vg.civcraft.mc.civmodcore.util;
 
 import com.google.common.collect.BiMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Function;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -134,5 +135,13 @@ public final class MoreMapUtils {
             map.put(key, value);
         }
     }
+
+    /**
+	 * @param <T> The type of the map's values.
+	 * @return Returns a new TreeMap with a String keys that are <b>NOT</b> case sensitive.
+	 */
+    public static <T> TreeMap<String, T> newStringKeyMap() {
+    	return new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+	}
 
 }
