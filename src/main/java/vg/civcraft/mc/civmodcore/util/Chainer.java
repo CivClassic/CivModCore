@@ -4,6 +4,7 @@ import java.util.function.Function;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.apache.commons.lang3.Validate;
+import org.jetbrains.annotations.Contract;
 
 /**
  * <p>Utility class that allows for something roughly within the range of Javascript's optional chaining.</p>
@@ -33,7 +34,7 @@ public final class Chainer<T> {
      * @param fallback The given fallback should the current value of the chainer be null.
      * @return Returns the current value of the chainer, or the given fallback if null.
      */
-    @Nullable
+    @Contract("null -> _; !null -> !null")
     public T orElse(final T fallback) {
         if (this.value == null) {
             return fallback;
