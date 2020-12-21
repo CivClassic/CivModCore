@@ -1,5 +1,6 @@
 package vg.civcraft.mc.civmodcore.api;
 
+import com.destroystokyo.paper.MaterialTags;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
@@ -37,11 +38,11 @@ public final class MaterialAPI {
 	}
 
 	/**
-	 * @deprecated Please use {@code Tag.LOGS.isTagged(material);}
+	 * @deprecated Please use {@code MoreTags.LOGS.isTagged(material);}
 	 */
 	@Deprecated
 	public static boolean isLog(Material material) {
-		return Tag.LOGS.isTagged(material);
+		return MoreTags.LOGS.isTagged(material);
 	}
 
 	/**
@@ -93,27 +94,27 @@ public final class MaterialAPI {
 	}
 
 	/**
-	 * @deprecated Please use {@code MoreTags.SKULLS.isTagged(material);}
+	 * @deprecated Please use {@code MaterialTags.SKULLS.isTagged(material);}
 	 */
 	@Deprecated
 	public static boolean isSkull(Material material) {
-		return MoreTags.SKULLS.isTagged(material);
+		return MaterialTags.SKULLS.isTagged(material);
 	}
 
 	/**
-	 * @deprecated Please use {@code MoreTags.GLASS.isTagged(material);}
+	 * @deprecated Please use {@code MaterialTags.GLASS.isTagged(material);}
 	 */
 	@Deprecated
 	public static boolean isGlassBlock(Material material) {
-		return MoreTags.GLASS.isTagged(material);
+		return MaterialTags.GLASS.isTagged(material);
 	}
 
 	/**
-	 * @deprecated Please use {@code MoreTags.GLASS_PANES.isTagged(material);}
+	 * @deprecated Please use {@code MaterialTags.GLASS_PANES.isTagged(material);}
 	 */
 	@Deprecated
 	public static boolean isGlassPane(Material material) {
-		return MoreTags.GLASS_PANES.isTagged(material);
+		return MaterialTags.GLASS_PANES.isTagged(material);
 	}
 
 	/**
@@ -141,11 +142,11 @@ public final class MaterialAPI {
 	}
 
 	/**
-	 * @deprecated Please use {@code MoreTags.INFESTED.isTagged(material);}
+	 * @deprecated Please use {@code MaterialTags.INFESTED_BLOCKS.isTagged(material);}
 	 */
 	@Deprecated
 	public static boolean isInfested(Material material) {
-		return MoreTags.INFESTED.isTagged(material);
+		return MaterialTags.INFESTED_BLOCKS.isTagged(material);
 	}
 
 	/**
@@ -175,75 +176,75 @@ public final class MaterialAPI {
 	}
 
 	/**
-	 * @deprecated Please use {@code MoreTags.SWORDS.isTagged(material);}
+	 * @deprecated Please use {@code MaterialTags.SWORDS.isTagged(material);}
 	 */
 	@Deprecated
 	public static boolean isSword(Material material) {
-		return MoreTags.SWORDS.isTagged(material);
+		return MaterialTags.SWORDS.isTagged(material);
 	}
 
 	/**
-	 * @deprecated Please use {@code MoreTags.PICKAXES.isTagged(material);}
+	 * @deprecated Please use {@code MaterialTags.PICKAXES.isTagged(material);}
 	 */
 	@Deprecated
 	public static boolean isPickaxe(Material material) {
-		return MoreTags.PICKAXES.isTagged(material);
+		return MaterialTags.PICKAXES.isTagged(material);
 	}
 
 	/**
-	 * @deprecated Please use {@code MoreTags.AXES.isTagged(material);}
+	 * @deprecated Please use {@code MaterialTags.AXES.isTagged(material);}
 	 */
 	@Deprecated
 	public static boolean isAxe(Material material) {
-		return MoreTags.AXES.isTagged(material);
+		return MaterialTags.AXES.isTagged(material);
 	}
 
 	/**
-	 * @deprecated Please use {@code MoreTags.SPADES.isTagged(material);}
+	 * @deprecated Please use {@code MaterialTags.SHOVELS.isTagged(material);}
 	 */
 	@Deprecated
 	public static boolean isShovel(Material material) {
-		return MoreTags.SPADES.isTagged(material);
+		return MaterialTags.SHOVELS.isTagged(material);
 	}
 
 	/**
-	 * @deprecated Please use {@code MoreTags.HOES.isTagged(material);}
+	 * @deprecated Please use {@code MaterialTags.HOES.isTagged(material);}
 	 */
 	@Deprecated
 	public static boolean isHoe(Material material) {
-		return MoreTags.HOES.isTagged(material);
+		return MaterialTags.HOES.isTagged(material);
 	}
 
 	/**
-	 * @deprecated Please use {@code MoreTags.HELMETS.isTagged(material);}
+	 * @deprecated Please use {@code MaterialTags.HELMETS.isTagged(material);}
 	 */
 	@Deprecated
 	public static boolean isHelmet(Material material) {
-		return MoreTags.HELMETS.isTagged(material);
+		return MaterialTags.HELMETS.isTagged(material);
 	}
 
 	/**
-	 * @deprecated Please use {@code MoreTags.CHESTPLATES.isTagged(material);}
+	 * @deprecated Please use {@code MaterialTags.CHESTPLATES.isTagged(material);}
 	 */
 	@Deprecated
 	public static boolean isChestplate(Material material) {
-		return MoreTags.CHESTPLATES.isTagged(material);
+		return MaterialTags.CHESTPLATES.isTagged(material);
 	}
 
 	/**
-	 * @deprecated Please use {@code MoreTags.LEGGINGS.isTagged(material);}
+	 * @deprecated Please use {@code MaterialTags.LEGGINGS.isTagged(material);}
 	 */
 	@Deprecated
 	public static boolean areLeggings(Material material) {
-		return MoreTags.LEGGINGS.isTagged(material);
+		return MaterialTags.LEGGINGS.isTagged(material);
 	}
 
 	/**
-	 * @deprecated Please use {@code MoreTags.BOOTS.isTagged(material);}
+	 * @deprecated Please use {@code MaterialTags.BOOTS.isTagged(material);}
 	 */
 	@Deprecated
 	public static boolean areBoots(Material material) {
-		return MoreTags.BOOTS.isTagged(material);
+		return MaterialTags.BOOTS.isTagged(material);
 	}
 
 	/**

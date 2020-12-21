@@ -13,6 +13,7 @@ import vg.civcraft.mc.civmodcore.dao.ManagedDatasource;
 import vg.civcraft.mc.civmodcore.events.CustomEventMapper;
 import vg.civcraft.mc.civmodcore.inventory.items.EnchantUtils;
 import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
+import vg.civcraft.mc.civmodcore.inventory.items.MoreTags;
 import vg.civcraft.mc.civmodcore.inventory.items.PotionUtils;
 import vg.civcraft.mc.civmodcore.inventory.items.SpawnEggUtils;
 import vg.civcraft.mc.civmodcore.inventory.items.TreeTypeUtils;
@@ -94,6 +95,7 @@ public final class CivModCorePlugin extends ACivMod {
 		// Load APIs
 		EnchantUtils.loadEnchantAbbreviations(this);
 		ItemUtils.loadItemNames(this);
+		MoreTags.init();
 		PotionUtils.getPotionNiceName(null);     // Using these methods to force load their respective classes
 		SpawnEggUtils.getSpawnEgg(null);         //
 		TreeTypeUtils.getMatchingTreeType(null); //

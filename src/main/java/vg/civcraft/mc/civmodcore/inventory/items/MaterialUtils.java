@@ -1,5 +1,6 @@
 package vg.civcraft.mc.civmodcore.inventory.items;
 
+import com.destroystokyo.paper.MaterialTags;
 import com.google.common.base.Strings;
 import com.google.common.math.IntMath;
 import java.util.ArrayList;
@@ -21,9 +22,9 @@ public final class MaterialUtils {
 
 	private static final List<Material> HASH_MATERIALS = new ArrayList<>() {{
 		addAll(Tag.WOOL.getValues());
-		addAll(MoreTags.STAINED_GLASS.getValues());
-		addAll(MoreTags.STAINED_GLASS_PANES.getValues());
-		addAll(MoreTags.CONCRETE.getValues());
+		addAll(MaterialTags.STAINED_GLASS.getValues());
+		addAll(MaterialTags.STAINED_GLASS_PANES.getValues());
+		addAll(MaterialTags.CONCRETES.getValues());
 	}};
 
 	/**

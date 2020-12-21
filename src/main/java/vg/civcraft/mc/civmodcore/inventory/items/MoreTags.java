@@ -1,9 +1,14 @@
 package vg.civcraft.mc.civmodcore.inventory.items;
 
+import com.destroystokyo.paper.MaterialTags;
 import com.google.common.collect.ImmutableSet;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import org.apache.commons.collections4.CollectionUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -11,100 +16,15 @@ import org.bukkit.Tag;
 import org.bukkit.block.data.Ageable;
 import vg.civcraft.mc.civmodcore.util.KeyedUtils;
 
+/**
+ * Fills in the gaps between {@link Tag} and {@link MaterialTags}.
+ */
 public class MoreTags {
 
-	public static final Tag<Material> STAINED_GLASS = new BetterTag<>("stained_glass",
-			ImmutableSet.<Material>builder()
-					.add(Material.BLACK_STAINED_GLASS)
-					.add(Material.WHITE_STAINED_GLASS)
-					.add(Material.YELLOW_STAINED_GLASS)
-					.add(Material.RED_STAINED_GLASS)
-					.add(Material.LIME_STAINED_GLASS)
-					.add(Material.GRAY_STAINED_GLASS)
-					.add(Material.BLUE_STAINED_GLASS)
-					.add(Material.LIGHT_GRAY_STAINED_GLASS)
-					.add(Material.LIGHT_BLUE_STAINED_GLASS)
-					.add(Material.GREEN_STAINED_GLASS)
-					.add(Material.BROWN_STAINED_GLASS)
-					.add(Material.PINK_STAINED_GLASS)
-					.add(Material.PURPLE_STAINED_GLASS)
-					.add(Material.CYAN_STAINED_GLASS)
-					.add(Material.MAGENTA_STAINED_GLASS)
-					.add(Material.ORANGE_STAINED_GLASS)
-					.build());
-
-	public static final Tag<Material> GLASS = new BetterTag<>("glass",
-			ImmutableSet.<Material>builder()
-					.add(Material.GLASS)
-					.addAll(STAINED_GLASS.getValues())
-					.build());
-
-	public static final Tag<Material> STAINED_GLASS_PANES = new BetterTag<>("stained_glass_panes",
-			ImmutableSet.<Material>builder()
-					.add(Material.BLACK_STAINED_GLASS_PANE)
-					.add(Material.WHITE_STAINED_GLASS_PANE)
-					.add(Material.YELLOW_STAINED_GLASS_PANE)
-					.add(Material.RED_STAINED_GLASS_PANE)
-					.add(Material.LIME_STAINED_GLASS_PANE)
-					.add(Material.GRAY_STAINED_GLASS_PANE)
-					.add(Material.BLUE_STAINED_GLASS_PANE)
-					.add(Material.LIGHT_GRAY_STAINED_GLASS_PANE)
-					.add(Material.LIGHT_BLUE_STAINED_GLASS_PANE)
-					.add(Material.GREEN_STAINED_GLASS_PANE)
-					.add(Material.BROWN_STAINED_GLASS_PANE)
-					.add(Material.PINK_STAINED_GLASS_PANE)
-					.add(Material.PURPLE_STAINED_GLASS_PANE)
-					.add(Material.CYAN_STAINED_GLASS_PANE)
-					.add(Material.MAGENTA_STAINED_GLASS_PANE)
-					.add(Material.ORANGE_STAINED_GLASS_PANE)
-					.build());
-
-	public static final Tag<Material> GLASS_PANES = new BetterTag<>("glass_panes",
-			ImmutableSet.<Material>builder()
-					.add(Material.GLASS_PANE)
-					.addAll(STAINED_GLASS_PANES.getValues())
-					.build());
-
-	public static final Tag<Material> CONCRETE = new BetterTag<>("concrete",
-			ImmutableSet.<Material>builder()
-					.add(Material.BLACK_CONCRETE)
-					.add(Material.WHITE_CONCRETE)
-					.add(Material.YELLOW_CONCRETE)
-					.add(Material.RED_CONCRETE)
-					.add(Material.LIME_CONCRETE)
-					.add(Material.GRAY_CONCRETE)
-					.add(Material.BLUE_CONCRETE)
-					.add(Material.LIGHT_GRAY_CONCRETE)
-					.add(Material.LIGHT_BLUE_CONCRETE)
-					.add(Material.GREEN_CONCRETE)
-					.add(Material.BROWN_CONCRETE)
-					.add(Material.PINK_CONCRETE)
-					.add(Material.PURPLE_CONCRETE)
-					.add(Material.CYAN_CONCRETE)
-					.add(Material.MAGENTA_CONCRETE)
-					.add(Material.ORANGE_CONCRETE)
-					.build());
-
-	public static final Tag<Material> CONCRETE_POWDER = new BetterTag<>("concrete_powder",
-			ImmutableSet.<Material>builder()
-					.add(Material.BLACK_CONCRETE_POWDER)
-					.add(Material.WHITE_CONCRETE_POWDER)
-					.add(Material.YELLOW_CONCRETE_POWDER)
-					.add(Material.RED_CONCRETE_POWDER)
-					.add(Material.LIME_CONCRETE_POWDER)
-					.add(Material.GRAY_CONCRETE_POWDER)
-					.add(Material.BLUE_CONCRETE_POWDER)
-					.add(Material.LIGHT_GRAY_CONCRETE_POWDER)
-					.add(Material.LIGHT_BLUE_CONCRETE_POWDER)
-					.add(Material.GREEN_CONCRETE_POWDER)
-					.add(Material.BROWN_CONCRETE_POWDER)
-					.add(Material.PINK_CONCRETE_POWDER)
-					.add(Material.PURPLE_CONCRETE_POWDER)
-					.add(Material.CYAN_CONCRETE_POWDER)
-					.add(Material.MAGENTA_CONCRETE_POWDER)
-					.add(Material.ORANGE_CONCRETE_POWDER)
-					.build());
-
+	/**
+	 * This differs from {@link Tag#LOGS} as that includes every type of wood,
+	 * including stripped logs and all planks.
+	 */
 	public static final Tag<Material> LOGS = new BetterTag<>("logs",
 			ImmutableSet.<Material>builder()
 					.add(Material.ACACIA_LOG)
@@ -141,16 +61,6 @@ public class MoreTags {
 					.addAll(STRIPPED_PLANKS.getValues())
 					.build());
 
-	public static final Tag<Material> INFESTED = new BetterTag<>("infested",
-			ImmutableSet.<Material>builder()
-					.add(Material.INFESTED_STONE)
-					.add(Material.INFESTED_COBBLESTONE)
-					.add(Material.INFESTED_STONE_BRICKS)
-					.add(Material.INFESTED_MOSSY_STONE_BRICKS)
-					.add(Material.INFESTED_CRACKED_STONE_BRICKS)
-					.add(Material.INFESTED_CHISELED_STONE_BRICKS)
-					.build());
-
 	public static final Tag<Material> DIRT = new BetterTag<>("dirt",
 			ImmutableSet.<Material>builder()
 					.add(Material.FARMLAND)
@@ -168,94 +78,13 @@ public class MoreTags {
 					.add(Material.LINGERING_POTION)
 					.build());
 
-	public static final Tag<Material> SWORDS = new BetterTag<>("swords",
+	/**
+	 * Materials of items that can apply potion effects.
+	 */
+	public static final Tag<Material> EFFECTORS = new BetterTag<>("effectors",
 			ImmutableSet.<Material>builder()
-					.add(Material.WOODEN_SWORD)
-					.add(Material.STONE_SWORD)
-					.add(Material.IRON_SWORD)
-					.add(Material.GOLDEN_SWORD)
-					.add(Material.DIAMOND_SWORD)
-					.add(Material.NETHERITE_SWORD)
-					.build());
-
-	public static final Tag<Material> PICKAXES = new BetterTag<>("pickaxes",
-			ImmutableSet.<Material>builder()
-					.add(Material.WOODEN_PICKAXE)
-					.add(Material.STONE_PICKAXE)
-					.add(Material.IRON_PICKAXE)
-					.add(Material.GOLDEN_PICKAXE)
-					.add(Material.DIAMOND_PICKAXE)
-					.add(Material.NETHERITE_PICKAXE)
-					.build());
-
-	public static final Tag<Material> AXES = new BetterTag<>("axes",
-			ImmutableSet.<Material>builder()
-					.add(Material.WOODEN_AXE)
-					.add(Material.STONE_AXE)
-					.add(Material.IRON_AXE)
-					.add(Material.GOLDEN_AXE)
-					.add(Material.DIAMOND_AXE)
-					.add(Material.NETHERITE_AXE)
-					.build());
-
-	public static final Tag<Material> SPADES = new BetterTag<>("spades",
-			ImmutableSet.<Material>builder()
-					.add(Material.WOODEN_SHOVEL)
-					.add(Material.STONE_SHOVEL)
-					.add(Material.IRON_SHOVEL)
-					.add(Material.GOLDEN_SHOVEL)
-					.add(Material.DIAMOND_SHOVEL)
-					.add(Material.NETHERITE_SHOVEL)
-					.build());
-
-	public static final Tag<Material> HOES = new BetterTag<>("hoes",
-			ImmutableSet.<Material>builder()
-					.add(Material.WOODEN_HOE)
-					.add(Material.STONE_HOE)
-					.add(Material.IRON_HOE)
-					.add(Material.GOLDEN_HOE)
-					.add(Material.DIAMOND_HOE)
-					.add(Material.NETHERITE_HOE)
-					.build());
-
-	public static final Tag<Material> HELMETS = new BetterTag<>("helmets",
-			ImmutableSet.<Material>builder()
-					.add(Material.LEATHER_HELMET)
-					.add(Material.CHAINMAIL_HELMET)
-					.add(Material.IRON_HELMET)
-					.add(Material.GOLDEN_HELMET)
-					.add(Material.DIAMOND_HELMET)
-					.add(Material.NETHERITE_HELMET)
-					.build());
-
-	public static final Tag<Material> CHESTPLATES = new BetterTag<>("chestplates",
-			ImmutableSet.<Material>builder()
-					.add(Material.LEATHER_CHESTPLATE)
-					.add(Material.CHAINMAIL_CHESTPLATE)
-					.add(Material.IRON_CHESTPLATE)
-					.add(Material.GOLDEN_CHESTPLATE)
-					.add(Material.DIAMOND_CHESTPLATE)
-					.add(Material.NETHERITE_CHESTPLATE)
-					.build());
-
-	public static final Tag<Material> LEGGINGS = new BetterTag<>("leggings",
-			ImmutableSet.<Material>builder()
-					.add(Material.LEATHER_LEGGINGS)
-					.add(Material.CHAINMAIL_LEGGINGS)
-					.add(Material.IRON_LEGGINGS)
-					.add(Material.GOLDEN_LEGGINGS)
-					.add(Material.DIAMOND_LEGGINGS)
-					.add(Material.NETHERITE_LEGGINGS)
-					.build());
-
-	public static final Tag<Material> BOOTS = new BetterTag<>("boots",
-			ImmutableSet.<Material>builder()
-					.add(Material.LEATHER_BOOTS)
-					.add(Material.CHAINMAIL_BOOTS)
-					.add(Material.IRON_BOOTS)
-					.add(Material.GOLDEN_BOOTS)
-					.add(Material.DIAMOND_BOOTS)
-					.add(Material.NETHERITE_BOOTS)
+					.addAll(POTIONS.getValues())
+					.add(Material.TIPPED_ARROW)
 					.build());
 
 	/**
@@ -265,6 +94,7 @@ public class MoreTags {
 	public static final Tag<Material> CROPS = new BetterTag<>("crops",
 			ImmutableSet.<Material>builder()
 					.add(Material.BAMBOO)
+					.add(Material.BAMBOO_SAPLING)
 					.add(Material.BEETROOTS)
 					.add(Material.CACTUS)
 					.add(Material.CARROTS)
@@ -314,28 +144,11 @@ public class MoreTags {
 					.add(Material.WITHER_ROSE)
 					.build());
 
-	public static final Tag<Material> SKULLS = new BetterTag<>("skulls",
-			ImmutableSet.<Material>builder()
-					.add(Material.CREEPER_HEAD)
-					.add(Material.CREEPER_WALL_HEAD)
-					.add(Material.DRAGON_HEAD)
-					.add(Material.DRAGON_WALL_HEAD)
-					.add(Material.PLAYER_HEAD)
-					.add(Material.PLAYER_WALL_HEAD)
-					.add(Material.ZOMBIE_HEAD)
-					.add(Material.ZOMBIE_WALL_HEAD)
-					.build());
+	// ------------------------------------------------------------
+	// Better Tag class to allow for easy Tag creation.
+	// ------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-	public static class BetterTag<T extends Keyed> implements Tag<T> {
+	private static class BetterTag<T extends Keyed> implements Tag<T> {
 
 		private final NamespacedKey key;
 
@@ -363,6 +176,27 @@ public class MoreTags {
 			return this.key;
 		}
 
+	}
+
+	// ------------------------------------------------------------
+	// Initialise and check MoreTags
+	// ------------------------------------------------------------
+
+	public static void init() {
+		// Determine if there's any crops missing
+		{
+			final Set<Material> missing = new HashSet<>();
+			CollectionUtils.addAll(missing, Material.values());
+			CollectionUtils.filter(missing, Material::isBlock); // Do this first to reduce amount of block data created
+			CollectionUtils.filter(missing, material -> Bukkit.createBlockData(material) instanceof Ageable);
+			missing.removeIf(Tag.ICE::isTagged);
+			missing.removeIf(Tag.FIRE::isTagged);
+			missing.removeIf(CROPS::isTagged);
+			if (!missing.isEmpty()) {
+				Bukkit.getLogger().warning("[MoreTags] The following crops are missing: " +
+						missing.stream().map(Material::name).collect(Collectors.joining(",")) + ".");
+			}
+		}
 	}
 
 }
