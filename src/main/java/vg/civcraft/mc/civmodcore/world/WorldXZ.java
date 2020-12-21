@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.World;
+import vg.civcraft.mc.civmodcore.util.NullUtils;
 
 public class WorldXZ {
 
@@ -15,7 +16,7 @@ public class WorldXZ {
 		if (!WorldUtils.isValidLocation(location)) {
 			throw new IllegalArgumentException("Location must be valid!");
 		}
-		this.world = location.getWorld().getUID(); // Do not listen to the highlighter
+		this.world = NullUtils.isNotNull(location.getWorld()).getUID();
 		this.x = location.getBlockX();
 		this.z = location.getBlockZ();
 	}
@@ -73,10 +74,10 @@ public class WorldXZ {
 		if (!WorldUtils.isValidLocation(location)) {
 			throw new IllegalArgumentException("Location cannot be null!");
 		}
-		final World world = location.getWorld();
+		final World world = NullUtils.isNotNull(location.getWorld());
 		final int x = location.getBlockX();
 		final int z = location.getBlockZ();
-		return new WorldXZ(world.getUID(), x, z); // Do not listen to the highlighter
+		return new WorldXZ(world.getUID(), x, z);
 	}
 
 }
