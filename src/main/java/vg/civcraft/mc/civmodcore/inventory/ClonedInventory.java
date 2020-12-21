@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Spliterator;
 import java.util.function.Consumer;
-import javax.annotation.Nonnull;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,6 +13,9 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import vg.civcraft.mc.civmodcore.util.MoreArrayUtils;
 
 /**
  * Wrapper for cloned inventories intended to ensure that ClonedInventories aren't themselves cloned.
@@ -56,10 +58,16 @@ public final class ClonedInventory implements Inventory {
 		return this.inventory.addItem(items);
 	}
 
-	@Nonnull
+	@NotNull
 	@Override
 	public HashMap<Integer, ItemStack> removeItem(final ItemStack... items) throws IllegalArgumentException {
 		return this.inventory.removeItem(items);
+	}
+
+	@NotNull
+	@Override
+	public HashMap<Integer, ItemStack> removeItemAnySlot(@NotNull ItemStack... items) throws IllegalArgumentException {
+		return this.inventory.removeItemAnySlot(items);
 	}
 
 	@Override
@@ -83,7 +91,7 @@ public final class ClonedInventory implements Inventory {
 	}
 
 	@Override
-	public boolean contains(@Nonnull final Material material) throws IllegalArgumentException {
+	public boolean contains(@NotNull final Material material) throws IllegalArgumentException {
 		return this.inventory.contains(material);
 	}
 
@@ -93,7 +101,7 @@ public final class ClonedInventory implements Inventory {
 	}
 
 	@Override
-	public boolean contains(@Nonnull final Material material, final int amount) throws IllegalArgumentException {
+	public boolean contains(@NotNull final Material material, final int amount) throws IllegalArgumentException {
 		return this.inventory.contains(material, amount);
 	}
 
@@ -108,7 +116,7 @@ public final class ClonedInventory implements Inventory {
 	}
 
 	@Override
-	public HashMap<Integer, ? extends ItemStack> all(@Nonnull final Material material) throws IllegalArgumentException {
+	public HashMap<Integer, ? extends ItemStack> all(@NotNull final Material material) throws IllegalArgumentException {
 		return this.inventory.all(material);
 	}
 
@@ -118,12 +126,12 @@ public final class ClonedInventory implements Inventory {
 	}
 
 	@Override
-	public int first(@Nonnull final Material material) throws IllegalArgumentException {
+	public int first(@NotNull final Material material) throws IllegalArgumentException {
 		return this.inventory.first(material);
 	}
 
 	@Override
-	public int first(@Nonnull final ItemStack item) {
+	public int first(@NotNull final ItemStack item) {
 		return this.inventory.first(item);
 	}
 
@@ -133,12 +141,12 @@ public final class ClonedInventory implements Inventory {
 	}
 
 	@Override
-	public void remove(@Nonnull final Material material) throws IllegalArgumentException {
+	public void remove(@NotNull final Material material) throws IllegalArgumentException {
 		this.inventory.remove(material);
 	}
 
 	@Override
-	public void remove(@Nonnull final ItemStack item) {
+	public void remove(@NotNull final ItemStack item) {
 		this.inventory.remove(item);
 	}
 
@@ -167,7 +175,13 @@ public final class ClonedInventory implements Inventory {
 		return this.inventory.getHolder();
 	}
 
-	@Nonnull
+	@Nullable
+	@Override
+	public InventoryHolder getHolder(boolean useSnapshot) {
+		return this.inventory.getHolder(useSnapshot);
+	}
+
+	@NotNull
 	@Override
 	public ListIterator<ItemStack> iterator() {
 		return this.inventory.iterator();
@@ -225,12 +239,9 @@ public final class ClonedInventory implements Inventory {
 		else {
 			clone = Bukkit.createInventory(inventory.getHolder(), inventory.getType());
 		}
-		ItemStack[] origin = inventory.getContents();
-		ItemStack[] copied = new ItemStack[origin.length];
-		for (int i = 0; i < origin.length; i++) {
-			copied[i] = origin[i] == null ? null : origin[i].clone();
-		}
-		clone.setContents(copied);
+		final ItemStack[] contents = inventory.getContents();
+		MoreArrayUtils.computeElements(contents, (item) -> item == null ? null : item.clone());
+		clone.setContents(contents);
 		return new ClonedInventory(clone);
 	}
 
