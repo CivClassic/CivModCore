@@ -108,7 +108,7 @@ public final class TreeTypeUtils {
 			.put(TreeType.WARPED_FUNGUS, Material.WARPED_FUNGUS)
 			.build();
 
-	static {
+	public static void init() {
 		// Determine if there's any tree types missing
 		{
 			final Set<TreeType> missing = new HashSet<>();

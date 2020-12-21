@@ -82,7 +82,7 @@ public final class PotionUtils {
 		put(PotionEffectType.HERO_OF_THE_VILLAGE, "Hero of the Village");
 	}};
 
-	static {
+	public static void init() {
 		// Determine if there's any missing potion types
 		{
 			final Set<PotionType> missing = new HashSet<>();

@@ -96,9 +96,9 @@ public final class CivModCorePlugin extends ACivMod {
 		EnchantUtils.loadEnchantAbbreviations(this);
 		ItemUtils.loadItemNames(this);
 		MoreTags.init();
-		PotionUtils.getPotionNiceName(null);     // Using these methods to force load their respective classes
-		SpawnEggUtils.getSpawnEgg(null);         //
-		TreeTypeUtils.getMatchingTreeType(null); //
+		PotionUtils.init();
+		SpawnEggUtils.init();
+		TreeTypeUtils.init();
 		BottomLineAPI.init();
 		newCommandHandler.registerCommand(new ConfigSetAnyCommand());
 		newCommandHandler.registerCommand(new ConfigGetAnyCommand());

@@ -82,7 +82,7 @@ public final class SpawnEggUtils {
 			put(Material.ZOMBIE_VILLAGER_SPAWN_EGG, EntityType.ZOMBIE_VILLAGER).
 			build();
 
-	static {
+	public static void init() {
 		// Determine if there's any enchants missing names
 		final Set<Material> missing = new HashSet<>();
 		CollectionUtils.addAll(missing, Material.values());
