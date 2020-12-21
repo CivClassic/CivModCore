@@ -30,6 +30,7 @@ import vg.civcraft.mc.civmodcore.playersettings.gui.ConfigSetAnyCommand;
 import vg.civcraft.mc.civmodcore.scoreboard.bottom.BottomLineAPI;
 import vg.civcraft.mc.civmodcore.scoreboard.side.ScoreBoardListener;
 import vg.civcraft.mc.civmodcore.serialization.NBTSerialization;
+import vg.civcraft.mc.civmodcore.world.BeaconTracker;
 import vg.civcraft.mc.civmodcore.world.WorldTracker;
 import vg.civcraft.mc.civmodcore.world.operations.ChunkOperationManager;
 
@@ -83,6 +84,7 @@ public final class CivModCorePlugin extends ACivMod {
 		registerListener(new ScoreBoardListener());
 		registerListener(new CustomEventMapper());
 		registerListener(new WorldTracker());
+		registerListener(new BeaconTracker());
 		registerListener(ChunkOperationManager.INSTANCE);
 		// Register commands
 		this.manager = new AikarCommandManager(this) {
