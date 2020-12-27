@@ -10,8 +10,8 @@ import org.bukkit.Tag;
 /**
  * <p>See <a href="https://github.com/Protonull/BukkitReport/tree/master/reports">BukkitReports</a>.</p>
  *
+ * See also:
  * <ul>
- *     <label>See also:</label>
  *     <li>{@link SpawnEggAPI SpawnEggAPI}</li>
  *     <li>{@link TreeTypeAPI TreeTypeAPI}</li>
  * </ul>

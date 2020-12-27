@@ -1,93 +1,56 @@
 package vg.civcraft.mc.civmodcore.command;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 public final class Trie {
 
-	private Map<Character, Trie> children;
-	private String word;
-	// instead of storing only the suffix and re-concatenating the original word for
-	// every lookup we always store the full word and depth as a relative offset
-	private int depth;
-	//whether this non-leaf also represents the end of a word
-	private boolean isEnd;
+	private final List<String> completions;
 
 	public static Trie getNewTrie() {
-		Trie trie = new Trie("", 0);
-		trie.children = new HashMap<>();
-		return trie;
+		return new Trie();
 	}
 	
-	private Trie(String word, int depth) {
-		this.word = word;
-		this.depth = depth;
-		this.isEnd = false;
+	private Trie() {
+		this.completions = new ArrayList<>();
 	}
 
-	public boolean isLeaf() {
-		return children == null;
-	}
 
-	public void insert(String wordToInsert) {
-		if (isLeaf()) {
-			if (word.equals(wordToInsert)) {
-				return;
-			}
-			children = new HashMap<>();
-			// insert current suffix
-			if (word.length() > depth) {
-				children.put(word.charAt(depth), new Trie(word, depth + 1));
-				this.word = word.substring(0, depth);
-			}
-			else {
-				isEnd = true;
-			}
-		}
-		Trie targetNode = children.computeIfAbsent(wordToInsert.charAt(depth), c -> new Trie(wordToInsert, depth + 1));
-		targetNode.insert(wordToInsert);
+	public void insert(String completion) {
+		this.completions.add(completion);
 	}
 	
-	public List<String> match(String prefix) {
-		List<String> result = new ArrayList<>();
-		matchWord(prefix, result);
-		return result;
-	}
-
-	private void matchWord(String wordToMatch, List<String> result) {
-		if (isLeaf()) {
-			if (wordToMatch.length() <= this.word.length()) {
-				result.add(word);
-				return;
-			}
-			if (wordToMatch.length() > this.word.length()) {
-				//we can not be a prefix if we are shorter
-				return;
-			}
-			for(int i = depth; i < this.word.length(); i++) {
-				if (wordToMatch.charAt(i) != this.word.charAt(i)) {
-					return;
-				}
-			}
-			result.add(this.word);
-		} else {
-			if (isEnd) {
-				result.add(this.word);
-			}
-			if (wordToMatch.length() <= depth) {
-				//valid prefix from here on and deeper, so deep search and add everything below
-				for(Trie subTrie : children.values()) {
-					subTrie.matchWord(wordToMatch, result);
-				}
-				return;
-			}
-			Trie deeperNode = children.get(wordToMatch.charAt(depth));
-			if (deeperNode != null) {
-				deeperNode.matchWord(wordToMatch, result);
-			}
+	public List<String> match(String[] args) {
+		if (args.length == 0) {
+			return completions;
 		}
-	}
 
+		// number of words to drop from completions
+		int words = args.length - 1;
+
+		List<String> matches = new ArrayList<>(completions);
+		ListIterator<String> it = matches.listIterator();
+		OUTER:
+		while (it.hasNext()) {
+			String completion = it.next();
+			String[] completionWords = completion.split(" ");
+			for (int i = 0; i < Math.min(completionWords.length, args.length); i++) {
+				String completionWord = completionWords[i];
+				String word = args[i];
+
+				if (!completionWord.regionMatches(true, 0, word, 0, word.length())) {
+					it.remove();
+					continue OUTER;
+				}
+			}
+			String[] result = Arrays.copyOfRange(completionWords, words, completionWords.length);
+			it.set(String.join(" ", result));
+		}
+		return matches;
+	}
 }
