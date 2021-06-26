@@ -41,7 +41,7 @@ public class ChunkMetaListener implements Listener {
 					e.printStackTrace();
 				}
 			}
-		});
+		}, "CivModCore chunk unload handler");
 		unloadConsumer.start();
 	}
 
