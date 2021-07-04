@@ -113,7 +113,7 @@ public final class TreeTypeUtils {
 			// Crimson Fungus
 			.put(TreeType.WARPED_FUNGUS, Material.WARPED_FUNGUS)
 			// Azalea
-			.put(TreeType.ACACIA, Material.FLOWERING_AZALEA)
+			.put(TreeType.AZALEA, Material.FLOWERING_AZALEA)
 			.build();
 
 	public static void init() {
