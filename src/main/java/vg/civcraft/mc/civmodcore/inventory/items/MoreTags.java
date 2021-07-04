@@ -218,6 +218,42 @@ public final class MoreTags {
 					.add(Material.YELLOW_CANDLE_CAKE)
 					.build());
 
+	public static final Tag<Material> COPPER_BLOCKS = new BetterTag<>("copper_blocks",
+			ImmutableSet.<Material>builder()
+					.add(Material.COPPER_BLOCK)
+					.add(Material.EXPOSED_COPPER)
+					.add(Material.WEATHERED_COPPER)
+					.add(Material.OXIDIZED_COPPER)
+					.add(Material.CUT_COPPER)
+					.add(Material.EXPOSED_CUT_COPPER)
+					.add(Material.WEATHERED_CUT_COPPER)
+					.add(Material.OXIDIZED_CUT_COPPER)
+					.add(Material.CUT_COPPER_STAIRS)
+					.add(Material.EXPOSED_CUT_COPPER_STAIRS)
+					.add(Material.WEATHERED_CUT_COPPER_STAIRS)
+					.add(Material.OXIDIZED_CUT_COPPER_STAIRS)
+					.add(Material.CUT_COPPER_SLAB)
+					.add(Material.EXPOSED_CUT_COPPER_SLAB)
+					.add(Material.WEATHERED_CUT_COPPER_SLAB)
+					.add(Material.OXIDIZED_CUT_COPPER_SLAB)
+					.add(Material.WAXED_COPPER_BLOCK)
+					.add(Material.WAXED_EXPOSED_COPPER)
+					.add(Material.WAXED_WEATHERED_COPPER)
+					.add(Material.WAXED_OXIDIZED_COPPER)
+					.add(Material.WAXED_CUT_COPPER)
+					.add(Material.WAXED_EXPOSED_CUT_COPPER)
+					.add(Material.WAXED_WEATHERED_CUT_COPPER)
+					.add(Material.WAXED_OXIDIZED_CUT_COPPER)
+					.add(Material.WAXED_CUT_COPPER_STAIRS)
+					.add(Material.WAXED_EXPOSED_CUT_COPPER_STAIRS)
+					.add(Material.WAXED_WEATHERED_CUT_COPPER_STAIRS)
+					.add(Material.WAXED_OXIDIZED_CUT_COPPER_STAIRS)
+					.add(Material.WAXED_CUT_COPPER_SLAB)
+					.add(Material.WAXED_EXPOSED_CUT_COPPER_SLAB)
+					.add(Material.WAXED_WEATHERED_CUT_COPPER_SLAB)
+					.add(Material.WAXED_OXIDIZED_CUT_COPPER_SLAB)
+					.build());
+
 	// ------------------------------------------------------------
 	// Better Tag class to allow for easy Tag creation.
 	// ------------------------------------------------------------
