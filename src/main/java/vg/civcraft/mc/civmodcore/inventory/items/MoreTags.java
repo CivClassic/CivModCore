@@ -114,6 +114,7 @@ public final class MoreTags {
 					.add(Material.TWISTING_VINES)
 					.add(Material.WEEPING_VINES)
 					.add(Material.WHEAT)
+					.add(Material.CAVE_VINES)
 					.build());
 
 	public static final Tag<Material> POTTABLE = new BetterTag<>("pottable",
