@@ -3,6 +3,7 @@ package vg.civcraft.mc.civmodcore;
 import java.sql.SQLException;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.HumanEntity;
 import vg.civcraft.mc.civmodcore.chat.dialog.DialogManager;
 import vg.civcraft.mc.civmodcore.commands.CommandManager;
@@ -43,6 +44,7 @@ public final class CivModCorePlugin extends ACivMod {
 	@Override
 	public void onEnable() {
 		instance = this;
+		ConfigurationSerialization.registerClass(DatabaseCredentials.class);
 		// Save default resources
 		saveDefaultResource("enchants.yml");
 		saveDefaultResource("materials.yml");
@@ -117,6 +119,7 @@ public final class CivModCorePlugin extends ACivMod {
 			this.commands = null;
 		}
 		this.skinCache.shutdown();
+		ConfigurationSerialization.unregisterClass(DatabaseCredentials.class);
 		super.onDisable();
 	}
 
