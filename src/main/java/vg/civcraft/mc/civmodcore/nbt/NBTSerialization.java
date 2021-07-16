@@ -19,9 +19,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.bukkit.craftbukkit.v1_17_R1.persistence.CraftPersistentDataContainer;
 import org.bukkit.craftbukkit.v1_17_R1.util.CraftNBTTagConfigSerializer;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
 import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
+import vg.civcraft.mc.civmodcore.nbt.wrappers.NBTCompound;
 import vg.civcraft.mc.civmodcore.utilities.CivLogger;
 
 @UtilityClass
@@ -35,7 +38,7 @@ public class NBTSerialization {
 	 * @param item The item to retrieve the NBT form.
 	 * @return Returns the item's NBT.
 	 */
-	public static NBTTagCompound fromItem(final ItemStack item) {
+	public static NBTCompound fromItem(final ItemStack item) {
 		if (item == null) {
 			return null;
 		}
@@ -43,7 +46,20 @@ public class NBTSerialization {
 		if (nmsItem == null) {
 			return null;
 		}
-		return nmsItem.getOrCreateTag();
+		return new NBTCompound(nmsItem.getOrCreateTag());
+	}
+
+	/**
+	 * Generates an NBT compound based on a given persistent data container.
+	 *
+	 * @param container The container to generate an NBT compound from.
+	 * @return Returns a newly generated NBT compound by wrapping the PDC's inner-map, or null.
+	 */
+	public static NBTCompound fromPDC(final PersistentDataContainer container) {
+		if (container instanceof CraftPersistentDataContainer craftContainer) {
+			return new NBTCompound(craftContainer.getRaw());
+		}
+		return null;
 	}
 
 	/**
@@ -121,7 +137,7 @@ public class NBTSerialization {
 	}
 
 	/**
-	 * Dynamically retrieves a serializable's {@link NBTSerializable#fromNBT(NBTTagCompound) fromNBT} method.
+	 * Dynamically retrieves a serializable's {@link NBTSerializable#fromNBT(NBTCompound) fromNBT} method.
 	 *
 	 * @param <T> The type of the serializable.
 	 * @param clazz The serializable's class.
