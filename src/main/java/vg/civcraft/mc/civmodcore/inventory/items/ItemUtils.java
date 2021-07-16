@@ -216,7 +216,7 @@ public final class ItemUtils {
 	 * @return Returns the given item with a decremented amount, or null.
 	 */
 	public static ItemStack decrementItem(final ItemStack item) {
-		return item == null ? null : item.subtract().getAmount() == 0 ? null : item;
+		return item == null ? null : item.subtract().getAmount() <= 0 ? null : item;
 	}
 
 	/**
