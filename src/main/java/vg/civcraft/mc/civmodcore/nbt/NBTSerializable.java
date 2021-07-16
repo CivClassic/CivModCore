@@ -25,7 +25,7 @@ public interface NBTSerializable {
 	 * @return Returns a new instance of this class.
 	 */
 	@Nonnull
-	static NBTSerializable fromNBT(@Nonnull final NBTCompound nbt) {
+	public static NBTSerializable fromNBT(@Nonnull final NBTCompound nbt) {
 		throw new NotImplementedException("Please implement me on your class!");
 	}
 
