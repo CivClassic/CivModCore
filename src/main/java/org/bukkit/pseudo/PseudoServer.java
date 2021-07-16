@@ -211,6 +211,16 @@ public class PseudoServer implements Server {
 		throw new NotImplementedException();
 	}
 
+	@Override
+	public boolean isWhitelistEnforced() {
+		return false;
+	}
+
+	@Override
+	public void setWhitelistEnforced(final boolean enforceWhitelist) {
+
+	}
+
 	@Nonnull
 	@Override
 	public Set<OfflinePlayer> getWhitelistedPlayers() {
