@@ -69,14 +69,14 @@ public class NBTSerialization {
 	 * @param processor The processor.
 	 * @return Returns the given item with the processed NBT, or null if it could not be successfully processed.
 	 */
-	public static ItemStack processItem(final ItemStack item, final Consumer<NBTTagCompound> processor) {
+	public static ItemStack processItem(final ItemStack item, final Consumer<NBTCompound> processor) {
 		Preconditions.checkArgument(ItemUtils.isValidItem(item));
 		Preconditions.checkArgument(processor != null);
 		final var nmsItem = ItemUtils.getNMSItemStack(item);
 		if (nmsItem == null) {
 			return null;
 		}
-		final var nbt = nmsItem.getOrCreateTag();
+		final var nbt = new NBTCompound(nmsItem.getOrCreateTag());
 		try {
 			processor.accept(nbt);
 		}
@@ -144,8 +144,8 @@ public class NBTSerialization {
 	 * @return Returns a deserializer function.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T extends NBTSerializable> Function<NBTTagCompound, T> getDeserializer(final Class<T> clazz) {
-		final var method = MethodUtils.getMatchingAccessibleMethod(clazz, "fromNBT", NBTTagCompound.class);
+	public static <T extends NBTSerializable> Function<NBTCompound, T> getDeserializer(final Class<T> clazz) {
+		final var method = MethodUtils.getMatchingAccessibleMethod(clazz, "fromNBT", NBTCompound.class);
 		if (!Objects.equals(clazz, method.getReturnType())) {
 			throw new IllegalArgumentException("That class hasn't implemented its own fromNBT method.. please fix");
 		}

@@ -1,11 +1,11 @@
 package vg.civcraft.mc.civmodcore.nbt;
 
 import java.io.Serial;
-import net.minecraft.nbt.NBTTagCompound;
+import vg.civcraft.mc.civmodcore.nbt.wrappers.NBTCompound;
 
 /**
- * Exception that ought to be used within {@link NBTSerializable#toNBT(NBTTagCompound)} and
- * {@link NBTSerializable#fromNBT(NBTTagCompound)}.
+ * Exception that ought to be used within {@link NBTSerializable#toNBT(NBTCompound)} and
+ * {@link NBTSerializable#fromNBT(NBTCompound)}.
  */
 public class NBTSerializationException extends RuntimeException {
 

@@ -5,12 +5,12 @@ import com.google.common.base.Strings;
 import java.io.File;
 import java.util.Objects;
 import java.util.stream.Stream;
-import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.lang3.ArrayUtils;
 import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 import org.bukkit.craftbukkit.libs.org.apache.commons.io.FilenameUtils;
 import org.bukkit.plugin.Plugin;
 import vg.civcraft.mc.civmodcore.nbt.NBTSerializable;
+import vg.civcraft.mc.civmodcore.nbt.wrappers.NBTCompound;
 import vg.civcraft.mc.civmodcore.utilities.CivLogger;
 
 public abstract class BatchedNbtStorage<T> {
@@ -81,7 +81,7 @@ public abstract class BatchedNbtStorage<T> {
 	 * This method is called during {@link #loadAll()} and is used to read and parse the data within the given file. You
 	 * should also check the file's name using maybe {@link FilenameUtils#getBaseName(String)} to ensure it's correctly
 	 * formatted. I'd recommend using {@link FileUtils#readFileToByteArray(File)} to read the file, then using
-	 * {@link NBTSerializable#fromNBT(NBTTagCompound)} to convert that into a usable NBT instance. If for whatever
+	 * {@link NBTSerializable#fromNBT(NBTCompound)} to convert that into a usable NBT instance. If for whatever
 	 * reason the file cannot be correctly parsed, the correct course of action is to log the error using
 	 * {@link this#logger} and returning null.
 	 *
@@ -93,7 +93,7 @@ public abstract class BatchedNbtStorage<T> {
 	/**
 	 * This method is called during {@link #saveSelected(Stream)} and is used to save particular elements to their
 	 * respective files. You can use I'd recommend you use {@link FileUtils#writeByteArrayToFile(File, byte[])} via
-	 * {@link NBTSerializable#toNBT(NBTTagCompound)}. If the element was successfully saved, return the element or
+	 * {@link NBTSerializable#toNBT(NBTCompound)}. If the element was successfully saved, return the element or
 	 * otherwise return null.
 	 *
 	 * @param element The element to save to its respective file.
