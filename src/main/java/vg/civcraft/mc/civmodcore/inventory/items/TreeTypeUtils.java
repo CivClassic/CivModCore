@@ -75,9 +75,9 @@ public final class TreeTypeUtils {
 			.put(Material.WARPED_FUNGUS, TreeType.WARPED_FUNGUS)
 			.put(Material.WARPED_STEM, TreeType.CRIMSON_FUNGUS)
 			//Azalea
-			.put(Material.FLOWERING_AZALEA, TreeType.ACACIA)
-			.put(Material.AZALEA_LEAVES, TreeType.ACACIA)
-			.put(Material.FLOWERING_AZALEA_LEAVES, TreeType.ACACIA)
+			.put(Material.FLOWERING_AZALEA, TreeType.AZALEA)
+			.put(Material.AZALEA_LEAVES, TreeType.AZALEA)
+			.put(Material.FLOWERING_AZALEA_LEAVES, TreeType.AZALEA)
 			.build();
 
 	private static final Map<TreeType, Material> SAPLING_MATERIALS = ImmutableMap.<TreeType, Material>builder()
