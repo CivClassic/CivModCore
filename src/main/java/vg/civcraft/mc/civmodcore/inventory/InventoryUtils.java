@@ -5,13 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.ArrayUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import vg.civcraft.mc.civmodcore.inventory.items.ItemUtils;
-import vg.civcraft.mc.civmodcore.util.MoreArrayUtils;
+import vg.civcraft.mc.civmodcore.utilities.MoreArrayUtils;
 
+@UtilityClass
 public final class InventoryUtils {
 
 	public static final int CHEST_1_ROW = 9;

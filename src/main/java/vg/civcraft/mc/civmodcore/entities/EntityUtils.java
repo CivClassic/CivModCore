@@ -1,13 +1,13 @@
 package vg.civcraft.mc.civmodcore.entities;
 
 import com.google.common.base.Strings;
-import org.bukkit.entity.Entity;
+import lombok.experimental.UtilityClass;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 
 /**
  * Class of static APIs for Entities.
  */
+@UtilityClass
 public final class EntityUtils {
 
 	/**
@@ -33,25 +33,6 @@ public final class EntityUtils {
 		}
 		catch (final Exception ignored) { }
 		return null;
-	}
-
-	/**
-	 * Checks whether an entity is a player.
-	 *
-	 * @param entity The entity to test.
-	 * @return Returns true if the entity is a player.
-	 */
-	public static boolean isPlayer(final Entity entity) {
-		if (entity == null) {
-			return false;
-		}
-		if (entity.getType() != EntityType.PLAYER) {
-			return false;
-		}
-		if (!(entity instanceof Player)) {
-			return false;
-		}
-		return true;
 	}
 
 }

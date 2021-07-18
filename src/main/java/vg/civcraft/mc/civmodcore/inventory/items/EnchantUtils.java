@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.experimental.UtilityClass;
 import org.apache.commons.collections4.CollectionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -18,12 +19,13 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import vg.civcraft.mc.civmodcore.CivModCorePlugin;
-import vg.civcraft.mc.civmodcore.util.CivLogger;
-import vg.civcraft.mc.civmodcore.util.KeyedUtils;
+import vg.civcraft.mc.civmodcore.utilities.CivLogger;
+import vg.civcraft.mc.civmodcore.utilities.KeyedUtils;
 
 /**
  * Class of static utilities for Enchantments.
  */
+@UtilityClass
 public final class EnchantUtils {
 
 	private static final BiMap<Enchantment, String> ENCHANT_NAMES = ImmutableBiMap.<Enchantment, String>builder()
@@ -98,7 +100,7 @@ public final class EnchantUtils {
 	public static void loadEnchantAbbreviations(final CivModCorePlugin plugin) {
 		final var logger = CivLogger.getLogger(EnchantUtils.class);
 		ENCHANT_ABBR.clear();
-		final File enchantsFile = plugin.getResourceFile("enchants.yml");
+		final File enchantsFile = plugin.getDataFile("enchants.yml");
 		final YamlConfiguration enchantsConfig = YamlConfiguration.loadConfiguration(enchantsFile);
 		for (final String key : enchantsConfig.getKeys(false)) {
 			if (Strings.isNullOrEmpty(key)) {

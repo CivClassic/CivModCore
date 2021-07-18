@@ -6,12 +6,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.annotation.Nonnull;
-import net.minecraft.server.v1_16_R3.MaterialMapColor;
+import net.minecraft.world.level.material.MaterialMapColor;
 import org.apache.commons.collections4.CollectionUtils;
-import vg.civcraft.mc.civmodcore.util.CivLogger;
+import vg.civcraft.mc.civmodcore.utilities.CivLogger;
 
 /**
- * <a href="https://minecraft.fandom.com/wiki/Map_item_format#Base_colors">Reference</a>
+ * This is a mapped version of NMS class {@link MaterialMapColor} to make setting pixel colours easier.
+ *
+ * <a href="https://minecraft.fandom.com/wiki/Map_item_format#Base_colors">Read more.</a>
+ *
+ * Deobf path: net.minecraft.world.level.material.MaterialColor
  */
 public enum MapColours {
 
@@ -73,7 +77,10 @@ public enum MapColours {
 	WARPED_NYLIUM(MaterialMapColor.ae),
 	WARPED_STEM(MaterialMapColor.af),
 	WARPED_HYPHAE(MaterialMapColor.ag),
-	WARPED_WART_BLOCK(MaterialMapColor.ah);
+	WARPED_WART_BLOCK(MaterialMapColor.ah),
+	DEEPSLATE(MaterialMapColor.ai),
+	RAW_IRON(MaterialMapColor.aj),
+	GLOW_LICHEN(MaterialMapColor.ak);
 
 	private final MaterialMapColor nms;
 
@@ -86,17 +93,18 @@ public enum MapColours {
 	}
 
 	public static void init() {
-		final Set<MaterialMapColor> coreMapColours = Set.of(Stream.of(values())
+		final Set<MaterialMapColor> cmcMapColours = Stream.of(values())
 				.map(MapColours::asNMS)
-				.toArray(MaterialMapColor[]::new));
-		final Set<MaterialMapColor> baseMapColours = Set.of(Stream.of(MaterialMapColor.a)
+				.collect(Collectors.toSet());
+		final Set<MaterialMapColor> nmsMapColours = Stream.of(MaterialMapColor.a)
 				.filter(Objects::nonNull)
-				.toArray(MaterialMapColor[]::new));
-		final Collection<MaterialMapColor> missing = CollectionUtils.disjunction(coreMapColours, baseMapColours);
-		if (!missing.isEmpty()) {
+				.collect(Collectors.toSet());
+		final Collection<MaterialMapColor> missingColours = CollectionUtils.disjunction(cmcMapColours, nmsMapColours);
+		if (!missingColours.isEmpty()) {
 			final CivLogger logger = CivLogger.getLogger(MapColours.class);
-			logger.warning("The following map colours are missing: " + missing.stream()
-					.map(e -> Integer.toString(e.aj))
+			logger.warning("The following map colours are missing: " + missingColours.stream()
+					/** {@link MaterialMapColor#MaterialMapColor(int, int)} "id" parameter */
+					.map(colour -> Integer.toString(colour.am))
 					.collect(Collectors.joining(",")));
 		}
 	}

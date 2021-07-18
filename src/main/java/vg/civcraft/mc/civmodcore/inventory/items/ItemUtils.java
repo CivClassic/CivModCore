@@ -10,21 +10,23 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
+import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
 import org.apache.commons.collections4.CollectionUtils;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import vg.civcraft.mc.civmodcore.CivModCorePlugin;
 import vg.civcraft.mc.civmodcore.chat.ChatUtils;
-import vg.civcraft.mc.civmodcore.util.CivLogger;
+import vg.civcraft.mc.civmodcore.utilities.CivLogger;
 
 /**
  * Class of static APIs for Items. Replaces ISUtils.
  */
+@UtilityClass
 public final class ItemUtils {
 
 	private static final EnumMap<Material, String> MATERIAL_NAMES = new EnumMap<>(Material.class);
@@ -33,11 +35,13 @@ public final class ItemUtils {
 	 * Loads item names from configurable files and requests any custom item names programmatically from plugins.
 	 *
 	 * @param plugin The CivModCore instance plugin.
+	 *
+	 * TODO: Discuss whether this is still necessary given {@link ItemStack#getI18NDisplayName()}.
 	 */
 	public static void loadItemNames(final CivModCorePlugin plugin) {
 		final var logger = CivLogger.getLogger(ItemUtils.class);
 		MATERIAL_NAMES.clear();
-		final File materialsFile = plugin.getResourceFile("materials.yml");
+		final File materialsFile = plugin.getDataFile("materials.yml");
 		final YamlConfiguration materialsConfig = YamlConfiguration.loadConfiguration(materialsFile);
 		for (final String key : materialsConfig.getKeys(false)) {
 			if (Strings.isNullOrEmpty(key)) {
@@ -104,7 +108,23 @@ public final class ItemUtils {
 	public static boolean isValidItem(final ItemStack item) {
 		return item != null
 				&& isValidItemMaterial(item.getType())
-				&& isValidItemAmount(item);
+				&& item.getAmount() > 0
+				&& item.getAmount() <= item.getMaxStackSize();
+	}
+
+	/**
+	 * Checks if an ItemStack is valid instance in that it's non-null, has a valid item material, and has a positive
+	 * item amount. This differs from {@link #isValidItem(ItemStack)} in that the maximum stack size isn't considered,
+	 * so an item considered valid by this method may not be considered valid by {@link #isValidItem(ItemStack)}, thus
+	 * may not appear correctly in inventories.
+	 *
+	 * @param item The item to validate.
+	 * @return Returns true if the item is valid.
+	 */
+	public static boolean isValidItemIgnoringAmount(final ItemStack item) {
+		return item != null
+				&& isValidItemMaterial(item.getType())
+				&& item.getAmount() > 0;
 	}
 
 	/**
@@ -177,14 +197,13 @@ public final class ItemUtils {
 	 * @param item The item to get the NMS version of.
 	 * @return The NMS version, either handle or copy.
 	 */
-	public static net.minecraft.server.v1_16_R3.ItemStack getNMSItemStack(final ItemStack item) {
+	public static net.minecraft.world.item.ItemStack getNMSItemStack(final ItemStack item) {
 		if (item == null) {
 			return null;
 		}
-		if (item instanceof CraftItemStack) {
-			final var handle = ((CraftItemStack) item).getHandle();
-			if (handle != null) {
-				return handle;
+		if (item instanceof CraftItemStack craftItem) {
+			if (craftItem.handle != null) {
+				return craftItem.handle;
 			}
 		}
 		return CraftItemStack.asNMSCopy(item);
@@ -197,7 +216,7 @@ public final class ItemUtils {
 	 * @return Returns the given item with a decremented amount, or null.
 	 */
 	public static ItemStack decrementItem(final ItemStack item) {
-		return item == null ? null : item.subtract().getAmount() == 0 ? null : item;
+		return item == null ? null : item.subtract().getAmount() <= 0 ? null : item;
 	}
 
 	/**

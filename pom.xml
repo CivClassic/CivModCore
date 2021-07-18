@@ -6,12 +6,11 @@
   <parent>
     <groupId>com.github.civclassic</groupId>
     <artifactId>civclassic-parent</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
   </parent>
 
-  <groupId>vg.civcraft.mc.civmodcore</groupId>
   <artifactId>CivModCore</artifactId>
-  <version>1.8.3</version>
+  <version>1.9.0</version>
   <name>CivModCore</name>
   <url>https://github.com/Civclassic/CivModCore/</url>
 
@@ -19,17 +18,8 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
-        <configuration>
-          <!-- Needed to compile, because of the annotation processor -->
-          <compilerArgument>-proc:none</compilerArgument>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.4</version>
+        <version>3.3.0-SNAPSHOT</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -37,13 +27,14 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <artifactSet>
-                <excludes>
-                  <!-- Psuedo Provided -->
-                  <exclude>it.unimi.dsi:fastutil</exclude>
-                  <exclude>co.aikar:cleaner</exclude>
-                </excludes>
-              </artifactSet>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/**/*</exclude>
+                  </excludes>
+                </filter>
+              </filters>
             </configuration>
           </execution>
         </executions>
@@ -53,9 +44,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.destroystokyo.paper</groupId>
+      <groupId>io.papermc.paper</groupId>
       <artifactId>paper</artifactId>
-      <version>1.16.5-R0.1-SNAPSHOT</version>
+      <version>1.17.1-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -73,6 +64,12 @@
       <groupId>net.kyori</groupId>
       <artifactId>adventure-text-minimessage</artifactId>
       <version>4.1.0-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.jetbrains</groupId>
+          <artifactId>annotations</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>co.aikar</groupId>
@@ -85,6 +82,7 @@
       <version>3.7.2</version>
     </dependency>
     <dependency>
+      <!-- https://jitpack.io/#IPVP-MC/canvas -->
       <groupId>com.github.IPVP-MC</groupId>
       <artifactId>canvas</artifactId>
       <version>91ec97f076</version>
@@ -100,25 +98,9 @@
       <version>4.4</version>
     </dependency>
     <dependency>
-      <groupId>org.jetbrains</groupId>
-      <artifactId>annotations</artifactId>
-      <version>20.1.0</version>
-    </dependency>
-    <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>jsr305</artifactId>
       <version>3.0.2</version>
-    </dependency>
-    <!-- Shaded into Paper -->
-    <dependency>
-      <groupId>it.unimi.dsi</groupId>
-      <artifactId>fastutil</artifactId>
-      <version>8.2.2</version> <!-- https://github.com/PaperMC/Paper/blob/master/Paper-MojangAPI/pom.xml#L68 -->
-    </dependency>
-    <dependency>
-      <groupId>co.aikar</groupId>
-      <artifactId>cleaner</artifactId>
-      <version>1.0-SNAPSHOT</version> <!-- https://github.com/PaperMC/Paper/blob/master/Spigot-Server-Patches/0001-POM-Changes.patch#L108 -->
     </dependency>
     <!-- For Testing -->
     <dependency>

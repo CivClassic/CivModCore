@@ -1,21 +1,20 @@
 package vg.civcraft.mc.civmodcore.chat;
 
-import com.google.common.base.Strings;
 import java.awt.Color;
 import java.util.List;
 import java.util.Objects;
+import lombok.experimental.UtilityClass;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+@UtilityClass
 public final class ChatUtils {
 
 	/**
@@ -82,6 +81,11 @@ public final class ChatUtils {
 	// Color parsing
 	// -------------------------------------------- //
 
+	/**
+	 * @deprecated Please use MiniMessage instead.
+	 * <a href="https://docs.adventure.kyori.net/minimessage.html">Read More</a>.
+	 */
+	@Deprecated
 	public static String parseColor(String string) {
 		string = parseColorAmp(string);
 		string = parseColorAcc(string);
@@ -89,15 +93,30 @@ public final class ChatUtils {
 		return string;
 	}
 
+	/**
+	 * @deprecated Please use MiniMessage instead.
+	 * <a href="https://docs.adventure.kyori.net/minimessage.html">Read More</a>.
+	 */
+	@Deprecated
 	public static String parseColorAmp(String string) {
 		string = string.replace("&&", "&");
 		return ChatColor.translateAlternateColorCodes('&', string);
 	}
 
+	/**
+	 * @deprecated Please use MiniMessage instead.
+	 * <a href="https://docs.adventure.kyori.net/minimessage.html">Read More</a>.
+	 */
+	@Deprecated
 	public static String parseColorAcc(String string) {
 		return ChatColor.translateAlternateColorCodes('`', string);
 	}
 
+	/**
+	 * @deprecated Please use MiniMessage instead.
+	 * <a href="https://docs.adventure.kyori.net/minimessage.html">Read More</a>.
+	 */
+	@Deprecated
 	public static String parseColorTags(String string) {
 		return string
 				.replace("<black>", ChatColor.BLACK.toString())
@@ -159,25 +178,6 @@ public final class ChatUtils {
 	 *
 	 * @param component The component to test if null or empty.
 	 * @return Returns true if the component is null or has no visible content.
-	 * 
-	 * @deprecated Has been deprecated due to Paper's move to Kyori's Adventure.
-	 */
-	@Deprecated(forRemoval = true)
-	public static boolean isNullOrEmpty(final BaseComponent component) {
-		if (component == null) {
-			return true;
-		}
-		return Strings.isNullOrEmpty(component.toPlainText());
-	}
-
-	/**
-	 * <p>Determines whether a given base component is null or empty.</p>
-	 *
-	 * <p>This is determined by converting the component into plain text, so a non-null component filled with
-	 * nothing but colour codes and hover text will likely return true.</p>
-	 *
-	 * @param component The component to test if null or empty.
-	 * @return Returns true if the component is null or has no visible content.
 	 */
 	public static boolean isNullOrEmpty(final Component component) {
 		if (component == null) {
@@ -196,9 +196,7 @@ public final class ChatUtils {
 		if (component == null) {
 			return false;
 		}
-		final var content = component instanceof net.kyori.adventure.text.TextComponent ?
-				((net.kyori.adventure.text.TextComponent) component).content() : null;
-		return StringUtils.isEmpty(content)
+		return StringUtils.isEmpty(component instanceof TextComponent textComponent ? textComponent.content() : null)
 				&& !component.children().isEmpty()
 				&& component.clickEvent() == null
 				&& component.hoverEvent() == null
@@ -209,7 +207,7 @@ public final class ChatUtils {
 	 * @return Generates a new text component that's specifically <i>NOT</i> italicised. Use this for item names and
 	 *         lore.
 	 */
-	public static net.kyori.adventure.text.TextComponent newComponent() {
+	public static TextComponent newComponent() {
 		return newComponent("");
 	}
 
@@ -219,7 +217,7 @@ public final class ChatUtils {
 	 * @param content The text content for the component.
 	 * @return Returns the generated text component.
 	 */
-	public static net.kyori.adventure.text.TextComponent newComponent(final String content) {
+	public static TextComponent newComponent(final String content) {
 		return Component.text(Objects.requireNonNull(content))
 				.decoration(TextDecoration.ITALIC, TextDecoration.State.FALSE);
 	}
@@ -236,54 +234,6 @@ public final class ChatUtils {
 		}
 		final var raw = GsonComponentSerializer.gson().serialize(component);
 		return GsonComponentSerializer.gson().deserialize(raw);
-	}
-
-	/**
-	 * This is an easy way to create a text component when all you want to do is colour it.
-	 *
-	 * @param value The value of the text. (Objects will be stringified)
-	 * @param formats The colour formats.
-	 * @return Returns the created component, so you <i>can</i> do more stuff to it.
-	 *
-	 * @deprecated Has been deprecated due to Paper's move to Kyori's Adventure. Use {@link Component#text()} instead.
-	 */
-	@Deprecated(forRemoval = true)
-	public static TextComponent textComponent(final Object value, final ChatColor... formats) {
-		final TextComponent component = new TextComponent(value == null ? "<null>" : value.toString());
-		if (!ArrayUtils.isEmpty(formats)) {
-			for (final ChatColor format : formats) {
-				if (format == null) {
-					//continue;
-				}
-				else if (format.getColor() != null) {
-					component.setColor(format);
-				}
-				else if (format == ChatColor.RESET) {
-					component.setColor(format);
-					component.setBold(false);
-					component.setItalic(false);
-					component.setUnderlined(false);
-					component.setStrikethrough(false);
-					component.setObfuscated(false);
-				}
-				else if (format == ChatColor.BOLD) {
-					component.setBold(true);
-				}
-				else if (format == ChatColor.ITALIC) {
-					component.setItalic(true);
-				}
-				else if (format == ChatColor.UNDERLINE) {
-					component.setUnderlined(true);
-				}
-				else if (format == ChatColor.STRIKETHROUGH) {
-					component.setStrikethrough(true);
-				}
-				else if (format == ChatColor.MAGIC) {
-					component.setObfuscated(true);
-				}
-			}
-		}
-		return component;
 	}
 
 	/**

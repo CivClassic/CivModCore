@@ -3,8 +3,9 @@ package vg.civcraft.mc.civmodcore.world;
 import com.google.common.base.Preconditions;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Beacon;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -16,9 +17,11 @@ import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import vg.civcraft.mc.civmodcore.utilities.CivLogger;
 
 public final class BeaconTracker implements Listener {
 
+	private static final CivLogger LOGGER = CivLogger.getLogger(BeaconTracker.class);
 	private static final Set<Beacon> STORAGE = new HashSet<>();
 
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -62,8 +65,8 @@ public final class BeaconTracker implements Listener {
 	//       doesn't instantly bug out immediately with a piston machine.
 	@EventHandler(ignoreCancelled = true)
 	public void onBlockMove(final BlockFromToEvent event) {
-		final BlockState state = event.getBlock().getState();
-		if (state instanceof Beacon) {
+		final Block block = event.getBlock();
+		if (block.getType() == Material.BEACON) {
 			event.setCancelled(true);
 		}
 	}
@@ -74,11 +77,10 @@ public final class BeaconTracker implements Listener {
 	 * @param location The location to test.
 	 * @return Returns a set of beacons that encompass the given location, which is never null.
 	 */
-	public static Set<Beacon> getEncompassingBeacons(final Location location) {
+	public static Stream<Beacon> getEncompassingBeacons(final Location location) {
 		Preconditions.checkArgument(WorldUtils.isValidLocation(location));
 		return STORAGE.stream()
-				.filter(beacon -> isInBeaconRange(beacon, location))
-				.collect(Collectors.toCollection(HashSet::new));
+				.filter(beacon -> isInBeaconRange(beacon, location));
 	}
 
 	/**
@@ -92,14 +94,10 @@ public final class BeaconTracker implements Listener {
 		final Location beaconLocation = beacon.getLocation();
 		final int distanceXZ = WorldUtils.blockDistance(beaconLocation, location, true);
 		final double range = beacon.getEffectRange();
-		if (distanceXZ < 0d || distanceXZ > range) {
-			return false;
-		}
-		// Beacon range also extends towards, but upwards is infinite
-		if (location.getY() < (beacon.getY() - range)) {
-			return false;
-		}
-		return true;
+		return distanceXZ >= 0
+				&& distanceXZ <= range
+				&& location.getY() >= (beacon.getY() - range)
+				&& location.getY() <= (beacon.getY() + range + 256);
 	}
 
 }
