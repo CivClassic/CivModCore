@@ -144,7 +144,7 @@ public class NBTSerialization {
 	 * @return Returns a deserializer function.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T extends NBTSerializable> Function<NBTCompound, T> getDeserializer(final Class<T> clazz) {
+	public static <T extends NBTSerializable> NBTDeserializer<T> getDeserializer(final Class<T> clazz) {
 		final var method = MethodUtils.getMatchingAccessibleMethod(clazz, "fromNBT", NBTCompound.class);
 		if (!Objects.equals(clazz, method.getReturnType())) {
 			throw new IllegalArgumentException("That class hasn't implemented its own fromNBT method.. please fix");
